@@ -1,0 +1,61 @@
+{
+    "series": "romanos",
+    "section": "pablo",
+    "book": "romanos",
+    "chapters": [1],
+    "verses": [1],
+    "biblical_texts": [
+        {
+            "text": "Pablo...",
+            "reference": "Romanos 1:1"
+        }
+    ],
+    "purpose": "Estudiar la persona de Pablo para desarrollar una idea del autor de la carta.",
+    "description": "Examinemos 4 facetas de Pablo que nos ayudarán a comprender mejor cómo la identidad del autor nos motiva a atender a la carta.",
+    "posts": [
+        {
+            "name": "origen",
+            "contribution": "Cómo el origen de Pablo nos anima a atender a sus Escritos.",
+            "abstract": "",
+            "biblical_texts": [
+                {
+                    "text": "",
+                    "reference": ""
+                }
+            ]
+        },
+        {
+            "name": "violencia",
+            "contribution": "Cómo el cambio de Pablo nos motiva a atender a sus escritos.",
+            "abstract": "",
+            "biblical_texts": [
+                {
+                    "text": "",
+                    "reference": ""
+                }
+            ]
+        },
+        {
+            "name": "gracia",
+            "contribution": "Cómo la gracia otorgada a Pablo nos motiva a atender a sus escritos.",
+            "abstract": "",
+            "biblical_texts": [
+                {
+                    "text": "",
+                    "reference": ""
+                }
+            ]
+        },
+        {
+            "name": "llamado",
+            "contribution": "Cómo el apostolado de Pablo nos motiva a atender a sus escritos.",
+            "abstract": "",
+            "biblical_texts": [
+                {
+                    "text": "",
+                    "reference": ""
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,50 @@
+# ==========================================
+# 1. Dependency Directories
+# ==========================================
+node_modules/
+jspm_packages/
+
+# ==========================================
+# 2. Build Artifacts & Output Directories
+# ==========================================
+# Ignore the Vite frontend build output
+/frontend/dist/
+/frontend/dist-ssr/
+
+# Ignore the Node.js backend build output
+/api-server/dist/
+
+# Ignore any shared library builds
+/shared/dist/
+
+# ==========================================
+# 3. Environment Variables & Secrets
+# ==========================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+
+# Explicitly excluded folder per your request
+secrets/
+
+# ==========================================
+# 4. Logs and Diagnostic Files
+# ==========================================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ==========================================
+# 5. OS Generated Files
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

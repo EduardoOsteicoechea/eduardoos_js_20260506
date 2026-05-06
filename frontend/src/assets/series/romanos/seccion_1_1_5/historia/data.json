@@ -1,0 +1,82 @@
+{
+   "series": "romanos",
+   "section": "Romanos 1:1-5",
+   "name": "historia",
+   "book": "romanos",
+   "chapters": [1],
+   "verses": [1],
+    "biblical_texts": [
+        {
+            "text": "Pablo.",
+            "reference": "Romanos 1:1"
+        }
+    ],
+   "creator": "Eduardo Osteicoechea",
+   "title": "La historia de Pablo",
+   "sections": [
+      {
+         "heading": "Origen (Exégesis)",
+         "content": [
+            {
+               "text": "Que me apartó desde el vientre de mi madre.",
+               "biblical_reference": "Hechos 9:1",
+               "emphasized_phrases": [
+                  "respirando todavía amenazas y muerte contra los discípulos del Señor"
+               ]
+            }
+         ]
+      }
+      
+      ,
+      
+      {
+         "heading": "Violencia (Exégesis)",
+         "content": [
+            {
+               "text": "...",
+               "biblical_reference": "Hechos 9:1",
+               "emphasized_phrases": [
+                  "respirando todavía amenazas y muerte contra los discípulos del Señor"
+               ]
+            }
+         ]
+      }
+      
+      ,
+      
+      {
+         "heading": "Llamado (Exégesis)",
+         "content": [
+            {
+               "text": "Te enviaré a.",
+               "biblical_reference": "Hechos 9:1",
+               "emphasized_phrases": [
+                  "respirando todavía amenazas y muerte contra los discípulos del Señor"
+               ]
+            }
+         ]
+      }
+      
+      ,
+      
+      {
+         "heading": "Legado (Exégesis)",
+         "content": [
+            {
+               "text": "He trabajado más que todos ellos.",
+               "biblical_reference": "Hechos 9:1",
+               "emphasized_phrases": []
+            }
+         ]
+      }
+
+   ],
+   "quiz": [
+      {
+         "question": "",
+         "options": [],
+         "correct_option": [],
+         "rationale": []
+      }
+   ]
+}
