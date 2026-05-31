@@ -1,4 +1,5 @@
 export default function CollapsibleSection({
+  number,
   heading,
   isExpanded,
   onToggle,
@@ -14,7 +15,9 @@ export default function CollapsibleSection({
           isExpanded ? 'article-section-toggle--active' : ''
         }`}
       >
-        <span className="text-[1.35em] font-semibold leading-snug">{heading}</span>
+        <span className="text-[1.35em] font-semibold leading-snug">
+          {number}. {heading}
+        </span>
         <span
           className="theme-muted mt-1 shrink-0 text-xl leading-none"
           aria-hidden="true"
@@ -23,7 +26,7 @@ export default function CollapsibleSection({
         </span>
       </button>
 
-      {isExpanded ? <div className="px-4 pb-8">{children}</div> : null}
+      {isExpanded ? <div className="px-4 pb-8 pt-10">{children}</div> : null}
     </section>
   );
 }

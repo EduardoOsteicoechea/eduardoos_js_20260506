@@ -39,6 +39,7 @@ export default function ArticleGenerator({
         {article.sections.map((section, sectionIndex) => (
           <CollapsibleSection
             key={`${sectionIndex}-${section.heading}`}
+            number={sectionIndex + 1}
             heading={section.heading}
             isExpanded={expandedSections.has(sectionIndex)}
             onToggle={() => onToggleSection(sectionIndex)}
