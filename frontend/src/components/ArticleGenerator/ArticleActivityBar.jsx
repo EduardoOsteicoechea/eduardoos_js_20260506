@@ -106,7 +106,7 @@ export default function ArticleActivityBar({
             aria-label="Recargar artículo desde JSON"
             title="Recargar JSON"
           >
-            {isReloading ? '…' : '↻ JSON'}
+            {isReloading ? '…' : '↻'}
           </button>
         </div>
       </footer>
