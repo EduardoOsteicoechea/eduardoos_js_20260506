@@ -1,20 +1,15 @@
 import MainHeading from './MainHeading';
 import ArticleMeta from './ArticleMeta';
+import ArticleSummaryIndex from './ArticleSummaryIndex';
 import ContentBlock from './ContentBlock';
 import Quiz from './Quiz';
-import CollapsibleSection from './CollapsibleSection';
+import ArticleSection from './ArticleSection';
 
 /**
  * Decoupled article renderer: consumes article JSON and composes UI from
  * dedicated ArticleGenerator components.
  */
-export default function ArticleGenerator({
-  article,
-  slug,
-  baseFontSize = 18,
-  expandedSections,
-  onToggleSection,
-}) {
+export default function ArticleGenerator({ article, slug, baseFontSize = 18 }) {
   if (!article) return null;
 
   const serie = article.serie ?? article.series;
@@ -35,14 +30,14 @@ export default function ArticleGenerator({
         {article.title}
       </MainHeading>
 
+      <ArticleSummaryIndex sections={article.sections} />
+
       <div className="article-sections">
         {article.sections.map((section, sectionIndex) => (
-          <CollapsibleSection
+          <ArticleSection
             key={`${sectionIndex}-${section.heading}`}
             number={sectionIndex + 1}
             heading={section.heading}
-            isExpanded={expandedSections.has(sectionIndex)}
-            onToggle={() => onToggleSection(sectionIndex)}
           >
             <div className="article-section__content">
               {section.content?.map((block, blockIndex) => (
@@ -57,7 +52,7 @@ export default function ArticleGenerator({
             {section.quiz?.length ? (
               <Quiz items={section.quiz} title="Preguntas de la sección" />
             ) : null}
-          </CollapsibleSection>
+          </ArticleSection>
         ))}
       </div>
 

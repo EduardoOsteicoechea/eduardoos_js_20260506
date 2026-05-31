@@ -8,8 +8,8 @@ export default function ArticleActivityBar({
   onToggleTheme,
   onIncreaseFont,
   onDecreaseFont,
-  onExpandAll,
-  onCollapseAll,
+  onScrollToTop,
+  onScrollToBottom,
   onReload,
   onSelectFont,
   isReloading = false,
@@ -80,22 +80,22 @@ export default function ArticleActivityBar({
 
           <button
             type="button"
-            onClick={onExpandAll}
+            onClick={onScrollToTop}
             className="theme-toolbar-btn shrink-0"
-            aria-label="Expandir todas las secciones"
-            title="Expandir todas las secciones"
+            aria-label="Ir al inicio"
+            title="Ir al inicio"
           >
-            + All
+            ↑
           </button>
 
           <button
             type="button"
-            onClick={onCollapseAll}
+            onClick={onScrollToBottom}
             className="theme-toolbar-btn shrink-0"
-            aria-label="Colapsar todas las secciones"
-            title="Colapsar todas las secciones"
+            aria-label="Ir al final"
+            title="Ir al final"
           >
-            − All
+            ↓
           </button>
 
           <button
