@@ -22,6 +22,7 @@ export default function ArticleViewer({ initialArticle, slug, jsonPath }) {
   const [baseFontSize, setBaseFontSize] = useState(DEFAULT_FONT_PX);
   const [theme, setTheme] = useState(THEMES.light);
   const [fontFamilyId, setFontFamilyId] = useState('montserrat');
+  const [expandedSections, setExpandedSections] = useState(() => new Set());
   const [prefsReady, setPrefsReady] = useState(false);
   const [isReloading, setIsReloading] = useState(false);
   const [reloadError, setReloadError] = useState(null);
@@ -51,6 +52,28 @@ export default function ArticleViewer({ initialArticle, slug, jsonPath }) {
     if (!prefsReady) return;
     persistFontFamily(fontFamilyId);
   }, [fontFamilyId, prefsReady]);
+
+  const toggleSection = useCallback((sectionIndex) => {
+    setExpandedSections((previous) => {
+      const next = new Set(previous);
+      if (next.has(sectionIndex)) {
+        next.delete(sectionIndex);
+      } else {
+        next.add(sectionIndex);
+      }
+      return next;
+    });
+  }, []);
+
+  const expandAllSections = useCallback(() => {
+    setExpandedSections(
+      new Set(article.sections.map((_, sectionIndex) => sectionIndex)),
+    );
+  }, [article.sections]);
+
+  const collapseAllSections = useCallback(() => {
+    setExpandedSections(new Set());
+  }, []);
 
   const increaseFont = useCallback(() => {
     setBaseFontSize((size) => Math.min(size + FONT_STEP_PX, MAX_FONT_PX));
@@ -88,6 +111,7 @@ export default function ArticleViewer({ initialArticle, slug, jsonPath }) {
       }
 
       setArticle(data);
+      setExpandedSections(new Set());
     } catch (error) {
       setReloadError(
         error instanceof Error ? error.message : 'No se pudo recargar el JSON',
@@ -109,6 +133,8 @@ export default function ArticleViewer({ initialArticle, slug, jsonPath }) {
         article={article}
         slug={slug}
         baseFontSize={baseFontSize}
+        expandedSections={expandedSections}
+        onToggleSection={toggleSection}
       />
 
       <ArticleActivityBar
@@ -118,6 +144,8 @@ export default function ArticleViewer({ initialArticle, slug, jsonPath }) {
         onToggleTheme={toggleTheme}
         onIncreaseFont={increaseFont}
         onDecreaseFont={decreaseFont}
+        onExpandAll={expandAllSections}
+        onCollapseAll={collapseAllSections}
         onReload={reloadJson}
         isReloading={isReloading}
       />

@@ -1,5 +1,6 @@
 export { default as ArticleGenerator } from './ArticleGenerator';
 export { default as ArticleViewer } from './ArticleViewer';
+export { default as CollapsibleSection } from './CollapsibleSection';
 export { default as ArticleActivityBar } from './ArticleActivityBar';
 export { default as FontPickerPanel } from './FontPickerPanel';
 export { default as MainHeading } from './MainHeading';

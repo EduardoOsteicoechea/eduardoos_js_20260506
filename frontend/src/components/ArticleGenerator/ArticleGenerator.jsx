@@ -1,14 +1,20 @@
 import MainHeading from './MainHeading';
-import SectionHeading from './SectionHeading';
 import ArticleMeta from './ArticleMeta';
 import ContentBlock from './ContentBlock';
 import Quiz from './Quiz';
+import CollapsibleSection from './CollapsibleSection';
 
 /**
  * Decoupled article renderer: consumes article JSON and composes UI from
  * dedicated ArticleGenerator components.
  */
-export default function ArticleGenerator({ article, slug, baseFontSize = 18 }) {
+export default function ArticleGenerator({
+  article,
+  slug,
+  baseFontSize = 18,
+  expandedSections,
+  onToggleSection,
+}) {
   if (!article) return null;
 
   const serie = article.serie ?? article.series;
@@ -29,25 +35,30 @@ export default function ArticleGenerator({ article, slug, baseFontSize = 18 }) {
         {article.title}
       </MainHeading>
 
-      {article.sections.map((section, sectionIndex) => (
-        <section key={`${sectionIndex}-${section.heading}`} className="article-section mt-20">
-          <SectionHeading>{section.heading}</SectionHeading>
+      <div className="article-sections">
+        {article.sections.map((section, sectionIndex) => (
+          <CollapsibleSection
+            key={`${sectionIndex}-${section.heading}`}
+            heading={section.heading}
+            isExpanded={expandedSections.has(sectionIndex)}
+            onToggle={() => onToggleSection(sectionIndex)}
+          >
+            <div className="article-section__content">
+              {section.content?.map((block, blockIndex) => (
+                <ContentBlock
+                  key={`${sectionIndex}-${blockIndex}`}
+                  block={block}
+                  index={blockIndex}
+                />
+              ))}
+            </div>
 
-          <div className="article-section__content">
-            {section.content?.map((block, blockIndex) => (
-              <ContentBlock
-                key={`${sectionIndex}-${blockIndex}`}
-                block={block}
-                index={blockIndex}
-              />
-            ))}
-          </div>
-
-          {section.quiz?.length ? (
-            <Quiz items={section.quiz} title="Preguntas de la sección" />
-          ) : null}
-        </section>
-      ))}
+            {section.quiz?.length ? (
+              <Quiz items={section.quiz} title="Preguntas de la sección" />
+            ) : null}
+          </CollapsibleSection>
+        ))}
+      </div>
 
       {article.quiz?.length ? (
         <Quiz items={article.quiz} title="Evaluación del estudio" />
