@@ -1,0 +1,30 @@
+---
+// This frontmatter script runs EXCLUSIVELY on the server.
+// Because you mentioned this is a "private route", this is where you
+// handle authentication before the page even renders.
+
+import Layout from "../../layouts/Layout.astro";
+import PostCreator from "../../components/postCreator/PostCreator.jsx";
+
+// Example Server-Side Auth Check:
+// const sessionCookie = Astro.cookies.get('your_jwt_cookie');
+// if (!sessionCookie) {
+//   return Astro.redirect('/login'); // Instantly redirect unauthorized bots/users
+// }
+---
+
+<Layout>
+  <main class="max-w-3xl mx-auto p-8">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-slate-900">Creator Dashboard</h1>
+      <p class="text-slate-600">Secure, client-side interactive zone.</p>
+    </div>
+
+    <!-- 
+      The client:load directive is CRITICAL here. 
+      It tells Astro to send the React JavaScript to the browser and hydrate this component immediately. 
+      Without it, the component will render as static, dead HTML.
+    -->
+    <PostCreator client:load />
+  </main>
+</Layout>

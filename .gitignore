@@ -12,6 +12,7 @@ jspm_packages/
 /frontend/dist-ssr/
 
 # Ignore the Node.js backend build output
+/backend/dist/
 /api-server/dist/
 
 # Ignore any shared library builds

@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'frontend/**'
+      - '.github/workflows/deploy-frontend.yml'
   workflow_dispatch:
 
 jobs:
@@ -22,14 +23,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
           cache-dependency-path: './frontend/package-lock.json'
 
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build React Application
+      - name: Build Astro Site
         run: npm run build
 
       - name: Sync to EC2 Nginx Directory
@@ -38,11 +39,13 @@ jobs:
           HOST: ${{ secrets.EC2_HOST }}
           USER: ${{ secrets.EC2_USER }}
         run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_KEY" > ~/.ssh/id_rsa
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
 
-          # Syncs directly to the path defined in your new Nginx conf
-          # Note: Ensure ec2-user has write permissions to /var/www/eduardoos.com/dist/
-          rsync -avz --delete ./dist/ $USER@$HOST:/var/www/eduardoos.com/dist/
+          SSH_OPTS="-i ~/.ssh/id_rsa -o StrictHostKeyChecking=yes"
+
+          ssh $SSH_OPTS "$USER@$HOST" "sudo mkdir -p /var/www/eduardoos.com/dist && sudo chown -R $USER:$USER /var/www/eduardoos.com"
+
+          rsync -avz --delete -e "ssh $SSH_OPTS" ./dist/ "$USER@$HOST:/var/www/eduardoos.com/dist/"

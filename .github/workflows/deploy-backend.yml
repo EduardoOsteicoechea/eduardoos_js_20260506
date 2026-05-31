@@ -5,7 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'backend/**' # Updated to match your folder
+      - 'backend/**'
+      - '.github/workflows/deploy-backend.yml'
   workflow_dispatch:
 
 jobs:
@@ -13,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./backend # Updated to match your folder
+        working-directory: ./backend
 
     steps:
       - name: Checkout Repository
@@ -22,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
           cache-dependency-path: './backend/package-lock.json'
 
@@ -38,16 +39,21 @@ jobs:
           HOST: ${{ secrets.EC2_HOST }}
           USER: ${{ secrets.EC2_USER }}
         run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_KEY" > ~/.ssh/id_rsa
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
 
-          # Sync to the 'backend' folder on EC2
-          rsync -avz ./dist ./package.json ./package-lock.json $USER@$HOST:/home/$USER/backend/
+          SSH_OPTS="-i ~/.ssh/id_rsa -o StrictHostKeyChecking=yes"
+          REMOTE_DIR="/home/$USER/backend"
 
-          ssh -i ~/.ssh/id_rsa $USER@$HOST << 'EOF'
-            cd /home/ec2-user/backend
+          ssh $SSH_OPTS "$USER@$HOST" "mkdir -p $REMOTE_DIR"
+
+          rsync -avz -e "ssh $SSH_OPTS" ./dist ./package.json ./package-lock.json "$USER@$HOST:$REMOTE_DIR/"
+
+          ssh $SSH_OPTS "$USER@$HOST" bash -s <<EOF
+            set -euo pipefail
+            cd "$REMOTE_DIR"
             npm ci --omit=dev
             sudo systemctl restart eduardoos-backend
           EOF
