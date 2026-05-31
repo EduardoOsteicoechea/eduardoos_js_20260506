@@ -5,13 +5,21 @@ export default function CollapsibleSection({
   onToggle,
   children,
 }) {
+  const contentId = `article-section-content-${number}`;
+
   return (
-    <section className="theme-border article-section border-b last:border-b-0">
-      <button
-        type="button"
-        onClick={onToggle}
+    <details
+      open={isExpanded}
+      className="theme-border article-section group border-b last:border-b-0"
+    >
+      <summary
+        onClick={(event) => {
+          event.preventDefault();
+          onToggle();
+        }}
+        aria-controls={contentId}
         aria-expanded={isExpanded}
-        className={`article-section-toggle flex w-full items-start justify-between gap-3 px-4 py-5 text-left ${
+        className={`article-section-toggle flex w-full cursor-pointer list-none items-start justify-between gap-3 px-4 py-5 text-left marker:content-none ${
           isExpanded ? 'article-section-toggle--active' : ''
         }`}
       >
@@ -24,9 +32,11 @@ export default function CollapsibleSection({
         >
           {isExpanded ? '−' : '+'}
         </span>
-      </button>
+      </summary>
 
-      {isExpanded ? <div className="px-4 pb-8 pt-10">{children}</div> : null}
-    </section>
+      <div id={contentId} className="article-section-content px-4 pb-8 pt-10">
+        {children}
+      </div>
+    </details>
   );
 }
