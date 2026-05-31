@@ -15,8 +15,8 @@ const grouped = articles.reduce<Record<string, typeof articles>>((acc, entry) =>
 <Layout title="Estudios bíblicos | Eduardo Osteicoechea">
   <main class="mx-auto max-w-4xl px-5 py-10">
     <header class="mb-10">
-      <h1 class="text-3xl font-bold text-slate-900">Estudios bíblicos</h1>
-      <p class="mt-3 text-lg text-slate-600">
+      <h1 class="text-3xl font-bold">Estudios bíblicos</h1>
+      <p class="theme-muted mt-3 text-lg">
         Artículos generados desde los archivos JSON en la serie Romanos.
       </p>
     </header>
@@ -24,7 +24,7 @@ const grouped = articles.reduce<Record<string, typeof articles>>((acc, entry) =>
     {
       Object.entries(grouped).map(([serie, entries]) => (
         <section class="mb-12">
-          <h2 class="mb-4 text-xl font-semibold capitalize text-slate-800">
+          <h2 class="mb-4 text-xl font-semibold capitalize">
             Serie {serie}
           </h2>
           <ul class="space-y-3">
@@ -32,17 +32,17 @@ const grouped = articles.reduce<Record<string, typeof articles>>((acc, entry) =>
               <li>
                 <a
                   href={`/series/${entry.slug}`}
-                  class="block rounded-lg border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-blue-300 hover:shadow-md"
+                  class="theme-border block rounded-lg border px-5 py-4 transition hover:bg-black/5 dark:hover:bg-white/10"
                 >
-                  <span class="font-semibold text-slate-900">
+                  <span class="font-semibold">
                     {entry.data.title}
                   </span>
                   {entry.data.chapter != null ? (
-                    <span class="ml-2 text-sm text-slate-500">
+                    <span class="theme-muted ml-2 text-sm">
                       · Cap. {entry.data.chapter}
                     </span>
                   ) : null}
-                  <span class="mt-1 block font-mono text-xs text-slate-400">
+                  <span class="theme-muted mt-1 block font-mono text-xs">
                     /series/{entry.slug}
                   </span>
                 </a>
@@ -54,7 +54,7 @@ const grouped = articles.reduce<Record<string, typeof articles>>((acc, entry) =>
     }
 
     {articles.length === 0 ? (
-      <p class="text-slate-600">No se encontraron artículos en public/data/series.</p>
+      <p class="theme-muted">No se encontraron artículos en public/data/series.</p>
     ) : null}
   </main>
 </Layout>

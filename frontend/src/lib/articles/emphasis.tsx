@@ -42,7 +42,7 @@ export function renderWithEmphasis(
     segment.emphasized ? (
       <mark
         key={`${index}-${segment.text}`}
-        className="rounded bg-amber-100 px-1 font-medium text-amber-950 not-italic"
+        className="article-emphasis rounded px-1 font-medium not-italic"
       >
         {segment.text}
       </mark>

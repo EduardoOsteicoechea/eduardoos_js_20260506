@@ -1,7 +1,13 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { discoverArticles, getArticleBySlug } from "../../lib/articles/discover";
-import ArticleGenerator from "../../components/ArticleGenerator/ArticleGenerator.jsx";
+import type { ArticleData } from "../../lib/articles/types";
+import ArticleViewer from "../../components/ArticleGenerator/ArticleViewer.jsx";
+
+interface Props {
+  article: ArticleData;
+  slug: string;
+}
 
 export async function getStaticPaths() {
   const articles = await discoverArticles();
@@ -12,15 +18,11 @@ export async function getStaticPaths() {
   }));
 }
 
-const slugParam = Astro.params.slug;
-const slug =
-  typeof slugParam === "string"
-    ? slugParam
-    : Array.isArray(slugParam)
-      ? slugParam.join("/")
-      : "";
+const slugParam = Astro.params.slug as string | string[] | undefined;
+const slug = Array.isArray(slugParam) ? slugParam.join("/") : (slugParam ?? "");
 
-let { article } = Astro.props;
+const props = Astro.props as Props;
+let article: ArticleData | undefined = props.article;
 
 if (!article && slug) {
   const found = await getArticleBySlug(slug);
@@ -30,16 +32,23 @@ if (!article && slug) {
 if (!article) {
   return Astro.redirect("/series");
 }
+
+const jsonPath = `/data/series/${slug}/data.json`;
 ---
 
 <Layout title={`${article.title} | Eduardo Osteicoechea`}>
-  <main class="mx-auto max-w-3xl px-5 py-10">
+  <main class="mx-auto max-w-3xl px-5 pb-[65px] pt-10">
     <nav class="mb-8">
-      <a href="/series" class="text-sm font-medium text-blue-700 hover:underline">
+      <a href="/series" class="text-sm font-medium underline opacity-80 hover:opacity-100">
         ← Todos los estudios
       </a>
     </nav>
 
-    <ArticleGenerator article={article} slug={slug} client:load />
+    <ArticleViewer
+      initialArticle={article}
+      slug={slug}
+      jsonPath={jsonPath}
+      client:load
+    />
   </main>
 </Layout>

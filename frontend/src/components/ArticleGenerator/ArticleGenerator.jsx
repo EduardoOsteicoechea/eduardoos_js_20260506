@@ -8,13 +8,16 @@ import Quiz from './Quiz';
  * Decoupled article renderer: consumes article JSON and composes UI from
  * dedicated ArticleGenerator components.
  */
-export default function ArticleGenerator({ article, slug }) {
+export default function ArticleGenerator({ article, slug, baseFontSize = 18 }) {
   if (!article) return null;
 
   const serie = article.serie ?? article.series;
 
   return (
-    <article className="article-generator">
+    <article
+      className="article-generator"
+      style={{ fontSize: `${baseFontSize}px` }}
+    >
       <ArticleMeta
         serie={serie}
         chapter={article.chapter}
@@ -27,7 +30,7 @@ export default function ArticleGenerator({ article, slug }) {
       </MainHeading>
 
       {article.sections.map((section, sectionIndex) => (
-        <section key={`${sectionIndex}-${section.heading}`} className="article-section">
+        <section key={`${sectionIndex}-${section.heading}`} className="article-section mt-20">
           <SectionHeading>{section.heading}</SectionHeading>
 
           <div className="article-section__content">

@@ -1,4 +1,7 @@
 export { default as ArticleGenerator } from './ArticleGenerator';
+export { default as ArticleViewer } from './ArticleViewer';
+export { default as ArticleActivityBar } from './ArticleActivityBar';
+export { default as FontPickerPanel } from './FontPickerPanel';
 export { default as MainHeading } from './MainHeading';
 export { default as SectionHeading } from './SectionHeading';
 export { default as Idea } from './Idea';

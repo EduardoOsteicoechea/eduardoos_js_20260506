@@ -6,11 +6,11 @@ export default function Image({ src, alt = '' }) {
       <img
         src={src}
         alt={alt}
-        className="w-full rounded-lg border border-slate-200 shadow-sm"
+        className="theme-border w-full rounded-lg border"
         loading="lazy"
       />
       {alt ? (
-        <figcaption className="mt-2 text-center text-sm text-slate-500">
+        <figcaption className="theme-muted mt-2 text-center text-sm">
           {alt}
         </figcaption>
       ) : null}

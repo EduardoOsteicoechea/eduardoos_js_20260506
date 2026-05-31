@@ -8,12 +8,12 @@ export default function BiblicalQuote({
   if (!text?.trim()) return null;
 
   return (
-    <figure className="my-6 border-l-4 border-blue-600 bg-blue-50/60 py-4 pl-5 pr-4">
-      <blockquote className="text-lg italic leading-relaxed text-slate-800">
+    <figure className="theme-border my-10 border-l-4 bg-black/[0.03] py-4 pl-5 pr-4 dark:bg-white/[0.05]">
+      <blockquote className="text-[1.125em] italic leading-relaxed">
         {renderWithEmphasis(text, emphasizedPhrases)}
       </blockquote>
       {reference ? (
-        <figcaption className="mt-3 text-sm font-semibold text-blue-800">
+        <figcaption className="theme-muted mt-3 text-[0.875em] font-semibold">
           — {reference}
         </figcaption>
       ) : null}

@@ -8,17 +8,17 @@ export default function ArticleMeta({ serie, chapter, creator, slug }) {
   if (!labels.length && !slug) return null;
 
   return (
-    <div className="mb-6 flex flex-wrap items-center gap-2 text-sm text-slate-500">
+    <div className="theme-muted mb-6 flex flex-wrap items-center gap-2 text-sm">
       {labels.map((label) => (
         <span
           key={label}
-          className="rounded-full bg-slate-100 px-3 py-1 font-medium text-slate-600"
+          className="theme-border rounded-full border px-3 py-1 font-medium"
         >
           {label}
         </span>
       ))}
       {slug ? (
-        <span className="font-mono text-xs text-slate-400">{slug}</span>
+        <span className="font-mono text-xs opacity-50">{slug}</span>
       ) : null}
     </div>
   );
