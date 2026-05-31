@@ -1,0 +1,121 @@
+{
+    "series": "romanos",
+    "section": "1:1-5",
+    "book": "romanos",
+    "chapters": [
+        1
+    ],
+    "verses": [
+        1,
+        2,
+        3,
+        4,
+        5
+    ],
+    "biblical_texts": [
+        {
+            "text": "Pablo, siervo de Jesucristo, llamado a ser apóstol, apartado para el evangelio de Dios, que él habìa prometido antes por sus profetas en las santas Escrituras, acerca de su Hijo, nuestro Señor Jesucristo, que era del linaje de David según la carne, que fue declarado Hijo de Dios con poder, según el Espíritu de santidad, por la resurrección de entre los muertos, y por quien recibimos la gracia y el apostolado, para la obediencia a la fe en todas las naciones por amor de su nombre; entre las cuales estáis también vosotros, llamados a ser de Jesucristo; a todos los que estáis en Roma, amados de Dios, llamados a ser santos: Gracia y paz a vosotros, de Dios nuestro Padre y del Señor Jesucristo.",
+            "reference": "Romanos 1:1-5"
+        }
+    ],
+    "purpose": "Establecer la autoridad del autor para promover la obediencia al escrito.",
+    "description": "Examinemos 8 argumentos para atender y obedecer la carta dirigida a los creyentes de Roma durante el primer siglo.",
+    "posts": [
+        {
+            "name": "historia",
+            "contribution": "Cómo la historia de Pablo nos anima a atender a sus Escritos.",
+            "abstract": "",
+            "biblical_texts": [
+                {
+                    "text": "Pablo",
+                    "reference": "Romanos 1:1"
+                }
+            ]
+        },
+        {
+            "name": "esclavitud",
+            "contribution": "Cómo la sujeción de Pablo a Jesucristo nos motiva a atender a sus escritos.",
+            "abstract": "",
+            "biblical_texts": [
+                {
+                    "text": "...siervo de Jesucristo,...",
+                    "reference": "Romanos 1:1"
+                }
+            ]
+        },
+        {
+            "name": "apostolado",
+            "contribution": "Cómo el llamamiento apostólico de Pablo nos motiva a atender a sus escritos.",
+            "abstract": "",
+            "biblical_texts": [
+                {
+                    "text": "...siervo de Jesucristo, llamado a ser apóstol, apartado para el evangelio de Dios...",
+                    "reference": "Romanos 1:1-5"
+                },
+                {
+                    "text": "...y por quien recibimos la gracia y el apostolado para la obediencia a la fe en todas las naciones por amor de su nombre...",
+                    "reference": "Romanos 1:1-5"
+                }
+            ]
+        },
+        {
+            "name": "evangelio",
+            "contribution": "Cómo el mensaje de Pablo nos motiva a atender a sus escritos.",
+            "abstract": "",
+            "biblical_texts": [
+                {
+                    "text": "...apartado para el evangelio de Dios, que Él había prometido antes por sus profetas en las santas Escrituras, acerca de su Hijo...",
+                    "reference": "Romanos 1:1-5"
+                }
+            ]
+        },
+        {
+            "name": "señor",
+            "contribution": "Cómo la identidad y voluntad del Señor de Pablo nos motiva a atender a sus escritos.",
+            "abstract": "",
+            "biblical_texts": [
+                {
+                    "text": "...apartado para el evangelio de Dios, que Él había prometido antes por sus profetas en las santas Escrituras, acerca de su Hijo, nuestro Señor Jesucristo, que era del linaje de David según la carne, que fue declarado Hijo de Dios con poder según el Espíritu de santidad, por la resurrección de entre los muertos, y por quien recibimos la gracia y el apostolado...",
+                    "reference": "Romanos 1:1-5"
+                }
+            ]
+        },
+        {
+            "name": "misión",
+            "contribution": "Cómo la misión otorgada a Pablo por el Cristo resucitado nos motiva a atender a sus escritos.",
+            "abstract": "",
+            "biblical_texts": [
+                {
+                    "text": "...siervo de Jesucristo, llamado a ser apóstol, apartado para el evangelio de Dios...",
+                    "reference": "Romanos 1:1-5"
+                },
+                {
+                    "text": "...y por quien recibimos la gracia y el apostolado para la obediencia a la fe en todas las naciones por amor de su nombre...",
+                    "reference": "Romanos 1:1-5"
+                }
+            ]
+        },
+        {
+            "name": "rebaño",
+            "contribution": "Cómo la identidad de las ovejas de Pablo nos motiva a atender a sus escritos.",
+            "abstract": "",
+            "biblical_texts": [
+                {
+                    "text": "...y por quien recibimos la gracia y el apostolado, para la obediencia a la fe en todas las naciones por amor de su nombre; entre las cuales estáis también vosotros, llamados a ser de Jesucristo; a todos los que estáis en Roma...",
+                    "reference": "Romanos 1:5-6"
+                }
+            ]
+        },
+        {
+            "name": "benediccion",
+            "contribution": "Cómo la benedicción apostólica nos motiva a atender a sus escritos.",
+            "abstract": "",
+            "biblical_texts": [
+                {
+                    "text": "...amados de Dios, llamados a ser santos: Gracia y paz a vosotros, de Dios nuestro Padre y del Señor Jesucristo.",
+                    "reference": "Romanos 1:5-7"
+                }
+            ]
+        }
+    ]
+}

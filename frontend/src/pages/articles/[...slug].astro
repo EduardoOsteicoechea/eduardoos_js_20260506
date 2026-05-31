@@ -1,0 +1,45 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { discoverArticles, getArticleBySlug } from "../../lib/articles/discover";
+import ArticleGenerator from "../../components/ArticleGenerator/ArticleGenerator.jsx";
+
+export async function getStaticPaths() {
+  const articles = await discoverArticles();
+
+  return articles.map(({ slug, data }) => ({
+    params: { slug },
+    props: { article: data, slug },
+  }));
+}
+
+const slugParam = Astro.params.slug;
+const slug =
+  typeof slugParam === "string"
+    ? slugParam
+    : Array.isArray(slugParam)
+      ? slugParam.join("/")
+      : "";
+
+let { article } = Astro.props;
+
+if (!article && slug) {
+  const found = await getArticleBySlug(slug);
+  article = found?.data;
+}
+
+if (!article) {
+  return Astro.redirect("/articles");
+}
+---
+
+<Layout title={`${article.title} | Eduardo Osteicoechea`}>
+  <main class="mx-auto max-w-3xl px-5 py-10">
+    <nav class="mb-8">
+      <a href="/articles" class="text-sm font-medium text-blue-700 hover:underline">
+        ← Todos los estudios
+      </a>
+    </nav>
+
+    <ArticleGenerator article={article} slug={slug} client:load />
+  </main>
+</Layout>

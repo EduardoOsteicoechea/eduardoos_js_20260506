@@ -1,6 +1,12 @@
 ---
 // Import your Tailwind CSS file
-import "../styles/global.css"
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+}
+
+const { title = "Eduardo Osteicoechea" } = Astro.props;
 ---
 
 <!doctype html>
@@ -44,7 +50,7 @@ import "../styles/global.css"
       />
 
       <meta name="generator" content={Astro.generator} />
-      <title>Eduardo Osteicoechea</title>
+      <title>{title}</title>
     </head>
     <body class="bg-slate-50 text-slate-900 antialiased min-h-screen">
         
