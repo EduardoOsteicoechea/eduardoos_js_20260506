@@ -1,0 +1,60 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { discoverArticles } from "../../lib/articles/discover";
+
+const articles = await discoverArticles();
+
+const grouped = articles.reduce<Record<string, typeof articles>>((acc, entry) => {
+  const serie = entry.data.serie ?? entry.data.series ?? "general";
+  if (!acc[serie]) acc[serie] = [];
+  acc[serie].push(entry);
+  return acc;
+}, {});
+---
+
+<Layout title="Estudios bíblicos | Eduardo Osteicoechea">
+  <main class="mx-auto max-w-4xl px-5 py-10">
+    <header class="mb-10">
+      <h1 class="text-3xl font-bold text-slate-900">Estudios bíblicos</h1>
+      <p class="mt-3 text-lg text-slate-600">
+        Artículos generados desde los archivos JSON en la serie Romanos.
+      </p>
+    </header>
+
+    {
+      Object.entries(grouped).map(([serie, entries]) => (
+        <section class="mb-12">
+          <h2 class="mb-4 text-xl font-semibold capitalize text-slate-800">
+            Serie {serie}
+          </h2>
+          <ul class="space-y-3">
+            {entries.map((entry) => (
+              <li>
+                <a
+                  href={`/series/${entry.slug}`}
+                  class="block rounded-lg border border-slate-200 bg-white px-5 py-4 shadow-sm transition hover:border-blue-300 hover:shadow-md"
+                >
+                  <span class="font-semibold text-slate-900">
+                    {entry.data.title}
+                  </span>
+                  {entry.data.chapter != null ? (
+                    <span class="ml-2 text-sm text-slate-500">
+                      · Cap. {entry.data.chapter}
+                    </span>
+                  ) : null}
+                  <span class="mt-1 block font-mono text-xs text-slate-400">
+                    /series/{entry.slug}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+
+    {articles.length === 0 ? (
+      <p class="text-slate-600">No se encontraron artículos en public/data/series.</p>
+    ) : null}
+  </main>
+</Layout>
