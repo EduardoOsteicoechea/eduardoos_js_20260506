@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { THEMES } from '../../lib/preferences';
 import FontPickerPanel from './FontPickerPanel';
+import VisualizationModePanel from './VisualizationModePanel';
 
 export default function ArticleActivityBar({
   theme,
   fontFamilyId,
+  viewMode,
   onToggleTheme,
   onIncreaseFont,
   onDecreaseFont,
@@ -12,14 +14,21 @@ export default function ArticleActivityBar({
   onScrollToBottom,
   onReload,
   onSelectFont,
+  onSelectViewMode,
   isReloading = false,
 }) {
   const isDark = theme === THEMES.dark;
   const [fontPickerOpen, setFontPickerOpen] = useState(false);
+  const [viewModePickerOpen, setViewModePickerOpen] = useState(false);
 
   const handleSelectFont = (id) => {
     onSelectFont(id);
     setFontPickerOpen(false);
+  };
+
+  const handleSelectViewMode = (mode) => {
+    onSelectViewMode(mode);
+    setViewModePickerOpen(false);
   };
 
   return (
@@ -31,6 +40,13 @@ export default function ArticleActivityBar({
         onClose={() => setFontPickerOpen(false)}
       />
 
+      <VisualizationModePanel
+        open={viewModePickerOpen}
+        selectedMode={viewMode}
+        onSelect={handleSelectViewMode}
+        onClose={() => setViewModePickerOpen(false)}
+      />
+
       <footer
         className="theme-border theme-surface fixed bottom-0 left-0 right-0 z-50 h-[45px] overflow-x-auto overflow-y-hidden border-t"
         role="toolbar"
@@ -39,7 +55,24 @@ export default function ArticleActivityBar({
         <div className="flex h-full min-w-max items-center gap-2 px-3 sm:gap-3 sm:px-4">
           <button
             type="button"
-            onClick={() => setFontPickerOpen((open) => !open)}
+            onClick={() => {
+              setViewModePickerOpen((open) => !open);
+              setFontPickerOpen(false);
+            }}
+            className={`theme-toolbar-btn shrink-0 ${viewModePickerOpen ? 'ring-2 ring-black dark:ring-white' : ''}`}
+            aria-label="Modo de visualización"
+            aria-expanded={viewModePickerOpen}
+            title="Modo de visualización"
+          >
+            ▦
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setFontPickerOpen((open) => !open);
+              setViewModePickerOpen(false);
+            }}
             className={`theme-toolbar-btn shrink-0 ${fontPickerOpen ? 'ring-2 ring-black dark:ring-white' : ''}`}
             aria-label="Elegir fuente"
             aria-expanded={fontPickerOpen}

@@ -1,18 +1,45 @@
 import MainHeading from './MainHeading';
 import ArticleMeta from './ArticleMeta';
 import ArticleSummaryIndex from './ArticleSummaryIndex';
-import ContentBlock from './ContentBlock';
+import SectionContent from './SectionContent';
 import Quiz from './Quiz';
 import ArticleSection from './ArticleSection';
+import CollapsibleSection from './CollapsibleSection';
+import { VIEW_MODES } from '../../lib/viewModes';
 
 /**
  * Decoupled article renderer: consumes article JSON and composes UI from
  * dedicated ArticleGenerator components.
  */
-export default function ArticleGenerator({ article, slug, baseFontSize = 18 }) {
+export default function ArticleGenerator({
+  article,
+  slug,
+  baseFontSize = 18,
+  viewMode = VIEW_MODES.regular,
+  expandedSections,
+  onToggleSection,
+}) {
   if (!article) return null;
 
   const serie = article.serie ?? article.series;
+  const showQuizzes = viewMode !== VIEW_MODES.outline;
+  const isCollapsible = viewMode === VIEW_MODES.collapsible;
+
+  const renderSectionBody = (section, sectionIndex) => (
+    <>
+      <div className="article-section__content">
+        <SectionContent
+          content={section.content}
+          sectionIndex={sectionIndex}
+          viewMode={viewMode}
+        />
+      </div>
+
+      {showQuizzes && section.quiz?.length ? (
+        <Quiz items={section.quiz} title="Preguntas de la sección" />
+      ) : null}
+    </>
+  );
 
   return (
     <article
@@ -33,30 +60,37 @@ export default function ArticleGenerator({ article, slug, baseFontSize = 18 }) {
       <ArticleSummaryIndex sections={article.sections} />
 
       <div className="article-sections">
-        {article.sections.map((section, sectionIndex) => (
-          <ArticleSection
-            key={`${sectionIndex}-${section.heading}`}
-            number={sectionIndex + 1}
-            heading={section.heading}
-          >
-            <div className="article-section__content">
-              {section.content?.map((block, blockIndex) => (
-                <ContentBlock
-                  key={`${sectionIndex}-${blockIndex}`}
-                  block={block}
-                  index={blockIndex}
-                />
-              ))}
-            </div>
+        {article.sections.map((section, sectionIndex) => {
+          const number = sectionIndex + 1;
+          const body = renderSectionBody(section, sectionIndex);
 
-            {section.quiz?.length ? (
-              <Quiz items={section.quiz} title="Preguntas de la sección" />
-            ) : null}
-          </ArticleSection>
-        ))}
+          if (isCollapsible) {
+            return (
+              <CollapsibleSection
+                key={`${sectionIndex}-${section.heading}`}
+                number={number}
+                heading={section.heading}
+                isExpanded={expandedSections.has(sectionIndex)}
+                onToggle={() => onToggleSection(sectionIndex)}
+              >
+                {body}
+              </CollapsibleSection>
+            );
+          }
+
+          return (
+            <ArticleSection
+              key={`${sectionIndex}-${section.heading}`}
+              number={number}
+              heading={section.heading}
+            >
+              {body}
+            </ArticleSection>
+          );
+        })}
       </div>
 
-      {article.quiz?.length ? (
+      {showQuizzes && article.quiz?.length ? (
         <Quiz items={article.quiz} title="Evaluación del estudio" />
       ) : null}
     </article>

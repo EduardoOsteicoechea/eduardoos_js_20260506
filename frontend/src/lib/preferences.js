@@ -3,11 +3,13 @@ import {
   applyFontFamilyToDocument,
   getFontFamilyById,
 } from './fonts';
+import { DEFAULT_VIEW_MODE, VIEW_MODES } from './viewModes';
 
 export const STORAGE_KEYS = {
   theme: 'eduardoos-theme',
   fontSize: 'eduardoos-article-font-size',
   fontFamily: 'eduardoos-font-family',
+  viewMode: 'eduardoos-view-mode',
 };
 
 export const THEMES = {
@@ -63,4 +65,18 @@ export function persistFontFamily(fontFamilyId) {
   const font = getFontFamilyById(fontFamilyId);
   localStorage.setItem(STORAGE_KEYS.fontFamily, font.id);
   applyFontFamilyToDocument(font.id);
+}
+
+export function getStoredViewMode() {
+  if (typeof localStorage === 'undefined') return DEFAULT_VIEW_MODE;
+  const stored = localStorage.getItem(STORAGE_KEYS.viewMode);
+  return Object.values(VIEW_MODES).includes(stored)
+    ? stored
+    : DEFAULT_VIEW_MODE;
+}
+
+export function persistViewMode(viewMode) {
+  if (typeof localStorage === 'undefined') return;
+  if (!Object.values(VIEW_MODES).includes(viewMode)) return;
+  localStorage.setItem(STORAGE_KEYS.viewMode, viewMode);
 }

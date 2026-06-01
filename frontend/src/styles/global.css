@@ -39,4 +39,16 @@
   .article-section-heading {
     @apply scroll-mt-6;
   }
+
+  .article-section-toggle {
+    @apply border-l-4 border-transparent transition-colors;
+  }
+
+  .article-section-toggle--active {
+    @apply border-black bg-black/[0.08] dark:border-white dark:bg-white/[0.1];
+  }
+
+  .article-section-toggle:not(.article-section-toggle--active):hover {
+    @apply bg-black/[0.03] dark:bg-white/[0.05];
+  }
 }

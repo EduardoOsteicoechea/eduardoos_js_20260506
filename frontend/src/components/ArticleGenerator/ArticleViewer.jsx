@@ -7,10 +7,13 @@ import {
   getStoredFontFamily,
   getStoredFontSize,
   getStoredTheme,
+  getStoredViewMode,
   persistFontFamily,
   persistFontSize,
   persistTheme,
+  persistViewMode,
 } from '../../lib/preferences';
+import { VIEW_MODES } from '../../lib/viewModes';
 
 const MIN_FONT_PX = 14;
 const MAX_FONT_PX = 32;
@@ -22,6 +25,8 @@ export default function ArticleViewer({ initialArticle, slug, jsonPath }) {
   const [baseFontSize, setBaseFontSize] = useState(DEFAULT_FONT_PX);
   const [theme, setTheme] = useState(THEMES.light);
   const [fontFamilyId, setFontFamilyId] = useState('montserrat');
+  const [viewMode, setViewMode] = useState(VIEW_MODES.regular);
+  const [expandedSections, setExpandedSections] = useState(() => new Set());
   const [prefsReady, setPrefsReady] = useState(false);
   const [isReloading, setIsReloading] = useState(false);
   const [reloadError, setReloadError] = useState(null);
@@ -30,8 +35,10 @@ export default function ArticleViewer({ initialArticle, slug, jsonPath }) {
     setBaseFontSize(getStoredFontSize(DEFAULT_FONT_PX));
     const storedTheme = getStoredTheme();
     const storedFontFamily = getStoredFontFamily();
+    const storedViewMode = getStoredViewMode();
     setTheme(storedTheme);
     setFontFamilyId(storedFontFamily);
+    setViewMode(storedViewMode);
     applyThemeToDocument(storedTheme);
     persistFontFamily(storedFontFamily);
     setPrefsReady(true);
@@ -51,6 +58,23 @@ export default function ArticleViewer({ initialArticle, slug, jsonPath }) {
     if (!prefsReady) return;
     persistFontFamily(fontFamilyId);
   }, [fontFamilyId, prefsReady]);
+
+  useEffect(() => {
+    if (!prefsReady) return;
+    persistViewMode(viewMode);
+  }, [viewMode, prefsReady]);
+
+  const toggleSection = useCallback((sectionIndex) => {
+    setExpandedSections((previous) => {
+      const next = new Set(previous);
+      if (next.has(sectionIndex)) {
+        next.delete(sectionIndex);
+      } else {
+        next.add(sectionIndex);
+      }
+      return next;
+    });
+  }, []);
 
   const increaseFont = useCallback(() => {
     setBaseFontSize((size) => Math.min(size + FONT_STEP_PX, MAX_FONT_PX));
@@ -99,6 +123,7 @@ export default function ArticleViewer({ initialArticle, slug, jsonPath }) {
       }
 
       setArticle(data);
+      setExpandedSections(new Set());
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (error) {
       setReloadError(
@@ -121,12 +146,17 @@ export default function ArticleViewer({ initialArticle, slug, jsonPath }) {
         article={article}
         slug={slug}
         baseFontSize={baseFontSize}
+        viewMode={viewMode}
+        expandedSections={expandedSections}
+        onToggleSection={toggleSection}
       />
 
       <ArticleActivityBar
         theme={theme}
         fontFamilyId={fontFamilyId}
+        viewMode={viewMode}
         onSelectFont={setFontFamilyId}
+        onSelectViewMode={setViewMode}
         onToggleTheme={toggleTheme}
         onIncreaseFont={increaseFont}
         onDecreaseFont={decreaseFont}

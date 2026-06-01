@@ -6,8 +6,20 @@ import List from './List';
 /**
  * Maps a JSON content block to the matching presentation component.
  */
-export default function ContentBlock({ block, index }) {
+export default function ContentBlock({ block, index, outlineOnly = false }) {
   if (!block) return null;
+
+  if (outlineOnly) {
+    if (!block.biblical_reference) return null;
+    return (
+      <BiblicalQuote
+        key={index}
+        text={block.text}
+        reference={block.biblical_reference}
+        emphasizedPhrases={block.emphasized_phrases}
+      />
+    );
+  }
 
   if (block.list?.length) {
     return (
