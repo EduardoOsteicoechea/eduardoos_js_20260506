@@ -1,0 +1,19 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { PostEditor } from "../../components/PostEditor";
+---
+
+<Layout title="Editor de artículos | Eduardo Osteicoechea">
+  <main class="mx-auto max-w-4xl px-5 py-10">
+    <nav class="mb-8">
+      <a
+        href="/series"
+        class="text-sm font-medium underline opacity-80 hover:opacity-100"
+      >
+        ← Estudios bíblicos
+      </a>
+    </nav>
+
+    <PostEditor client:load />
+  </main>
+</Layout>

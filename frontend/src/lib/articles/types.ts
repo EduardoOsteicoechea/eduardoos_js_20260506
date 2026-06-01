@@ -1,10 +1,15 @@
+export interface ListItemBlock {
+  text: string;
+  emphasized_phrases?: string[];
+}
+
 export interface ContentBlock {
   text?: string;
   biblical_reference?: string;
   emphasized_phrases?: string[];
   image?: string;
   alt?: string;
-  list?: string[];
+  list?: Array<string | ListItemBlock>;
   ordered?: boolean;
 }
 
