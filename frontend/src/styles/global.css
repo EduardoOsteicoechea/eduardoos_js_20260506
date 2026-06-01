@@ -5,6 +5,7 @@
 @layer base {
   html {
     --font-family: "Montserrat", sans-serif;
+    scrollbar-gutter: stable;
     @apply antialiased;
   }
 
@@ -50,5 +51,45 @@
 
   .article-section-toggle:not(.article-section-toggle--active):hover {
     @apply bg-black/[0.03] dark:bg-white/[0.05];
+  }
+
+  .article-generator audio {
+    @apply h-10 w-full;
+    color-scheme: light dark;
+  }
+
+  .site-menu-drawer {
+    animation: site-menu-slide-in 0.25s ease-out;
+    max-height: 100dvh;
+  }
+
+  .site-menu-tray {
+    height: 100%;
+  }
+
+  .site-menu-settings-overlay {
+    animation: site-menu-fade-in 0.2s ease-out;
+  }
+
+  .site-menu-settings {
+    animation: site-menu-slide-in 0.2s ease-out;
+  }
+}
+
+@keyframes site-menu-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes site-menu-slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
   }
 }

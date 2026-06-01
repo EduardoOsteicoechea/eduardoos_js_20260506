@@ -1,9 +1,9 @@
 ---
-import { discoverArticles } from "../../lib/articles/discover";
+import { discoverSeriesSlugs } from "../../lib/articles/discover";
 
 export async function getStaticPaths() {
-  const articles = await discoverArticles();
-  return articles.map(({ slug }) => ({
+  const slugs = await discoverSeriesSlugs();
+  return slugs.map((slug) => ({
     params: { slug },
   }));
 }

@@ -14,13 +14,19 @@ import {
   persistViewMode,
 } from '../../lib/preferences';
 import { VIEW_MODES } from '../../lib/viewModes';
+import { useSermonPlayer } from './useSermonPlayer';
 
 const MIN_FONT_PX = 14;
 const MAX_FONT_PX = 32;
 const FONT_STEP_PX = 2;
 const DEFAULT_FONT_PX = 18;
 
-export default function ArticleViewer({ initialArticle, slug, jsonPath }) {
+export default function ArticleViewer({
+  initialArticle,
+  slug,
+  jsonPath,
+  sermonPath: initialSermonPath,
+}) {
   const [article, setArticle] = useState(initialArticle);
   const [baseFontSize, setBaseFontSize] = useState(DEFAULT_FONT_PX);
   const [theme, setTheme] = useState(THEMES.light);
@@ -30,6 +36,29 @@ export default function ArticleViewer({ initialArticle, slug, jsonPath }) {
   const [prefsReady, setPrefsReady] = useState(false);
   const [isReloading, setIsReloading] = useState(false);
   const [reloadError, setReloadError] = useState(null);
+  const [sermonPath, setSermonPath] = useState(initialSermonPath);
+
+  const sermon = useSermonPlayer(sermonPath);
+
+  useEffect(() => {
+    if (initialSermonPath) {
+      setSermonPath(initialSermonPath);
+      return;
+    }
+
+    if (!slug) {
+      setSermonPath(undefined);
+      return;
+    }
+
+    const candidate = `/data/series/${slug.replace(/^\/+|\/+$/g, '')}/sermon.mp3`;
+
+    fetch(candidate, { method: 'HEAD' })
+      .then((response) => {
+        setSermonPath(response.ok ? candidate : undefined);
+      })
+      .catch(() => setSermonPath(undefined));
+  }, [initialSermonPath, slug]);
 
   useEffect(() => {
     setBaseFontSize(getStoredFontSize(DEFAULT_FONT_PX));
@@ -124,6 +153,7 @@ export default function ArticleViewer({ initialArticle, slug, jsonPath }) {
 
       setArticle(data);
       setExpandedSections(new Set());
+      sermon.stop();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (error) {
       setReloadError(
@@ -132,7 +162,7 @@ export default function ArticleViewer({ initialArticle, slug, jsonPath }) {
     } finally {
       setIsReloading(false);
     }
-  }, [jsonPath]);
+  }, [jsonPath, sermon]);
 
   return (
     <>
@@ -149,11 +179,14 @@ export default function ArticleViewer({ initialArticle, slug, jsonPath }) {
         viewMode={viewMode}
         expandedSections={expandedSections}
         onToggleSection={toggleSection}
+        sermonPath={sermon.hasSermon ? sermonPath : undefined}
+        sermonAudioRef={sermon.audioRef}
       />
 
       <ArticleActivityBar
         theme={theme}
         fontFamilyId={fontFamilyId}
+        baseFontSize={baseFontSize}
         viewMode={viewMode}
         onSelectFont={setFontFamilyId}
         onSelectViewMode={setViewMode}
@@ -164,6 +197,10 @@ export default function ArticleViewer({ initialArticle, slug, jsonPath }) {
         onScrollToBottom={scrollToBottom}
         onReload={reloadJson}
         isReloading={isReloading}
+        hasSermon={sermon.hasSermon}
+        isSermonPlaying={sermon.isPlaying}
+        isSermonLoading={sermon.isLoading}
+        onToggleSermon={sermon.togglePlayPause}
       />
     </>
   );

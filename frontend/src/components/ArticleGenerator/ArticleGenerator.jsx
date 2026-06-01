@@ -3,8 +3,10 @@ import ArticleMeta from './ArticleMeta';
 import ArticleSummaryIndex from './ArticleSummaryIndex';
 import SectionContent from './SectionContent';
 import Quiz from './Quiz';
+import CollapsibleQuiz from './CollapsibleQuiz';
 import ArticleSection from './ArticleSection';
 import CollapsibleSection from './CollapsibleSection';
+import SermonPlayer from './SermonPlayer';
 import { VIEW_MODES } from '../../lib/viewModes';
 
 /**
@@ -18,6 +20,8 @@ export default function ArticleGenerator({
   viewMode = VIEW_MODES.regular,
   expandedSections,
   onToggleSection,
+  sermonPath,
+  sermonAudioRef,
 }) {
   if (!article) return null;
 
@@ -36,7 +40,12 @@ export default function ArticleGenerator({
       </div>
 
       {showQuizzes && section.quiz?.length ? (
-        <Quiz items={section.quiz} title="Preguntas de la sección" />
+        <CollapsibleQuiz
+          title="Preguntas de la sección"
+          questionCount={section.quiz.length}
+        >
+          <Quiz items={section.quiz} />
+        </CollapsibleQuiz>
       ) : null}
     </>
   );
@@ -56,6 +65,8 @@ export default function ArticleGenerator({
       <MainHeading subtitle={serie ? `Serie ${serie}` : undefined}>
         {article.title}
       </MainHeading>
+
+      <SermonPlayer sermonPath={sermonPath} audioRef={sermonAudioRef} />
 
       <ArticleSummaryIndex sections={article.sections} />
 
@@ -91,7 +102,12 @@ export default function ArticleGenerator({
       </div>
 
       {showQuizzes && article.quiz?.length ? (
-        <Quiz items={article.quiz} title="Evaluación del estudio" />
+        <CollapsibleQuiz
+          title="Evaluación del estudio"
+          questionCount={article.quiz.length}
+        >
+          <Quiz items={article.quiz} />
+        </CollapsibleQuiz>
       ) : null}
     </article>
   );

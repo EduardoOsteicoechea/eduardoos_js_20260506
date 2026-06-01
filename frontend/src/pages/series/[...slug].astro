@@ -1,54 +1,373 @@
 ---
+
 import Layout from "../../layouts/Layout.astro";
-import { discoverArticles, getArticleBySlug } from "../../lib/articles/discover";
-import type { ArticleData } from "../../lib/articles/types";
+
+import SeriesBreadcrumbs from "../../components/series/SeriesBreadcrumbs.astro";
+
+import SeriesChildCards from "../../components/series/SeriesChildCards.astro";
+
+import SeriesHubPosts from "../../components/series/SeriesHubPosts.astro";
+
+import {
+
+  discoverArticles,
+
+  discoverHubs,
+
+  discoverSeriesSlugs,
+
+  formatSegmentLabel,
+
+  getHubPostLinks,
+
+  getSeriesBreadcrumbs,
+
+  getSeriesChildren,
+
+} from "../../lib/articles/discover";
+
+import type { ArticleData, SeriesHubData } from "../../lib/articles/types";
+
 import ArticleViewer from "../../components/ArticleGenerator/ArticleViewer.jsx";
 
-interface Props {
-  article: ArticleData;
+
+
+interface ArticleProps {
+
+  routeKind: "article";
+
   slug: string;
+
+  article: ArticleData;
+
+  sermonPath?: string;
+
 }
+
+
+
+interface HubProps {
+
+  routeKind: "hub";
+
+  slug: string;
+
+  hub: SeriesHubData;
+
+  hubPosts: ReturnType<typeof getHubPostLinks>;
+
+  pageTitle: string;
+
+  breadcrumbs: ReturnType<typeof getSeriesBreadcrumbs>;
+
+}
+
+
+
+interface IndexProps {
+
+  routeKind: "index";
+
+  slug: string;
+
+  pageTitle: string;
+
+  breadcrumbs: ReturnType<typeof getSeriesBreadcrumbs>;
+
+  children: Awaited<ReturnType<typeof getSeriesChildren>>;
+
+}
+
+
+
+type PageProps = ArticleProps | HubProps | IndexProps;
 
 export async function getStaticPaths() {
+
   const articles = await discoverArticles();
 
-  return articles.map(({ slug, data }) => ({
-    params: { slug },
-    props: { article: data, slug },
-  }));
+  const hubs = await discoverHubs();
+
+  const hubBySlug = new Map(hubs.map((hub) => [hub.slug, hub]));
+
+  const articleBySlug = new Map(articles.map((article) => [article.slug, article]));
+
+  const slugs = await discoverSeriesSlugs();
+
+
+
+  return Promise.all(
+
+    slugs.map(async (slug) => {
+
+      const article = articleBySlug.get(slug);
+
+      if (article) {
+
+        return {
+
+          params: { slug },
+
+          props: {
+
+            routeKind: "article",
+
+            slug,
+
+            article: article.data,
+
+            sermonPath: article.sermonPath,
+
+          } satisfies ArticleProps,
+
+        };
+
+      }
+
+
+
+      const hub = hubBySlug.get(slug);
+
+      if (hub) {
+
+        const pageTitle = hub.data.section
+
+          ? String(hub.data.section)
+
+          : formatSegmentLabel(slug.split("/").pop() ?? slug);
+
+
+
+        return {
+
+          params: { slug },
+
+          props: {
+
+            routeKind: "hub",
+
+            slug,
+
+            hub: hub.data,
+
+            hubPosts: getHubPostLinks(slug, hub.data, articles),
+
+            pageTitle,
+
+            breadcrumbs: getSeriesBreadcrumbs(slug),
+
+          } satisfies HubProps,
+
+        };
+
+      }
+
+
+
+      const pageTitle = formatSegmentLabel(slug.split("/").pop() ?? slug);
+
+
+
+      return {
+
+        params: { slug },
+
+        props: {
+
+          routeKind: "index",
+
+          slug,
+
+          pageTitle,
+
+          breadcrumbs: getSeriesBreadcrumbs(slug),
+
+          children: await getSeriesChildren(slug, articles, hubs),
+
+        } satisfies IndexProps,
+
+      };
+
+    }),
+
+  );
+
 }
+
+
 
 const slugParam = Astro.params.slug as string | string[] | undefined;
+
 const slug = Array.isArray(slugParam) ? slugParam.join("/") : (slugParam ?? "");
 
-const props = Astro.props as Props;
-let article: ArticleData | undefined = props.article;
+const props = Astro.props as PageProps;
 
-if (!article && slug) {
-  const found = await getArticleBySlug(slug);
-  article = found?.data;
-}
-
-if (!article) {
-  return Astro.redirect("/series");
-}
-
-const jsonPath = `/data/series/${slug}/data.json`;
 ---
 
-<Layout title={`${article.title} | Eduardo Osteicoechea`}>
-  <main class="mx-auto max-w-3xl px-5 pb-[65px] pt-10">
-    <nav class="mb-8">
-      <a href="/series" class="text-sm font-medium underline opacity-80 hover:opacity-100">
-        ← Todos los estudios
-      </a>
-    </nav>
 
-    <ArticleViewer
-      initialArticle={article}
-      slug={slug}
-      jsonPath={jsonPath}
-      client:load
-    />
-  </main>
-</Layout>
+
+{props.routeKind === "article" ? (
+
+  <Layout title={`${props.article.title} | Eduardo Osteicoechea`}>
+
+    <main class="mx-auto max-w-3xl px-5 pb-[65px] pt-10">
+
+      <nav class="mb-8">
+
+        <a
+
+          href="/series"
+
+          class="text-sm font-medium underline opacity-80 hover:opacity-100"
+
+        >
+
+          ← Todos los estudios
+
+        </a>
+
+      </nav>
+
+
+
+      <ArticleViewer
+
+        initialArticle={props.article}
+
+        slug={slug}
+
+        jsonPath={`/data/series/${slug}/data.json`}
+
+        sermonPath={props.sermonPath}
+
+        client:load
+
+      />
+
+    </main>
+
+  </Layout>
+
+) : props.routeKind === "hub" ? (
+
+  <Layout title={`${props.pageTitle} | Eduardo Osteicoechea`}>
+
+    <main class="mx-auto max-w-4xl px-5 py-10">
+
+      <SeriesBreadcrumbs crumbs={props.breadcrumbs} currentLabel={props.pageTitle} />
+
+
+
+      <header class="mb-10">
+
+        <p class="theme-muted text-sm uppercase tracking-wide">
+
+          {props.hub.series ? `Serie ${props.hub.series}` : "Estudio bíblico"}
+
+        </p>
+
+        <h1 class="mt-2 text-3xl font-bold">{props.pageTitle}</h1>
+
+        {props.hub.description ? (
+
+          <p class="theme-muted mt-4 text-lg leading-relaxed">{props.hub.description}</p>
+
+        ) : null}
+
+        {props.hub.purpose ? (
+
+          <p class="mt-4 leading-relaxed">{props.hub.purpose}</p>
+
+        ) : null}
+
+      </header>
+
+
+
+      {
+
+        props.hub.biblical_texts?.length ? (
+
+          <section class="theme-border mb-10 rounded-lg border px-5 py-4">
+
+            <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide opacity-70">
+
+              Texto bíblico
+
+            </h2>
+
+            <ul class="space-y-3">
+
+              {props.hub.biblical_texts.map((item) => (
+
+                <li>
+
+                  {item.text ? <p class="leading-relaxed">{item.text}</p> : null}
+
+                  {item.reference ? (
+
+                    <p class="theme-muted mt-1 text-sm font-medium">{item.reference}</p>
+
+                  ) : null}
+
+                </li>
+
+              ))}
+
+            </ul>
+
+          </section>
+
+        ) : null
+
+      }
+
+
+
+      <section>
+
+        <h2 class="mb-4 text-xl font-semibold">Estudios</h2>
+
+        <SeriesHubPosts posts={props.hubPosts} />
+
+      </section>
+
+    </main>
+
+  </Layout>
+
+) : (
+
+  <Layout title={`${props.pageTitle} | Eduardo Osteicoechea`}>
+
+    <main class="mx-auto max-w-4xl px-5 py-10">
+
+      <SeriesBreadcrumbs crumbs={props.breadcrumbs} currentLabel={props.pageTitle} />
+
+
+
+      <header class="mb-10">
+
+        <h1 class="text-3xl font-bold">{props.pageTitle}</h1>
+
+      </header>
+
+
+
+      {props.children.length > 0 ? (
+
+        <SeriesChildCards items={props.children} />
+
+      ) : (
+
+        <p class="theme-muted">No hay estudios en esta ruta.</p>
+
+      )}
+
+    </main>
+
+  </Layout>
+
+)}
+
+

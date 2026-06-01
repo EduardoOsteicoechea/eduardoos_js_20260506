@@ -1,0 +1,40 @@
+---
+import type { SeriesHubPostLink } from '../../lib/articles/types';
+
+interface Props {
+  posts: SeriesHubPostLink[];
+}
+
+const { posts } = Astro.props;
+---
+
+<ul class="space-y-3">
+  {
+    posts.map((post) => (
+      <li>
+        {post.href ? (
+          <a
+            href={post.href}
+            class="theme-border block rounded-lg border px-5 py-4 transition hover:bg-black/5 dark:hover:bg-white/10"
+          >
+            <span class="font-semibold">
+              {post.articleTitle ?? post.contribution}
+            </span>
+            {post.abstract ? (
+              <p class="theme-muted mt-2 text-sm leading-relaxed">{post.abstract}</p>
+            ) : null}
+            <span class="theme-muted mt-2 block text-xs">{post.contribution}</span>
+          </a>
+        ) : (
+          <div class="theme-border rounded-lg border px-5 py-4 opacity-60">
+            <span class="font-semibold">{post.contribution}</span>
+            {post.abstract ? (
+              <p class="theme-muted mt-2 text-sm leading-relaxed">{post.abstract}</p>
+            ) : null}
+            <span class="theme-muted mt-2 block text-xs">Próximamente</span>
+          </div>
+        )}
+      </li>
+    ))
+  }
+</ul>
