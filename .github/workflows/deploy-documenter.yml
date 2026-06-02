@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'documenter/**'
+      - 'deploy/systemd/eduardoos-documenter.service'
       - '.github/workflows/deploy-documenter.yml'
   workflow_dispatch:
 
@@ -47,21 +48,44 @@ jobs:
           SSH_OPTS="-i ~/.ssh/id_rsa -o StrictHostKeyChecking=yes"
           REMOTE_DIR="/home/$USER/documenter"
 
-          ssh $SSH_OPTS "$USER@$HOST" "mkdir -p $REMOTE_DIR"
+          ssh $SSH_OPTS "$USER@$HOST" "mkdir -p $REMOTE_DIR/public/data $REMOTE_DIR/dist"
 
           rsync -avz -e "ssh $SSH_OPTS" \
-            ./dist \
-            ./public/data \
+            ./dist/ \
+            "$USER@$HOST:$REMOTE_DIR/dist/"
+
+          rsync -avz -e "ssh $SSH_OPTS" \
+            ./public/data/ \
+            "$USER@$HOST:$REMOTE_DIR/public/data/"
+
+          rsync -avz -e "ssh $SSH_OPTS" \
             ./package.json \
             ./package-lock.json \
             "$USER@$HOST:$REMOTE_DIR/"
 
+          rsync -avz -e "ssh $SSH_OPTS" \
+            ../deploy/systemd/eduardoos-documenter.service \
+            "$USER@$HOST:/tmp/eduardoos-documenter.service"
+
           ssh $SSH_OPTS "$USER@$HOST" bash -s <<EOF
             set -euo pipefail
-            cd "$REMOTE_DIR"
+            REMOTE_DIR="/home/$USER/documenter"
+
+            if [ -d "\$REMOTE_DIR/data/series" ] && [ ! -e "\$REMOTE_DIR/public/data/series" ]; then
+              mkdir -p "\$REMOTE_DIR/public/data"
+              mv "\$REMOTE_DIR/data/series" "\$REMOTE_DIR/public/data/series"
+              rmdir "\$REMOTE_DIR/data" 2>/dev/null || true
+            fi
+
+            sudo cp /tmp/eduardoos-documenter.service /etc/systemd/system/eduardoos-documenter.service
+            cd "\$REMOTE_DIR"
             npm ci --omit=dev
             sudo systemctl daemon-reload
             sudo systemctl enable eduardoos-documenter
             sudo systemctl restart eduardoos-documenter
             sudo systemctl --no-pager --full status eduardoos-documenter
+
+            curl -sf "http://127.0.0.1:8090/health" >/dev/null \
+              || { echo "ERROR: documenter /health check failed"; exit 1; }
+            echo "Documenter deploy OK"
           EOF

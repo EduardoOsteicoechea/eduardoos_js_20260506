@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'frontend/**'
+      - 'deploy/nginx/**'
       - '.github/workflows/deploy-frontend.yml'
   workflow_dispatch:
 
@@ -48,4 +49,18 @@ jobs:
 
           ssh $SSH_OPTS "$USER@$HOST" "sudo mkdir -p /var/www/eduardoos.com/dist && sudo chown -R $USER:$USER /var/www/eduardoos.com"
 
-          rsync -avz --delete -e "ssh $SSH_OPTS" ./dist/ "$USER@$HOST:/var/www/eduardoos.com/dist/"
+          rsync -avz --delete -e "ssh $SSH_OPTS" \
+            ./dist/ \
+            "$USER@$HOST:/var/www/eduardoos.com/dist/"
+
+          rsync -avz -e "ssh $SSH_OPTS" \
+            ../deploy/nginx/eduardoos.com.conf \
+            "$USER@$HOST:/tmp/eduardoos.com.conf"
+
+          ssh $SSH_OPTS "$USER@$HOST" bash -s <<'EOF'
+            set -euo pipefail
+            sudo cp /tmp/eduardoos.com.conf /etc/nginx/conf.d/eduardoos.com.conf
+            sudo nginx -t
+            sudo systemctl reload nginx
+            echo "Frontend + nginx deploy OK"
+          EOF

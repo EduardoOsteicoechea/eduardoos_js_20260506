@@ -23,8 +23,13 @@ app.use(
 
 app.use('/api', apiRouter);
 
-const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Backend API running on http://0.0.0.0:${PORT}`);
+const server = app.listen(PORT, '0.0.0.0');
+
+server.on('listening', () => {
+  const address = server.address();
+  const boundPort =
+    address && typeof address === 'object' ? address.port : PORT;
+  console.log(`Backend API running on http://0.0.0.0:${boundPort}`);
 });
 
 server.on('error', (error: NodeJS.ErrnoException) => {
