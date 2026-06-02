@@ -89,7 +89,7 @@ jobs:
             sudo systemctl restart eduardoos-telemetry
             sleep 1
             sudo systemctl --no-pager --full status eduardoos-telemetry
-            curl -sf "http://127.0.0.1:8100/api/server/healt" >/dev/null \
-              || { echo "ERROR: telemetry /api/server/healt check failed"; exit 1; }
+            curl -sf "http://127.0.0.1:8100/api/server/health" >/dev/null \
+              || { echo "ERROR: telemetry /api/server/health check failed"; exit 1; }
             echo "Telemetry deploy OK"
           EOF

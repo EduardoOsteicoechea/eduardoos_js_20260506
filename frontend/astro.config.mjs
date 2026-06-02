@@ -18,7 +18,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
     server: {
       proxy: {
-        '/api/server/healt': {
+        '/api/server/health': {
           target: telemetryProxyTarget,
           changeOrigin: true,
         },

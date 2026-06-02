@@ -11,7 +11,7 @@ import (
 func main() {
 	cfg := config.Load()
 	mux := http.NewServeMux()
-	mux.HandleFunc("/api/server/healt", handler.Health(cfg))
+	mux.HandleFunc("/api/server/health", handler.Health(cfg))
 
 	addr := ":" + cfg.Port
 	log.Printf("telemetry listening on %s (log_mode=%s)", addr, cfg.LogMode)

@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
+const HEALTH_API_PATH = '/api/server/health';
+
 function formatBytes(bytes) {
   if (!Number.isFinite(bytes) || bytes <= 0) return '0 B';
   const units = ['B', 'KB', 'MB', 'GB', 'TB'];
@@ -12,12 +14,85 @@ function formatBytes(bytes) {
   return `${value.toFixed(index === 0 ? 0 : 1)} ${units[index]}`;
 }
 
-function MetricCard({ label, children }) {
+async function copyTextToClipboard(text) {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.setAttribute('readonly', '');
+  textarea.style.position = 'fixed';
+  textarea.style.left = '-9999px';
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+}
+
+function CopyButton({ text, label = 'Copiar' }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await copyTextToClipboard(text);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  };
+
   return (
-    <div className="theme-border rounded-xl border p-4">
-      <p className="theme-muted mb-2 text-xs font-semibold uppercase tracking-wide">
-        {label}
-      </p>
+    <button
+      type="button"
+      onClick={handleCopy}
+      className="theme-toolbar-btn shrink-0 px-3 py-1 text-xs"
+      title="Copiar al portapapeles"
+    >
+      {copied ? 'Copiado' : label}
+    </button>
+  );
+}
+
+function PanelHeader({ title, subtitle, copyText }) {
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-2">
+      <div className="min-w-0">
+        <h2 className="text-lg font-semibold">{title}</h2>
+        {subtitle ? <span className="theme-muted text-xs">{subtitle}</span> : null}
+      </div>
+      <CopyButton text={copyText} />
+    </div>
+  );
+}
+
+function formatMemoryText(memory) {
+  if (!memory) return '';
+  return [
+    `Total: ${formatBytes(memory.total_bytes)}`,
+    `Usada: ${formatBytes(memory.used_bytes)}`,
+    `Disponible: ${formatBytes(memory.available_bytes)}`,
+    `Uso: ${memory.used_percent}%`,
+  ].join('\n');
+}
+
+function formatDiskText(disk) {
+  if (!disk) return '';
+  return [
+    `Ruta: ${disk.path}`,
+    `Total: ${formatBytes(disk.total_bytes)}`,
+    `Usado: ${formatBytes(disk.used_bytes)}`,
+    `Libre: ${formatBytes(disk.free_bytes)}`,
+    `Uso: ${disk.used_percent}%`,
+  ].join('\n');
+}
+
+function MetricCard({ label, copyText, children }) {
+  return (
+    <div className="theme-border space-y-2 rounded-xl border p-4">
+      <PanelHeader title={label} copyText={copyText} />
       {children}
     </div>
   );
@@ -26,18 +101,17 @@ function MetricCard({ label, children }) {
 function LogPanel({ title, block }) {
   const error = block?.error;
   const lines = Array.isArray(block?.logs) ? block.logs : [];
+  const logText = lines.length ? lines.join('\n') : '(sin líneas de log)';
+  const copyText = error ? `${error}\n\n${logText}` : logText;
 
   return (
     <section className="theme-border space-y-2 rounded-xl border p-4">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-lg font-semibold">{title}</h2>
-        <span className="theme-muted text-xs">{block?.service}</span>
-      </div>
+      <PanelHeader title={title} subtitle={block?.service} copyText={copyText} />
       {error ? (
         <p className="text-sm text-red-600 dark:text-red-300">{error}</p>
       ) : null}
       <pre className="theme-border max-h-72 overflow-auto rounded-lg border bg-black/5 p-3 text-xs leading-relaxed dark:bg-white/5">
-        {lines.length ? lines.join('\n') : '(sin líneas de log)'}
+        {logText}
       </pre>
     </section>
   );
@@ -52,7 +126,7 @@ export default function ServerHealthDashboard() {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch('/api/server/healt');
+      const response = await fetch(HEALTH_API_PATH);
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
       }
@@ -94,7 +168,7 @@ export default function ServerHealthDashboard() {
 
       {error ? (
         <p className="rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-300">
-          No se pudo cargar /api/server/healt: {error}
+          No se pudo cargar {HEALTH_API_PATH}: {error}
         </p>
       ) : null}
 
@@ -103,7 +177,7 @@ export default function ServerHealthDashboard() {
       ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <MetricCard label="Memoria RAM">
+        <MetricCard label="Memoria RAM" copyText={formatMemoryText(memory)}>
           {memory ? (
             <ul className="space-y-1 text-sm">
               <li>Total: {formatBytes(memory.total_bytes)}</li>
@@ -116,7 +190,7 @@ export default function ServerHealthDashboard() {
           )}
         </MetricCard>
 
-        <MetricCard label="Disco">
+        <MetricCard label="Disco" copyText={formatDiskText(disk)}>
           {disk ? (
             <ul className="space-y-1 text-sm">
               <li>Ruta: {disk.path}</li>
