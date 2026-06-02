@@ -1,69 +1,42 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import EditorActionButton from '../../EditorActionButton';
 import { inputClassName, labelClassName } from './editorInputStyles';
 import LinkUnitEditor from './LinkUnitEditor';
 import ListUnitEditor from './ListUnitEditor';
 import MediaUnitEditor from './MediaUnitEditor';
-import { UnitPreviewBody } from './unitPreviewDisplay';
 import {
-  commitLinkUnitFields,
-  commitListUnitFields,
-  commitMediaUnitFields,
-  commitTextUnitFields,
   commitUnitFields,
   normalizeUnitData,
   unitIsMediaType,
   unitSupportsEditor,
   unitSupportsTextEmphasis,
-  unitToEditorPreviewBlock,
 } from './unitContentModel';
 
 export default function SectionUnitEditor({
   unit,
-  isActive,
   pendingFile,
   onPendingFileChange,
-  onActivate,
   onCommit,
-  onDeactivate,
   onRemove,
 }) {
-  const rootRef = useRef(null);
   const normalized = normalizeUnitData(unit);
   const [draft, setDraft] = useState(normalized);
 
   useEffect(() => {
-    if (isActive) {
-      setDraft(normalizeUnitData(unit));
-    }
-  }, [isActive, unit]);
-
-  const finishEditing = useCallback(() => {
-    onCommit(unit.id, commitUnitFields(unit, draft));
-    onDeactivate();
-  }, [unit, draft, onCommit, onDeactivate]);
-
-  useEffect(() => {
-    if (!isActive) return undefined;
-
-    const handlePointerDown = (event) => {
-      if (rootRef.current?.contains(event.target)) return;
-      finishEditing();
-    };
-
-    document.addEventListener('mousedown', handlePointerDown);
-    return () => document.removeEventListener('mousedown', handlePointerDown);
-  }, [isActive, finishEditing]);
+    setDraft(normalizeUnitData(unit));
+  }, [unit]);
 
   const handleFieldChange = (field, value) => {
     setDraft((previous) => ({ ...previous, [field]: value }));
   };
 
-  const previewBlock = unitToEditorPreviewBlock({
-    ...unit,
-    data: unitSupportsEditor(unit.type)
-      ? commitUnitFields(unit, draft)
-      : unit.data,
-  });
+  useEffect(() => {
+    if (!unitSupportsEditor(unit.type)) return;
+    const committed = commitUnitFields(unit, draft);
+    const current = commitUnitFields(unit, normalizeUnitData(unit));
+    if (JSON.stringify(committed) === JSON.stringify(current)) return;
+    onCommit(unit.id, committed);
+  }, [draft, unit, onCommit]);
 
   const renderEditorFields = () => {
     if (unit.type === 'list') {
@@ -106,7 +79,6 @@ export default function SectionUnitEditor({
               }
               rows={4}
               className={`${inputClassName} resize-y`}
-              autoFocus
             />
           </div>
 
@@ -152,64 +124,39 @@ export default function SectionUnitEditor({
     return null;
   };
 
+  if (!unitSupportsEditor(unit.type)) {
+    return (
+      <article className="theme-border rounded-xl border px-4 py-3">
+        <div className="flex justify-end">
+          <EditorActionButton
+            variant="danger"
+            className="shrink-0 text-xs"
+            onClick={() => onRemove(unit.id)}
+            aria-label="Quitar unidad"
+          >
+            Quitar
+          </EditorActionButton>
+        </div>
+      </article>
+    );
+  }
+
   return (
-    <article
-      ref={rootRef}
-      className={`theme-border rounded-xl border transition-colors ${
-        isActive
-          ? 'border-black ring-2 ring-black dark:border-white dark:ring-white'
-          : 'hover:bg-black/[0.03] dark:hover:bg-white/[0.05]'
-      }`}
-    >
-      <div className="flex items-start justify-between gap-3 px-4 py-3">
-        <button
-          type="button"
-          className="min-w-0 flex-1 text-left"
-          onClick={onActivate}
-          disabled={isActive}
-        >
-          <UnitPreviewBody unit={unit} />
-        </button>
-        <button
-          type="button"
+    <article className="theme-border rounded-xl border">
+      <div className="flex items-center justify-end px-4 py-2">
+        <EditorActionButton
+          variant="danger"
+          className="shrink-0 text-xs"
           onClick={() => onRemove(unit.id)}
-          className="theme-toolbar-btn shrink-0 text-xs"
           aria-label="Quitar unidad"
         >
           Quitar
-        </button>
+        </EditorActionButton>
       </div>
 
-      {isActive && unitSupportsEditor(unit.type) ? (
-        <div className="theme-border space-y-4 border-t px-4 py-4">
-          {renderEditorFields()}
-
-          <div className="flex justify-end">
-            <button
-              type="button"
-              onClick={finishEditing}
-              className="theme-toolbar-btn px-4 text-sm"
-            >
-              Listo
-            </button>
-          </div>
-
-          <div className="theme-border rounded-lg border bg-black/[0.03] px-3 py-2 dark:bg-white/[0.06]">
-            <p className="mb-1 text-xs font-semibold uppercase opacity-60">
-              Vista previa de la unidad
-            </p>
-            <UnitPreviewBody
-              unit={{
-                ...unit,
-                data: commitUnitFields(unit, draft),
-              }}
-            />
-            <pre className="theme-muted mt-2 overflow-x-auto text-[10px]">
-              {JSON.stringify(previewBlock, null, 2)}
-            </pre>
-          </div>
-        </div>
-      ) : null}
+      <div className="theme-border space-y-4 border-t px-4 py-4">
+        {renderEditorFields()}
+      </div>
     </article>
   );
 }

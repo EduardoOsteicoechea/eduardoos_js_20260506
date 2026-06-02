@@ -1,0 +1,19 @@
+[Unit]
+Description=Eduardoos Backend API
+After=network.target
+
+[Service]
+Type=simple
+User=ec2-user
+WorkingDirectory=/home/ec2-user/backend
+Environment=NODE_ENV=production
+Environment=PORT=8080
+Environment=SERIES_DATA_ROOT=/home/ec2-user/backend/public/data/series
+Environment=DOCUMENTER_URL=http://127.0.0.1:8090
+EnvironmentFile=-/home/ec2-user/backend/.env
+ExecStart=/usr/bin/node dist/server.js
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

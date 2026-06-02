@@ -1,0 +1,102 @@
+# ==========================================================
+# EDUARDOOS STACK (frontend + backend + documenter)
+# ==========================================================
+#
+# Docker Desktop stack name:
+# - Set in docker-compose.yml as: name: eduardoos-com
+# - Docker Desktop shows this under "Stacks" / grouped containers.
+# - "eduardoos.com" is NOT allowed (dots are invalid in Compose project names).
+# - Closest valid name: eduardoos-com
+#
+# Optional override from CLI:
+# docker compose -p eduardoos-com up --build -d
+#
+
+# 1) Linux prerequisites (Debian/Ubuntu)
+sudo apt update
+sudo apt install -y ca-certificates curl gnupg lsb-release
+
+# 2) Install Docker Engine + Compose plugin
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo $VERSION_CODENAME) stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# 3) Activate Docker service at boot + start now
+sudo systemctl enable docker
+sudo systemctl start docker
+
+# 4) (Optional) Run docker without sudo (logout/login required after this)
+sudo usermod -aG docker $USER
+
+# 5) Validate Docker
+docker --version
+docker compose version
+docker ps
+
+# 6) Install local dependencies (optional for non-container workflows)
+cd frontend && npm install
+cd ../backend && npm install
+cd ../documenter && npm install
+cd ..
+
+# 7) Build and run all containers (foreground)
+docker compose up --build
+
+# 8) Build and run all containers (background / detached)
+docker compose up --build -d
+
+# 9) Stop stack
+docker compose down
+
+# 10) IMPORTANT: Recreate containers from scratch
+#     (stops, removes containers/networks, removes volumes, removes orphans,
+#      then rebuilds images and recreates all containers)
+docker compose down --volumes --remove-orphans
+docker compose up --build --force-recreate -d
+
+# 11) Follow logs
+docker compose logs -f
+
+# 12) Quick status
+docker compose ps
+
+# ==========================================================
+# WINDOWS (PowerShell/CMD) - run from project root
+# ==========================================================
+
+# 1) Open Docker Desktop first (required on Windows)
+#    Verify Docker is available:
+docker --version
+docker compose version
+
+# 2) Go to repo root
+cd C:\Users\eduar\Documents\work\internal\eduardoos\eduardoos.com_20260525
+
+# 3) Build and run all services
+docker compose up --build
+
+# 4) Build and run in background
+docker compose up --build -d
+
+# 5) Stop and remove containers/network
+docker compose down
+
+# 6) IMPORTANT: Recreate containers from scratch
+docker compose down --volumes --remove-orphans
+docker compose up --build --force-recreate -d
+
+# 7) Logs and status
+docker compose logs -f
+docker compose ps
+
+
+
+
+
+docker compose down --volumes --remove-orphans; docker compose up --build --force-recreate -d;

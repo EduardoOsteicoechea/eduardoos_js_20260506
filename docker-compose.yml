@@ -1,0 +1,51 @@
+# Stack name in Docker Desktop (Compose project name).
+# Note: Docker only allows [a-z0-9_-], so "eduardoos.com" must be "eduardoos-com".
+name: eduardoos-com
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: eduardoos-backend
+    environment:
+      PORT: 8080
+      POST_EDITOR_PASSWORD: editor-dev
+      SERIES_DATA_ROOT: /app/public/data/series
+      DOCUMENTER_URL: http://documenter:8090
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend/public/data:/app/public/data
+    restart: unless-stopped
+
+  documenter:
+    build:
+      context: ./documenter
+      dockerfile: Dockerfile
+    container_name: eduardoos-documenter
+    environment:
+      PORT: 8090
+    volumes:
+      - ./documenter/public/data:/app/public/data
+    ports:
+      - "8090:8090"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        PUBLIC_API_BASE: http://backend:8080
+        PUBLIC_DOCUMENTER_BASE: http://documenter:8090
+    container_name: eduardoos-frontend
+    environment:
+      PUBLIC_API_BASE: http://backend:8080
+      PUBLIC_DOCUMENTER_BASE: http://documenter:8090
+    depends_on:
+      - backend
+      - documenter
+    ports:
+      - "4321:4321"
+    restart: unless-stopped

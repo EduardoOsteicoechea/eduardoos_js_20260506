@@ -5,12 +5,21 @@
 @layer base {
   html {
     --font-family: "Montserrat", sans-serif;
-    scrollbar-gutter: stable;
+    scrollbar-gutter: auto;
+    scrollbar-width: none;
     @apply antialiased;
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
   }
 
   body {
     font-family: var(--font-family);
+    scrollbar-width: none;
     @apply min-h-screen bg-white text-black dark:bg-black dark:text-white;
   }
 }

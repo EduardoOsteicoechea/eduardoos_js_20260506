@@ -1,0 +1,67 @@
+name: Deploy Documenter to EC2
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'documenter/**'
+      - '.github/workflows/deploy-documenter.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy-documenter:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./documenter
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: './documenter/package-lock.json'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build TypeScript
+        run: npm run build
+
+      - name: Sync and Restart Service on EC2
+        env:
+          SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+          HOST: ${{ secrets.EC2_HOST }}
+          USER: ${{ secrets.EC2_USER }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+          SSH_OPTS="-i ~/.ssh/id_rsa -o StrictHostKeyChecking=yes"
+          REMOTE_DIR="/home/$USER/documenter"
+
+          ssh $SSH_OPTS "$USER@$HOST" "mkdir -p $REMOTE_DIR"
+
+          rsync -avz -e "ssh $SSH_OPTS" \
+            ./dist \
+            ./public/data \
+            ./package.json \
+            ./package-lock.json \
+            "$USER@$HOST:$REMOTE_DIR/"
+
+          ssh $SSH_OPTS "$USER@$HOST" bash -s <<EOF
+            set -euo pipefail
+            cd "$REMOTE_DIR"
+            npm ci --omit=dev
+            sudo systemctl daemon-reload
+            sudo systemctl enable eduardoos-documenter
+            sudo systemctl restart eduardoos-documenter
+            sudo systemctl --no-pager --full status eduardoos-documenter
+          EOF

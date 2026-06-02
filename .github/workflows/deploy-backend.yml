@@ -49,11 +49,19 @@ jobs:
 
           ssh $SSH_OPTS "$USER@$HOST" "mkdir -p $REMOTE_DIR"
 
-          rsync -avz -e "ssh $SSH_OPTS" ./dist ./package.json ./package-lock.json "$USER@$HOST:$REMOTE_DIR/"
+          rsync -avz -e "ssh $SSH_OPTS" \
+            ./dist \
+            ./public/data \
+            ./package.json \
+            ./package-lock.json \
+            "$USER@$HOST:$REMOTE_DIR/"
 
           ssh $SSH_OPTS "$USER@$HOST" bash -s <<EOF
             set -euo pipefail
             cd "$REMOTE_DIR"
             npm ci --omit=dev
+            sudo systemctl daemon-reload
+            sudo systemctl enable eduardoos-backend
             sudo systemctl restart eduardoos-backend
+            sudo systemctl --no-pager --full status eduardoos-backend
           EOF

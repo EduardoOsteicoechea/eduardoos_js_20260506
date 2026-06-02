@@ -1,9 +1,12 @@
 import { previewSlug } from './catalogHelpers';
+import { normalizeKebabInput } from './slugify';
 
 const NEW_OPTION = '__new__';
 
 const inputClassName =
   'theme-border w-full rounded-lg border bg-transparent px-3 py-2 text-base outline-none focus:ring-2 focus:ring-black dark:focus:ring-white';
+
+const selectClassName = `${inputClassName} h-10`;
 
 export default function CatalogSelect({
   id,
@@ -21,8 +24,7 @@ export default function CatalogSelect({
   onCommitCustom,
 }) {
   const selectValue = isCustom ? NEW_OPTION : value || '';
-  const resolvedSlug = previewSlug(customValue);
-  const canCommit = isCustom && resolvedSlug.length > 0;
+  const canCommit = isCustom && previewSlug(customValue).length > 0;
 
   const handleCommit = () => {
     if (!canCommit || !onCommitCustom) return;
@@ -34,30 +36,38 @@ export default function CatalogSelect({
       <label htmlFor={id} className="mb-1 block text-sm font-medium">
         {label}
       </label>
-      <select
-        id={id}
-        disabled={disabled}
-        value={selectValue}
-        onChange={(event) => {
-          const next = event.target.value;
-          if (next === NEW_OPTION) {
-            onEnableCustom();
-            return;
-          }
-          onSelectExisting(next);
-        }}
-        className={inputClassName}
-      >
-        <option value="" disabled>
-          Seleccionar…
-        </option>
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
+      <div className="relative">
+        <select
+          id={id}
+          disabled={disabled}
+          value={selectValue}
+          onChange={(event) => {
+            const next = event.target.value;
+            if (next === NEW_OPTION) {
+              onEnableCustom();
+              return;
+            }
+            onSelectExisting(next);
+          }}
+          className={`${selectClassName} appearance-none pr-10`}
+        >
+          <option value="" disabled>
+            Seleccionar…
           </option>
-        ))}
-        <option value={NEW_OPTION}>{newOptionLabel}</option>
-      </select>
+          {options.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+          <option value={NEW_OPTION}>{newOptionLabel}</option>
+        </select>
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm opacity-80"
+        >
+          ▼
+        </span>
+      </div>
 
       {isCustom ? (
         <div className="mt-2 space-y-2">
@@ -65,7 +75,9 @@ export default function CatalogSelect({
             type="text"
             value={customValue}
             disabled={disabled}
-            onChange={(event) => onCustomValueChange(event.target.value)}
+            onChange={(event) =>
+              onCustomValueChange(normalizeKebabInput(event.target.value))
+            }
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
                 event.preventDefault();
@@ -76,11 +88,6 @@ export default function CatalogSelect({
             className={inputClassName}
             aria-label={`${label} nueva`}
           />
-          <p className="theme-muted text-xs">
-            {resolvedSlug
-              ? `En el JSON: "${resolvedSlug}"`
-              : 'Escribe un nombre para ver la vista previa'}
-          </p>
           {onCommitCustom ? (
             <button
               type="button"

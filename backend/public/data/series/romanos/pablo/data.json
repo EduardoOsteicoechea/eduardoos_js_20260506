@@ -1,0 +1,83 @@
+{
+    "series": "romanos",
+    "section": "pablo",
+    "book": "romanos",
+    "chapters": [1],
+    "verses": [1],
+    "biblical_texts": [
+        {
+            "text": "Pablo...",
+            "reference": "Romanos 1:1"
+        }
+    ],
+    "purpose": "Incrementar la dispocisión del receptor para atender a Romanos como revelación divina crítica, al promover la admiración por la gracia y autoridad depositada por Dios sobre Pablo, el autor de Romanos.",
+    "description": "Examinemos 6 facetas de la obra de Dios en la vida Pablo que nos ayudarán a comprender porqué debemos atender la este escrito como revelación divina crítica para nuestro bienestar.",
+    "posts": [
+        {
+            "name": "origen",
+            "contribution": "Cómo el origen de Pablo nos anima a atender a sus Escritos.",
+            "abstract": "La nacionalidad romana y la excepcional formación judaica que Dios orquestó durante el origen de Pablo, nos persuaden de que Romanos será una revelación extraordinaria. Dios modeló el punto de partida de este canal de verdad de una manera minuciosa y sobresaliente. El origen de Saulo de Tarso fue una obra maestra de la providencia que posibilitó que recibiéramos los magníficos escritos paulinos y, en particular, la carta a los Romanos.",
+            "biblical_texts": [
+                {
+                    "text": "",
+                    "reference": ""
+                }
+            ]
+        },
+        {
+            "name": "violencia",
+            "contribution": "Cómo el cambio de Pablo nos motiva a atender a sus escritos.",
+            "abstract": "El cambio de ser un asesino consumido por el celo ignorante y la ira, a ser el principal pastor y promotor cristiano del primer siglo, hacen de Pablo un extraordinario maestro de la verdad, del propósito y del destino.",
+            "biblical_texts": [
+                {
+                    "text": "",
+                    "reference": ""
+                }
+            ]
+        },
+        {
+            "name": "gracia",
+            "contribution": "Cómo la gracia otorgada a Pablo nos motiva a atender a sus escritos.",
+            "abstract": "El regalo de perdón y priviliegio especial e inmerecido que Dios le otorgó, hacen de Pablo un extraordinario de la verdad, del propósito y del destino.",
+            "biblical_texts": [
+                {
+                    "text": "",
+                    "reference": ""
+                }
+            ]
+        },
+        {
+            "name": "llamado",
+            "contribution": "Cómo el apostolado de Pablo nos motiva a atender a sus escritos.",
+            "abstract": "La asignación y capacitación única que recibió hacen de Pablo un extraordinario de la verdad, del propósito y del destino.",
+            "biblical_texts": [
+                {
+                    "text": "",
+                    "reference": ""
+                }
+            ]
+        },
+        {
+            "name": "impacto",
+            "contribution": "Cómo el impacto de Pablo sobre la iglesia e historia nos motiva a atender a sus escritos.",
+            "abstract": "La influencia que tuvo sobre líderes, creyentes, gobernantes, sociedades, naciones y enormes segmentos del mundo, hacen de Pablo un extraordinario de la verdad, del propósito y del destino.",
+            "biblical_texts": [
+                {
+                    "text": "",
+                    "reference": ""
+                }
+            ]
+        },
+        {
+            "name": "dedicación",
+            "contribution": "Cómo la dedicación de Pablo nos motiva a atender a sus escritos.",
+            "abstract": "El enorme amor y sacrificio que tuvo por la espiritualidad de los discípulos de Cristo, hacen de Pablo un extraordinario de la verdad, del propósito y del destino.",
+            "biblical_texts": [
+                {
+                    "text": "",
+                    "reference": ""
+                }
+            ]
+        }
+    ]
+}

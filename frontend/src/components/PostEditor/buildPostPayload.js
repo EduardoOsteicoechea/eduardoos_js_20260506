@@ -1,4 +1,4 @@
-import { slugifySegment } from './slugify';
+import { normalizeKebabInput, slugifySegment } from './slugify';
 import {
   unitHasEditorContent,
   unitToContentBlock,
@@ -8,6 +8,10 @@ import {
 export function resolveCatalogValue(isCustom, customValue, selectedValue) {
   const raw = isCustom ? customValue : selectedValue;
   return slugifySegment(raw);
+}
+
+export function normalizeFolderName(value) {
+  return slugifySegment(normalizeKebabInput(value)).slice(0, 50);
 }
 
 /**
@@ -39,13 +43,18 @@ export function buildPostPayload(form, options = {}) {
     form.chapter,
   );
   const articleId = form.articleId?.trim() || '';
+  const folderName = normalizeFolderName(form.folderName);
 
   const payload = {
     serie: serie || undefined,
+    series: serie || undefined,
     chapter: chapter || undefined,
+    section: chapter || undefined,
     article_id: articleId || undefined,
+    folder_name: folderName || undefined,
     creator: form.creator.trim() || undefined,
     title: form.title.trim(),
+    posts: Array.isArray(form.posts) ? form.posts : [],
     sections: form.sections
       .map((section) => {
         const heading = section.heading.trim();
@@ -85,6 +94,8 @@ export const EMPTY_FORM = {
   chapterCustom: '',
   creator: 'Eduardo Osteicoechea',
   title: '',
+  folderName: '',
   articleId: '',
+  posts: [],
   sections: [createEmptySection()],
 };

@@ -1,3 +1,5 @@
+import EditorActionButton from '../../EditorActionButton';
+
 export default function SectionEditActivityBar({
   typeTrayOpen,
   onToggleTypeTray,
@@ -9,24 +11,18 @@ export default function SectionEditActivityBar({
       role="toolbar"
       aria-label="Controles de la sección"
     >
-      <button
-        type="button"
+      <EditorActionButton
+        variant="primary"
+        className={`shrink-0 ${typeTrayOpen ? 'ring-2 ring-black dark:ring-white' : ''}`}
         onClick={onToggleTypeTray}
-        className={`theme-toolbar-btn shrink-0 ${
-          typeTrayOpen ? 'ring-2 ring-black dark:ring-white' : ''
-        }`}
         aria-expanded={typeTrayOpen}
       >
         + Añadir unidad
-      </button>
+      </EditorActionButton>
 
-      <button
-        type="button"
-        onClick={onClose}
-        className="theme-toolbar-btn shrink-0 px-4"
-      >
+      <EditorActionButton variant="success" className="shrink-0 px-4" onClick={onClose}>
         Listo
-      </button>
+      </EditorActionButton>
     </footer>
   );
 }

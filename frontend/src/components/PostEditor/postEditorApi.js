@@ -19,3 +19,20 @@ export async function savePostPayload(payload) {
   const data = await response.json().catch(() => ({}));
   return { response, data };
 }
+
+export async function savePostPayloadWithAssets(payload, files = []) {
+  const formData = new FormData();
+  formData.append('payload', JSON.stringify(payload));
+
+  for (const file of files) {
+    formData.append(file.name, file, file.name);
+  }
+
+  const response = await fetch('/api/post/editor/', {
+    method: 'POST',
+    body: formData,
+  });
+
+  const data = await response.json().catch(() => ({}));
+  return { response, data };
+}

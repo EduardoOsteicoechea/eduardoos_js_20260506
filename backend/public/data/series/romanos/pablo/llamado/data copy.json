@@ -1,0 +1,329 @@
+{
+   "serie": "romanos",
+   "facilitador": "Eduardo Osteicoechea",
+   "libro_de_pasaje": "romanos",
+   "capitulos_de_pasaje": [
+      1
+   ],
+   "versiculos_de_pasaje": [
+      1
+   ],
+   "texto_nbla": "Pablo, siervo de Jesucristo, llamado a ser apóstol, apartado para el evangelio de Dios.",
+   "texto_nestleadam": "Παῦλος δοῦλος Χριστοῦ Ἰησοῦ, κλητὸς ἀπόστολος ἀφωρισμένος εἰς εὐαγγέλιον θεοῦ",
+   "titulo_de_enseñanza": "El llamado de Pablo",
+   "sections": [
+      {
+         "type": "youtube",
+         "youtube_url": "https://www.youtube.com/@tenanimovzla"
+      },
+      {
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Llamado en la violencia",
+         "content": [
+             "Lo primero destacable de este llamado es el momento en que ocurre."
+            ,"El relato dice:"
+            ,"Saulo, respirando todavía amenazas y muerte contra los discípulos del Señor, fue al sumo sacerdote, y le pidió cartas para las sinagogas de Damasco, para que si encontraba a algunos que pertenecieran al Camino, tanto hombres como mujeres, los pudiera llevar atados a Jerusalén."
+            ,"Y mientras viajaba, al acercarse a Damasco, de repente resplandeció a su alrededor una luz del cielo. Al caer a tierra, oyó una voz que le decia: 'Saulo, Saulo, ¿Por qué me persigues?'."
+            ,"Saulo de Tarso fue llamado mientras aun respira amenazas y muerte contra los discípulos."
+            ,"Esta es la primera sorpresa."
+            ,"Mientras Saulo está intentando extinguir el cristianismo, Cristo se le aparece."
+            ,"Mientras Saulo recorre palestina para apresar y ejecutar a los discípulos, Jesús se le aparece para salvarlo."
+            ,"Esta es una enseñanza chocante."
+            ,"Dios escoge a sus instrumentos usando criterios misteriosos."
+            ,"Décadas luego, Saulo diría..."
+            ,"Él nos ha salvado y nos ha llamado con un llamamiento santo, no según nuestras obras, sino según Su propósito y según la gracia que nos fue dada en Cristo Jesús desde la eternidad..."
+            ,"La única razón explícita que encontramos para la escogencia de este hombre era la dimensión de su maldad."
+            ,"Lo único Dios previó en Pablo fue una maldad tan acentúada, que serviría como una ilustración del tamaño de la gracia evangélica."
+            ,"Doy gracias a Cristo Jesús nuestro Señor, que me ha fortalecido, porque me tuvo por fiel, poniéndome en el ministerio, aun habiendo sido yo antes blasfemo, perseguidar y agresor. Sin embargo, se me mostró misericordia porque lo hice por ignorancia en mi incredulidad."
+            ,"Sin embargo, por esto hallé misericordia, para que en mí, como el primero, Jesucristo demostrara toda Su paciencia como un ejemplo para los que habrían de creer en Él para vida eterna."
+            ,"Una pregunta interesante sería, ¿Por qué solo Saulo?"
+            ,"¿Por qué no escuchamos más de los hombres que venían con él y que igualmente presenciaron el milagro?"
+            ,"De hecho, mucho después Pablo diría:"
+            ,"Los que estaban conmigo vieron la luz, ciertamente, pero no comprendieron la voz de Aquel que me hablaba."
+            ,"Este llamamiento solo estuvo dirigido a Pablo."
+            ,"¿Por qué no darle esta revelación a éstos hombres igualmente?"
+            ,"¿Por qué no darle esta revelación al concilio, a los sumos sacerdotes, al César?"
+            ,"En verdad solo Dios sabe."
+            ,"Lo que sí sabemos es que..."
+            ,"...no depende del que quiere ni del que corre, sino de Dios que tiene misericordia."
+            ,"En el cristianismo verdadero, nadie escoge venir a Cristo por sí mismo, ni tampoco escoge su ministerio."
+            ,"Nadie toma este honor para sí mismo, sino que lo recibe cuando es llamado por Dios, así como lo fue Aarón. De la misma manera, Cristo no se glorificó a Él mismo para hacerse Sumo Sacerdote, sino que lo glorificó el que le dijo: 'Hijo Mío eres Tú, Yo te he engendrado hoy'."
+            ,"Dios ha colocado a cada uno de los miembros en el cuerpo según le agradó."
+            ,"Dios escoge a Sus instrumentos, y les asigna funciones dentro de la iglesia según criterios misteriosos para nosotros."
+         ],
+         "emphasyzed_phrases": [
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "Hechos 9:1",
+               "text": "Saulo, respirando todavía amenazas y muerte contra los discípulos del Señor, fue al sumo sacerdote, y le pidió cartas para las sinagogas de Damasco, para que si encontraba a algunos que pertenecieran al Camino, tanto hombres como mujeres, los pudiera llevar atados a Jerusalén.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "Hechos 9:3-4",
+               "text": "Y mientras viajaba, al acercarse a Damasco, de repente resplandeció a su alrededor una luz del cielo. Al caer a tierra, oyó una voz que le decia: 'Saulo, Saulo, ¿Por qué me persigues?'.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "2 Timoteo 1:9",
+               "text": "Él nos ha salvado y nos ha llamado con un llamamiento santo, no según nuestras obras, sino según Su propósito y según la gracia que nos fue dada en Cristo Jesús desde la eternidad...",
+               "emphasized": []
+            }
+            ,{
+               "reference": "1 Timoteo 1:12-13",
+               "text": "Doy gracias a Cristo Jesús nuestro Señor, que me ha fortalecido, porque me tuvo por fiel, poniéndome en el ministerio, aun habiendo sido yo antes blasfemo, perseguidar y agresor. Sin embargo, se me mostró misericordia porque lo hice por ignorancia en mi incredulidad.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "1 Timoteo 1:16",
+               "text": "Sin embargo, por esto hallé misericordia, para que en mí, como el primero, Jesucristo demostrara toda Su paciencia como un ejemplo para los que habrían de creer en Él para vida eterna.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "Romanos 9:16",
+               "text": "...no depende del que quiere ni del que corre, sino de Dios que tiene misericordia.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "Hechos 22:9",
+               "text": "Los que estaban conmigo vieron la luz, ciertamente, pero no comprendieron la voz de Aquel que me hablaba.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "Hebreos 5:4-5",
+               "text": "Nadie toma este honor para sí mismo, sino que lo recibe cuando es llamado por Dios, así como lo fue Aarón. De la misma manera, Cristo no se glorificó a Él mismo para hacerse Sumo Sacerdote, sino que lo glorificó el que le dijo: 'Hijo Mío eres Tú, Yo te he engendrado hoy'.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "1 Corintios 12:11",
+               "text": "Todas estas cosas las hace uno y el mismo Espíritu, distribuyendo individualmente a cada uno según Su voluntad.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "1 Corintios 12:18",
+               "text": "Dios ha colocado a cada uno de los miembros en el cuerpo según le agradó.",
+               "emphasized": []
+            }
+            
+         ]
+      }
+      ,{
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Llamado ministerial inmediato",
+         "content": [
+            "Otro aspecto interesante del llamado de Pablo es que inmediatamente involucra el apostolado."
+            ,"Desde el momento que el Señor se le aparece llegando a Damasco, vemos un llamamiento ministerial claro."
+            ,"Hechos 9:5-6 '¿Quién eres, Señor?', preguntó Saulo. El Señor respondió: 'Yo soy Jesús a quien tú persigues; levántate, entra en la ciudad, y se te dirá lo que debes hacer'."
+            ,"Hechos 26:15-16 Yo entonces dije: '¿Quién eres, Señor?'. Y Él dijo: 'Yo soy Jesús a quien tú persigues. Pero levántate y ponte en pie; porque te he aparecido con el fin de designarte como ministro y testigo, no solo de las cosas que has visto, sino también de aquellas en que me apraeceré a ti'."
+            ,"Hechos 9:15-16 Pero el Señor le dijo: 'Ve, porque él es Mi instrumento escogido, para llevar Mi nombre en presencia de los gentiles, de los reyes y de los israelitas; porque Yo le mostraré cuánto debe padecer por Mi nombre'."
+            ,"Hechos 22:9-10 Los que estaban conmigo vieron la luz, ciertamente, pero no comprendieron la voz de Aquel que me hablaba. Y yo dije: '¿Qué debo hacer Señor?'. Y Él Señor me dijo: 'Levántate y entra a Damasco; y allí se te dirá todo lo que se ha ordenado que hagas'."
+            ,"Hechos 22:14-15 El Dios de nuestros Padres te ha designado para que conozcas Su voluntad, y para que veas al Justo y oigas palabras de Su boca. Porque tú serás testigo Suyo a todos los hombres de lo que has visto y oído."
+            ,"Hechos 22:17-21 Cuando regresé a Jerusalén y me hallaba orando en el templo, caí en un éxtasis, y vi al Señor que me decía: 'Apresúrate y sal pronto de Jerusalén porque no aceptarán tu testimonio acerca de Mí'."
+            ,"Hechos 22:17-18 Cuando regresé a Jerusalén y me hallaba orando en el templo, caí en un éxtasis, y vi al Señor que me decía: 'Apresúrate y sal pronto de Jerusalén porque no aceptarán tu testimonio acerca de Mí'."
+            ,"Hechos 22:19-21 Entonces yo dije: 'Señor, ellos saben bien que en las sinagogas, una tras otra, yo encarcelaba y azotaba a los que creían en Ti. Cuando se derramaba la sangre de Tu testigo Esteban, allí estaba también yo dando mi aprobación, y cuidando los mantos de los que lo estaban matando'. Pero Él me dijo: 'Ve, porque te voy a enviar lejos, a los gentiles'."
+            ,"2 Corintios 12:1-4 "
+            ,"2 Corintios 12:7 "
+            ,"Efesios 3:4-6 "
+            ,"Romanos 16:25-26 "
+         ],
+         "emphasyzed_phrases": [
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "",
+               "text": "",
+               "emphasized": []
+            }
+         ]
+      }   
+      ,{
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Llamado al arrepentimiento",
+         "content": [
+            ""
+         ],
+         "emphasyzed_phrases": [
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "",
+               "text": "",
+               "emphasized": []
+            }
+         ]
+      }   
+      ,{
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Llamado a prepararse",
+         "content": [
+            ""
+         ],
+         "emphasyzed_phrases": [
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "",
+               "text": "",
+               "emphasized": []
+            }
+         ]
+      }   
+      ,{
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Llamado a comenzar congregaciones",
+         "content": [
+            ""
+         ],
+         "emphasyzed_phrases": [
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "",
+               "text": "",
+               "emphasized": []
+            }
+         ]
+      }   
+      ,{
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Llamado a confirmar iglesias",
+         "content": [
+            ""
+         ],
+         "emphasyzed_phrases": [
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "",
+               "text": "",
+               "emphasized": []
+            }
+         ]
+      }   
+      ,{
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Llamado a establecer doctrinas",
+         "content": [
+            ""
+         ],
+         "emphasyzed_phrases": [
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "",
+               "text": "",
+               "emphasized": []
+            }
+         ]
+      }   
+      ,{
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Llamado a cumplir una tarea",
+         "content": [
+            ""
+         ],
+         "emphasyzed_phrases": [
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "",
+               "text": "",
+               "emphasized": []
+            }
+         ]
+      }   
+      ,{
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Llamado a revelar el evangelio",
+         "content": [
+            ""
+         ],
+         "emphasyzed_phrases": [
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "",
+               "text": "",
+               "emphasized": []
+            }
+         ]
+      }   
+      ,{
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Llamado a promover la obediencia de la fe",
+         "content": [
+            ""
+         ],
+         "emphasyzed_phrases": [
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "",
+               "text": "",
+               "emphasized": []
+            }
+         ]
+      }   
+      ,{
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Llamado al padecimiento",
+         "content": [
+            ""
+         ],
+         "emphasyzed_phrases": [
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "",
+               "text": "",
+               "emphasized": []
+            }
+         ]
+      }   
+      ,{
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Llamado al arrepentimiento",
+         "content": [
+            ""
+         ],
+         "emphasyzed_phrases": [
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "",
+               "text": "",
+               "emphasized": []
+            }
+         ]
+      }   
+      ,{
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Llamado al arrepentimiento",
+         "content": [
+            ""
+         ],
+         "emphasyzed_phrases": [
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "",
+               "text": "",
+               "emphasized": []
+            }
+         ]
+      }   
+   ]
+}

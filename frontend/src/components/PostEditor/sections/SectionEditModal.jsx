@@ -9,9 +9,13 @@ import UnitTypeTray from './UnitTypeTray';
 const inputClassName =
   'theme-border w-full rounded-lg border bg-transparent px-3 py-2 text-lg font-semibold outline-none focus:ring-2 focus:ring-black dark:focus:ring-white';
 
-export default function SectionEditModal({ section, onSave, onClose }) {
+export default function SectionEditModal({
+  section,
+  initialPendingFiles = new Map(),
+  onSave,
+  onClose,
+}) {
   const [draftSection, setDraftSection] = useState(section);
-  const [activeUnitId, setActiveUnitId] = useState(null);
   const [typeTrayOpen, setTypeTrayOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [pendingMediaFiles, setPendingMediaFiles] = useState(() => new Map());
@@ -22,10 +26,17 @@ export default function SectionEditModal({ section, onSave, onClose }) {
 
   useEffect(() => {
     setDraftSection(section);
-    setActiveUnitId(null);
     setTypeTrayOpen(false);
-    setPendingMediaFiles(new Map());
-  }, [section]);
+    setPendingMediaFiles(() => {
+      const next = new Map();
+      const unitIds = new Set((section.content ?? []).map((unit) => unit.id));
+
+      for (const [unitId, file] of initialPendingFiles.entries()) {
+        if (unitIds.has(unitId)) next.set(unitId, file);
+      }
+      return next;
+    });
+  }, [section, initialPendingFiles]);
 
   useEffect(() => {
     if (!mounted) return undefined;
@@ -34,9 +45,7 @@ export default function SectionEditModal({ section, onSave, onClose }) {
     document.body.style.overflow = 'hidden';
 
     const onKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        onSave(draftSection);
-      }
+      if (event.key === 'Escape') onClose();
     };
 
     window.addEventListener('keydown', onKeyDown);
@@ -44,7 +53,7 @@ export default function SectionEditModal({ section, onSave, onClose }) {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', onKeyDown);
     };
-  }, [mounted, draftSection, onSave]);
+  }, [mounted, onClose]);
 
   const updateUnitData = useCallback((unitId, data) => {
     setDraftSection((previous) => ({
@@ -61,7 +70,6 @@ export default function SectionEditModal({ section, onSave, onClose }) {
       content: addUnitToSection(type, previous.content ?? []),
     }));
     setTypeTrayOpen(false);
-    setActiveUnitId(null);
   };
 
   const setPendingMediaFile = useCallback((unitId, file) => {
@@ -79,11 +87,10 @@ export default function SectionEditModal({ section, onSave, onClose }) {
       ...previous,
       content: (previous.content ?? []).filter((unit) => unit.id !== unitId),
     }));
-    if (activeUnitId === unitId) setActiveUnitId(null);
   };
 
   const handleDone = () => {
-    onSave(draftSection);
+    onSave(draftSection, pendingMediaFiles);
   };
 
   if (!mounted) return null;
@@ -122,19 +129,13 @@ export default function SectionEditModal({ section, onSave, onClose }) {
               <li key={unit.id}>
                 <SectionUnitEditor
                   unit={unit}
-                  isActive={activeUnitId === unit.id}
                   pendingFile={
                     unitIsMediaType(unit.type)
                       ? pendingMediaFiles.get(unit.id) ?? null
                       : null
                   }
                   onPendingFileChange={(file) => setPendingMediaFile(unit.id, file)}
-                  onActivate={() => {
-                    setActiveUnitId(unit.id);
-                    setTypeTrayOpen(false);
-                  }}
                   onCommit={updateUnitData}
-                  onDeactivate={() => setActiveUnitId(null)}
                   onRemove={handleRemoveUnit}
                 />
               </li>

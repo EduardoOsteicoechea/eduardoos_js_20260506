@@ -1,0 +1,536 @@
+{
+   "serie": "romanos",
+   "facilitador": "Eduardo Osteicoechea",
+   "libro_de_pasaje": "romanos",
+   "capitulos_de_pasaje": [
+      1
+   ],
+   "versiculos_de_pasaje": [
+      1
+   ],
+   "texto_nbla": "Pablo, siervo de Jesucristo, llamado a ser apóstol, apartado para el evangelio de Dios.",
+   "texto_nestleadam": "Παῦλος δοῦλος Χριστοῦ Ἰησοῦ, κλητὸς ἀπόστολος ἀφωρισμένος εἰς εὐαγγέλιον θεοῦ",
+   "titulo_de_enseñanza": "La brutalidad de Pablo",
+   "sections": [
+      {
+         "type": "youtube",
+         "youtube_url": "https://www.youtube.com/@tenanimovzla"
+      },
+      {
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Un homicidio como comienzo",
+         "content": [
+            "La primera aparacición de Pablo es un asesinato:",
+            "Echándolo fuera de la ciudad, comenzaron a apedrearlo; y los testigos pusieron sus mantos a los pies de un joven llamado Saulo.",
+            "Y mientras lo apedreaban, Esteban invocaba al Señor y decía: 'Señor Jesús, recibe mi espíritu'.",
+            "Y Saulo estaba de completo acuerdo con ellos en su muerte.",
+            "Las historias bíblicas son selectivas.",
+            "...hay también muchas otras cosas que Jesús hizo, que si se escribieran en detalle, pienso que ni aun el mundo mismo podría contener los libros que se escribirían."
+            ,"Dios solo incluye lo que busca remarcar.",
+            "El hecho de que Pablo comience la historia partícipando de un homicidio dice mucho.",
+            "Dios quiere enfatizar que este hombre era un asesino de cristianos.",
+            "El pasaje dice que \"Saulo estaba de completo acuerdo\" con este homicidio.",
+            "Saulo era la ayuda idónea de los testigos formales de esta ejecución.",
+            "Saulo supervisaba sus mantos, para que terminaran la tarea cómodamente.",
+            "Y cuando las piedras habían hecho su trabajo...",
+            "Cuando los órganos de Esteban habían detenido su funcionamiento adecuado...",
+            "Saulo decía..."
+            ,"¡Me parece bien!"
+         ],
+         "emphasyzed_phrases": [
+            "Las historias bíblicas son selectivas.",
+            "asesino de cristianos",
+            "ayuda idónea de los testigos oficiales de esta ejecución"
+            ,"Saulo decía"
+            ,"¡Me parece bien!"
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "Hechos 7.57",
+               "text": "Entonces ellos gritaron a gran voz, y tapándose los oídos se lanzaron a una contra él.",
+               "emphasized": []
+            },
+            {
+               "reference": "Hechos 7.58",
+               "text": "Echándolo fuera de la ciudad, comenzaron a apedrearlo; y los testigos pusieron sus mantos a los pies de un joven llamado Saulo.",
+               "emphasized": [
+                  "un joven llamado Saulo"
+               ]
+            },
+            {
+               "reference": "Hechos 7:59",
+               "text": "Y mientras lo apedreaban, Esteban invocaba al Señor y decía: 'Señor Jesús, recibe mi espíritu'.",
+               "emphasized": []
+            },
+            {
+               "reference": "Hechos 7:60",
+               "text": "Cayendo de rodillas, clamó en alta voz: 'Señor, no les tomes en cuenta este pecado'. Habiendo dicho esto, durmió.",
+               "emphasized": []
+            },
+            {
+               "reference": "Hechos 8:1",
+               "text": "Y Saulo estaba de completo acuerdo con ellos en su muerte.",
+               "emphasized": [
+                  "Y Saulo estaba de completo acuerdo con ellos en su muerte."
+               ]
+            }
+            ,{
+               "reference": "Juan 21:25",
+               "text": "...hay también muchas otras cosas que Jesús hizo, que si se escribieran en detalle, pienso que ni aun el mundo mismo podría contener los libros que se escribirían.",
+               "emphasized": []
+            }
+         ]
+      },
+      {
+         "type": "prose",
+         "id": "introduccion",
+         "title": "De casa en casa",
+         "content": [
+            "Lo próximo que vemos sobre Saulo es igualmente atemorizante.",
+            "...Saulo hacía estragos en la iglesia entrando de casa en casa, y arrastrando a hombres y mujeres, los echaba en la cárcel.",
+            "Que ironía que los cristianos modernos evangelizamos de casa en casa.",
+            "Esta fue la modalidad primitiva de persecusión.",
+            "De casa en casa...",
+            "Piénsalo por un momento...",
+            "Saulo recorría Jerusalén, derribando puertas, agrediendo y apresando con violencia al profesara seguir a Jesucristo.",
+            "¿Qué ocurría cuando por ejemplo, un padre se rehusaba dejar a su familia para ir con Saulo?",
+            "Saulo derribaría la puerta...",
+            "Y posiblemente golpearía a este hombre hasta que dejara de resistirse.",
+            "Mientras la mujer y niños de este hombre gritarían aterrorizados.",
+            "Incluso de las mujeres creyentes eran arrastradas fuera de sus casas.",
+            "entrando de casa en casa, y arrastrando a hombres y mujeres, los echaba en la cárcel.",
+            "La iglesia tenía miles de miembros en este punto.",
+            "Imagina la escala de esta violencia."
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "Hechos 7:60-8:1",
+               "text": "Y Saulo estaba de completo acuerdo con ellos en su muerte.",
+               "emphasized": [
+                  "Y Saulo estaba de completo acuerdo con ellos en su muerte."
+               ]
+            },
+            {
+               "reference": "Hechos 8:3",
+               "text": "...Saulo hacía estragos en la iglesia entrando de casa en casa, y arrastrando a hombres y mujeres, los echaba en la cárcel.",
+               "emphasized": ["de casa en casa"]
+            },
+            {
+               "reference": "Hechos 8:3",
+               "text": "entrando de casa en casa, y arrastrando a hombres y mujeres, los echaba en la cárcel.",
+               "emphasized": [
+                  "arrastrando a hombres y mujeres"
+               ]
+            }
+         ]
+      },
+      {
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Trescientos kilómetros de ira",
+         "content": [
+            "Pero Jerusalén no era suficiente...",
+            "... fue al sumo sacerdote, y le pidió cartas para las sinagogas de Damasco, para que si encontraba algunos que pertenecieran al Camino, tanto hombres como mujeres, los pudiera llevar a tados a Jerusalén.",
+            "Saulo estaba determinado a acabar con el cristianismo.",
+            "Su celo le llevó a perseguir cristianos hasta damasco.",
+            "300km_de_persecusion_de_jerusalen_a_damasco.webp",
+            "La distancia entre estas localidades es de 300 kilómetros.",
+            "Esto era una extensión enorme de territorio.",
+            "Saulo tenía la dedicación para no solo ir de casa en casa, sino también llegar a Damasco para detener cristianos en ese punto."
+            ,"Gracias a Dios, carecemos de registros que muestren que Saulo persiguió creyentes en todos los territorios judíos."
+            ,"Al contrario..."
+            ,"Leemos que:"
+            ,"...los que habían sido esparcidos iban predicando la Palabra. Felipe, descendiendo a la ciudad de Samaria, les predicaba a Cristo."
+            ,"Pero Felipe se encontró en Azoto, y por donde pasaba, anunciaba el evangelio en todas las ciudades, hasta que llegó a Cesarea."
+            ,"Entretanto la iglesia gozaba de paz por toda Judea, Galilea y Samaria, y era edificada; y andando en el temor del Señor y en la fortaleza del Espíritu Santo, seguía creciendo."
+            ,"Si bien la persecusión de Jerusalén fue brutal y exhaustiva, al parecer, la mayoría de las localidades aún permitían la predicación y discipulado."
+            ,"Pareciera que Pablo intentaba colocarse hacia el extremo migratorio del territorio judío."
+            ,"Posiblemente quería capturar a los que escaparon o evitar que salieran fácilmente."
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "Hechos 9:1-2",
+               "text": "... fue al sumo sacerdote, y le pidió cartas para las sinagogas de Damasco, para que si encontraba algunos que pertenecieran al Camino, tanto hombres como mujeres, los pudiera llevar a tados a Jerusalén.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "Hechos 9:1-2",
+               "text": "Saulo, todavía respirando amenazas y muerte contra los discípulos del Señor, fue al sumo sacerdote, y le pidió cartas para las sinagogas de Damasco, para que si encontraba algunos que pertenecieran al Camino, tanto hombres como mujeres, los pudiera llevar a tados a Jerusalén.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "Hechos 8:4",
+               "text": "...los que habían sido esparcidos iban predicando la Palabra. Felipe, descendiendo a la ciudad de Samaria, les predicaba a Cristo.",
+               "emphasized": ["los que habían sido esparcidos iban predicando la Palabra", "descendiendo a la ciudad de Samaria, les predicaba a Cristo."]
+            }
+            ,{
+               "reference": "Hechos 8:40",
+               "text": "Pero Felipe se encontró en Azoto, y por donde pasaba, anunciaba el evangelio en todas las ciudades, hasta que llegó a Cesarea.",
+               "emphasized": ["anunciaba el evangelio en todas las ciudades"]
+            }
+            ,{
+               "reference": "Hechos 9:31",
+               "text": "Entretanto la iglesia gozaba de paz por toda Judea, Galilea y Samaria, y era edificada; y andando en el temor del Señor y en la fortaleza del Espíritu Santo, seguía creciendo.",
+               "emphasized": ["la iglesia gozaba de paz por toda Judea, Galilea y Samaria"]
+            }
+         ],
+         "images": [
+            {
+               "image_name": "300km_de_persecusion_de_jerusalen_a_damasco.webp",
+               "uri": "/300km_de_persecusion_de_jerusalen_a_damasco.webp"
+            }
+         ]
+      },
+      {
+         "type": "prose",
+         "id": "introduccion",
+         "title": "De confianza para el sumo sacerdote",
+         "content": [
+            "Para lograr su cometido, Saulo:"
+            ,"... fue al sumo sacerdote, y le pidió cartas para las sinagogas de Damasco, para que si encontraba algunos que pertenecieran al Camino, tanto hombres como mujeres, los pudiera llevar a tados a Jerusalén."
+            ,"Esto fue un evento veraz y público."
+            ,"Esto incluso podía ser atestiguado ante de todo el pueblo."
+            ,"Pablo contaba con el apoyo del liderazgo judío para perseguir a los creyentes."
+            ,"Como dijo Pablo a la turba de Jerusalén:"
+            ,"...de lo cual pueden testificar el sumo sacerdote y todo el Concilio de los ancianos. De ellos recibí cartas para los hermanos, y me puse en marcha para Damasco con el fin de traer presos a Jerusalén también a los que estaban allá, para que fueran castigados."
+            ,"Pablo era reconocido entre las esferas más importantes de Israel y del judaísmo."
+            ,"Pablo era conocido por ser tan celoso de la ley, que estaba dispuesto a viajar trescientos kilómetros para detener esta \"desviación\" del judaísmo."
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "Hechos 9:1-2",
+               "text": "... fue al sumo sacerdote, y le pidió cartas para las sinagogas de Damasco, para que si encontraba algunos que pertenecieran al Camino, tanto hombres como mujeres, los pudiera llevar a tados a Jerusalén.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "Hechos 22:5",
+               "text": "...de lo cual pueden testificar el sumo sacerdote y todo el Concilio de los ancianos. De ellos recibí cartas para los hermanos, y me puse en marcha para Damasco con el fin de traer presos a Jerusalén también a los que estaban allá, para que fueran castigados.",
+               "emphasized": []
+            }
+         ],
+         "images": [
+            {
+               "image_name": "300km_de_persecusion_de_jerusalen_a_damasco.webp",
+               "uri": "/300km_de_persecusion_de_jerusalen_a_damasco.webp"
+            }
+         ]
+      },
+      {
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Aliento de muerte",
+         "content": [
+            "Otra característica atemorizante de Saulo era su corazón homicida."
+            ,"La historia dice:"
+            ,"Saulo, respirando todavía amenazas y muerte contra los discípulos del Señor, fue al sumo sacerdote..."
+            ,"Saulo respiraba amenazas y muerte."
+            ,"Su celo por el judaísmo le llevanaba de una ira intensa y asesina."
+            ,"Como leemos en sus propias confesiones:"
+            ,"...Castigándolos con frecuencia en todas las sinagogas, procuraba obligarlos a blasfemar, y enfurecido contra ellos, seguía persiguiéndolos aun hasta en las ciudades extranjeras."
+            ,"Pablo recorría Jerusalén estando consumido por la ira."
+            ,"Pablo castigaba violentamente a los creyentes, forzándolos a blasfemar de Cristo."
+            ,"2 Corintios 11:24-25 nos ayuda a visualizar un poco de estos catigos:"
+            ,"...Cinco veces he recibido de los judíos treinta y nueve azotes. Tres veces he sido golpeado con varas, una vez fui apedreado."
+            ,"Los judíos castigaban por medio de azotes increíblemente dolorosos."
+            ,"Por lo que leemos en este pasaje, estos azotes pudieron llegar a practicarse con varas. Estos instrumentos de madera eran más dolorosos que los azotes comunes."
+            ,"De hecho, los judíos igualmente recurrían al apedreamientos."
+            ,"Los judíos intentaron apedrear al Señor, de igual manera con Pablo, y probablemente lo hicieron con otros seguidores de Cristo."
+            ,"Los judíos podían llegar a golpear cristianos con rocas hasta romperles el craneo o detener sus órganos vitales."
+            ,"Saulo era un hombre dominado por la ira homicida contra los creyentes."
+            ,"Algo notorio de esta ira, fue el hecho de que llevó a Pablo a convertirse en un asesino."
+            ,"En verdad carecemos de registros de que consumara homicidios con sus propias manos."
+            ,"Sin embargo, sí que tenemos al menos tres textos bíblicos donde lo vemos activamente involucrado en múltiples asesinatos."
+            ,"Y Saulo estaba de completo acuerdo con ellos en su muerte."
+            ,"Perseguí este camino hasta la muerte, encadenando y echando en cárceles tanto a hombres como a mujeres, de lo cual pueden testificar el sumo sacerdote y todo e concilio de los ancianos."
+            ,"Yo ciertamente había creído que debía hacer muchos males en contra del nombre de Jesús de Nazaret. Esto es precisamente lo que hice en Jerusalén. No solo encerré en cárceles a muchos de los santos con la autoridad recibida de los principales sacerdotes, sino que también, cuando eran condenados a muerte, yo añadía mi voto."
+            ,"Saulo asistió el homicidio de Esteban."
+            ,"Saulo confesó haber añadido su voto para varias condenas de muerte."
+            ,"Y en su defensa ante la turba de Jerusalén, confesó perseguir a los creyentes hasta la muerte."
+            ,"Rios de sangre teñían las manos de este hombre."
+            ,"Saulo de Tarso fue un hombre súmamente violento, dispuesto a golpear, azotar y condenar a muerte a los seguidores de Cristo."
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "Hechos 9:1",
+               "text": "Saulo, respirando todavía amenazas y muerte contra los discípulos del Señor, fue al sumo sacerdote...",
+               "emphasized": ["respirando todavía amenazas y muerte"]
+            }
+            ,{
+               "reference": "Hechos 8:1",
+               "text": "Y Saulo estaba de completo acuerdo con ellos en su muerte.",
+               "emphasized": ["de completo acuerdo con ellos en su muerte."]
+            }
+            ,{
+               "reference": "Hechos 22:4-5",
+               "text": "Perseguí este camino hasta la muerte, encadenando y echando en cárceles tanto a hombres como a mujeres, de lo cual pueden testificar el sumo sacerdote y todo e concilio de los ancianos.",
+               "emphasized": ["Perseguí este camino hasta la muerte"]
+            }
+            ,{
+               "reference": "Hechos 26:10",
+               "text": "Yo ciertamente había creído que debía hacer muchos males en contra del nombre de Jesús de Nazaret. Esto es precisamente lo que hice en Jerusalén. No solo encerré en cárceles a muchos de los santos con la autoridad recibida de los principales sacerdotes, sino que también, cuando eran condenados a muerte, yo añadía mi voto.",
+               "emphasized": ["cuando eran condenados a muerte, yo añadía mi voto."]
+            }
+            ,{
+               "reference": "Hechos 26:11",
+               "text": "...Castigándolos con frecuencia en todas las sinagogas, procuraba obligarlos a blasfemar, y enfurecido contra ellos, seguía persiguiéndolos aun hasta en las ciudades extranjeras.",
+               "emphasized": ["Castigándolos con frecuencia en todas las sinagogas, procuraba obligarlos a blasfemar, y enfurecido contra ellos"]
+            }
+            ,{
+               "reference": "2 Corintios 11:24-25",
+               "text": "...Cinco veces he recibido de los judíos treinta y nueve azotes. Tres veces he sido golpeado con varas, una vez fui apedreado.",
+               "emphasized": ["treinta y nueve azotes", "golpeado con varas", "apedreado"]
+            }
+         ]
+      },
+      {
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Famoso por la violencia",
+         "content": [
+            "No por nada llegó a construir una reputación homicida entre los cristianos."
+            ,"...Ananías respondió: 'Señor, he oído de muchos acerca de este hombre, cuánto mal ha hecho a Tus santos en Jerusalén, y aquí tiene autoridad de los principales sacerdotes para prender a todos los que invocan Tu nombre'."
+            ,"Cuando Saulo llegó a Jerusalén, trataba de juntarse con los discípulos; pero todos le temían, no creyendo que era discípulo."
+            ,"Pablo era conocido tanto por los líderes judíos como por los cristianos por ser un líder de la persecusión violenta contra el cristianismo."
+            ,"Era famoso por ser uno de los instrumentos violentos de Satanás contra los creyentes."
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "Hechos 9:13",
+               "text": "...Ananías respondió: 'Señor, he oído de muchos acerca de este hombre, cuánto mal ha hecho a Tus santos en Jerusalén, y aquí tiene autoridad de los principales sacerdotes para prender a todos los que invocan Tu nombre'.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "Hechos 9:26",
+               "text": "Cuando Saulo llegó a Jerusalén, trataba de juntarse con los discípulos; pero todos le temían, no creyendo que era discípulo.",
+               "emphasized": []
+            }
+         ]
+      },
+      {
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Violento por ignorancia",
+         "content": [
+            "Sin embargo, el contenido bíblico posee algunas declaraciones interesantes sobre esta ira:"
+            ,"Yo ciertamente había creído que debía hacer muchos males en contra del nombre de Jesús de Nazaret."
+            ,"...aun habiendo sido yo antes blasfemo, perseguidor y agresor. Sin embargo, se me mostró misericordia porque lo hice por ignorancia en mi incredulidad."
+            ,"Había un componente de honestidad ignorante en estas acciones."
+            ,"Pablo confiesa que estaba plenamente convencido de hacer lo correcto de acuerdo a sus creencias."
+            ,"De hecho, bajo la inspiración del Espíritu, declara que recibió misericordia porque lo hizo bajo ignorancia."
+            ,"Al parecer, Dios entendía que Pablo aún no percibía la verdad del cristianismo, por lo que no se le consideraba abandonado a la rebeldía."
+            ,"Parece que Dios no le contaba estos hechos como una resistencia absoluta al evangelio."
+            ,"Saulo aún ignoraba las verdades, por lo que actuaba en concordancia con el conocimiento que poseía."
+            ,"Y esto no solo ocurría con Pablo."
+            ,"Pablo dice de los judíos:"
+            ,"Porque yo testifico a su favor de que tienen celo de Dios, pero no conforme a un pleno conocimiento. Pues desconociendo la justicia de Dios y procurando establecer la suya propia, no se sometieron a la justicia de Dios."
+            ,"Pero el entendimientos de ellos se endureció. Porque hasta el día de hoy, en la lectura del antiguo pacto el mismo velo permanece sin alzarse, pues solo en Cristo es quitado. Y hasta el día de hoy, cada vez que se lee a Moisés, un velo está puesto sobre sus corazones. Pero cuando alguien se vuelve al Señor, el velo es quitado."
+            ,"Porque no quiero, hermanos, que ignoren este misterio, para que no sean sabios en su propia opinión: que a Israel le ha acontecido un endurecimiento parcial hasta que haya entrado la plenitud de los gentiles."
+            ,"Cuando llegaron al lugar llamado 'La Calavera', crucificaron allí a Jesús y a los malechores, uno a la derecha y otro a la izquiera. Y Jesús decía: 'Padre, perdónalos, porque no saben lo que hacen'."
+            ,"Parece que mientras la persona permanece en cierto grado de ignorancia, Dios retiene un componente de misericordia."
+            ,"Dios considera la ignorancia del rebelde como un atenuante de sus hechos."
+            ,"No obstante..."
+            ,"Esta ignorancia no queda indefinidamente."
+            ,"Una vez que el evangelio es presentado claramente, el Espíritu Santo dice de los judíos:"
+            ,"Estos mataron tanto al Señor Jesús como a los profetas, y a nosotros nos expulsaron, y no agradan a Dios sino que son contrarios a todos los hombres, impidiéndonos hablar a los gentiles para que se salven, con el resultado de que siempre llenan la medida de sus pecados. Pero la ira de Dios ha venido sobre ellos hasta el extremo."
+            ,"Parece haber un cambio de consideración hacia los judíos que en efecto han llegado a conocer el evangelio y son opositores."
+            ,"El mismo Pablo dice que han colmado la medida de sus pecados."
+            ,"La ira de Dios ha venido sobre ellos hasta el extremo."
+            ,"Parece que llegado el punto de conocimiento, la resistencia al evangelio y la persecución colma la medida de los pecado."
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "Hechos 26:9",
+               "text": "Yo ciertamente había creído que debía hacer muchos males en contra del nombre de Jesús de Nazaret.",
+               "emphasized": ["Yo ciertamente había creído"]
+            }
+            ,{
+               "reference": "1 Timoteo 1:13",
+               "text": "...aun habiendo sido yo antes blasfemo, perseguidor y agresor. Sin embargo, se me mostró misericordia porque lo hice por ignorancia en mi incredulidad.",
+               "emphasized": ["lo hice por ignorancia en mi incredulidad."]
+            }
+            ,{
+               "reference": "Romanos 10:2-3",
+               "text": "Porque yo testifico a su favor de que tienen celo de Dios, pero no conforme a un pleno conocimiento. Pues desconociendo la justicia de Dios y procurando establecer la suya propia, no se sometieron a la justicia de Dios.",
+               "emphasized": ["tienen celo de Dios, pero no conforme a un pleno conocimiento."]
+            }
+            ,{
+               "reference": "2 Corintios 3:14-16",
+               "text": "Pero el entendimientos de ellos se endureció. Porque hasta el día de hoy, en la lectura del antiguo pacto el mismo velo permanece sin alzarse, pues solo en Cristo es quitado. Y hasta el día de hoy, cada vez que se lee a Moisés, un velo está puesto sobre sus corazones. Pero cuando alguien se vuelve al Señor, el velo es quitado.",
+               "emphasized": ["en la lectura del antiguo pacto el mismo velo permanece sin alzarse, pues solo en Cristo es quitado."]
+            }
+            ,{
+               "reference": "Romanos 11:25",
+               "text": "Porque no quiero, hermanos, que ignoren este misterio, para que no sean sabios en su propia opinión: que a Israel le ha acontecido un endurecimiento parcial hasta que haya entrado la plenitud de los gentiles.",
+               "emphasized": ["no sean sabios en su propia opinión: que a Israel le ha acontecido un endurecimiento parcial"]
+            }
+            ,{
+               "reference": "Lucas 23:33-34",
+               "text": "Cuando llegaron al lugar llamado 'La Calavera', crucificaron allí a Jesús y a los malechores, uno a la derecha y otro a la izquiera. Y Jesús decía: 'Padre, perdónalos, porque no saben lo que hacen'.",
+               "emphasized": ["'Padre, perdónalos, porque no saben lo que hacen'."]
+            }
+            ,{
+               "reference": "1 Tesalonicenses 2:15-16",
+               "text": "Estos mataron tanto al Señor Jesús como a los profetas, y a nosotros nos expulsaron, y no agradan a Dios sino que son contrarios a todos los hombres, impidiéndonos hablar a los gentiles para que se salven, con el resultado de que siempre llenan la medida de sus pecados. Pero la ira de Dios ha venido sobre ellos hasta el extremo.",
+               "emphasized": ["con el resultado de que siempre llenan la medida de sus pecados. Pero la iera de Dios ha venido sobre ellos hasta el extremo."]
+            }
+            ,{
+               "reference": "Mateo 12:31-32",
+               "text": "Por eso les digo, que todo pecado y blasfemia será perdonado a los hombres, pero la blasfemia contra el Espíritu no será perdonada. Y a cualquiera que diga una palabra contra el Hijo del Hombre, se le perdonará; pero al que hable contra el Espíritu Santo, no se le perdonará ni en este sigo ni en el venidero.",
+               "emphasized": []
+            }
+         ]
+      },
+      {
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Nuestra resistencia a la misericordia",
+         "content": [
+            "¿Cuántos diríamos que un hombre agresor, blasfemo, violento y asesino pudiera ser un ministro de Jesucristo?"
+            ,"¿Cuántos pensaríamos que un hombre como Saulo pudiera llegar a arrepentirse?"
+            ,"De hecho, ¿Cuántos de los creyentes del primer siglo estaban dispuesto a creer esto inicialmente?"
+            ,"Cuando Saulo llegó a Jerusalén, trataba de juntarse con los discípulos; pero todos le temían, no creyendo que era discípulo."
+            ,"La realidad es que difícilmente veríamos a este hombre como un potencial hermano."
+            ,"¡Menos como el pastor de nuestra iglesia!"
+            ,"Imagina que pensarían algunos cuando le preguntaban a un creyente de Antioquía: ¿Quién es el líder de tu iglesia?"
+            ,"Imagina la sorpesa cuando el antioquieño respondía: 'Actualmente nos dirijen el hermano Bernabé y otro nuevo líder que se llama Saulo de Tarso. ¿Me acompañas a la iglesia?'."
+            ,"Pero este es precisamente el punto de la historia."
+            ,"Dios tenía un plan diferente..."
+            ,"Cuando Anaías se resitía a bautizar al creyente Saulo, decía:"
+            ,"Señor, he oído de muchos acerca de este hombre, cuánto mal ha hecho a Tus santos en Jerusalén, y aquí tiene autoridad de los principales sacerdotes para prender a todos los que invocan Tu nombre."
+            ,"Pero Dios dijo:"
+            ,"Ve, porque él es Mi instrumento escogido, para llevar Mi nombre en presencia de los gentiles, de los reyes y de los israelitas; porque Yo le mostraré cuánto debe padecer por Mi nombre."
+            ,"Puede que muchos reaccionemos como Jonás ante el arrepentimiento de Nínive:"
+            ,"...esto desagradó a Jonás en gran manera, y se enojó. Y oró al Señor: '¡Ah Señor! ¿No era esto lo que yo decía cuando aún estaba en mi tierra? Por eso me anticipé a huir a Tarsis. Porque yo sabía que Tú eres un Dios clemente y compasivo, lento para la ira y rico en misericordia, y que te arrepientes del mal anunciado'."
+            ,"¡¿Cómo es posible que este asesino violento sea perdonado?!"
+            ,"¡¿Van a colocarlo ahora como líder de la iglesia?!"
+            ,"Señor. ¡mátame ahora mismo, te lo ruego!"
+            ,"Considerar esto parece gracioso, pero bajo la superficie, luchamos con este tipo de hipocresía."
+            ,"Luchamos con el deseo de nuestros ofensores sean castigados."
+            ,"Deseamos que paguen por lo que hacen."
+            ,"Pero muchas veces esto va en contra del espíritu del evangelio."
+            ,"Cuando llegaron al lugar llamado 'La Calavera', crucificaron allí a Jesús y a los malechores, uno a la derecha y otro a la izquiera. Y Jesús decía: 'Padre, perdónalos, porque no saben lo que hacen'."
+            ,"La misericordia de Dios es tan extraordinaria, que puede cubrir incluso a un perseguidor y asesino del evangelio."
+            ,"La gracia de Dios puede alcanzar incluso a los peores."
+            ,"Y recuerda..."
+            ,"Y cuando es estén orando, perdonen si tienen algo contra alguien, para que también su Padre que está en los cielo les perdone a ustedes sus transgresiones. Pero si ustedes no perdonan, tampoco su Padre que está en los cielos perdonará sus transgresiones."
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "Hechos 9:26",
+               "text": "Cuando Saulo llegó a Jerusalén, trataba de juntarse con los discípulos; pero todos le temían, no creyendo que era discípulo.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "Hechos 9:13",
+               "text": "Señor, he oído de muchos acerca de este hombre, cuánto mal ha hecho a Tus santos en Jerusalén, y aquí tiene autoridad de los principales sacerdotes para prender a todos los que invocan Tu nombre.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "Hechos 9:15-16",
+               "text": "Ve, porque él es Mi instrumento escogido, para llevar Mi nombre en presencia de los gentiles, de los reyes y de los israelitas; porque Yo le mostraré cuánto debe padecer por Mi nombre.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "Jonás 3:1-2",
+               "text": "...esto desagradó a Jonás en gran manera, y se enojó. Y oró al Señor: '¡Ah Señor! ¿No era esto lo que yo decía cuando aún estaba en mi tierra? Por eso me anticipé a huir a Tarsis. Porque yo sabía que Tú eres un Dios clemente y compasivo, lento para la ira y rico en misericordia, y que te arrepientes del mal anunciado'.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "Lucas 23:33-34",
+               "text": "Cuando llegaron al lugar llamado 'La Calavera', crucificaron allí a Jesús y a los malechores, uno a la derecha y otro a la izquiera. Y Jesús decía: 'Padre, perdónalos, porque no saben lo que hacen'.",
+               "emphasized": ["'Padre, perdónalos, porque no saben lo que hacen'."]
+            }
+            ,{
+               "reference": "Marcos 11:25-26",
+               "text": "Y cuando es estén orando, perdonen si tienen algo contra alguien, para que también su Padre que está en los cielo les perdone a ustedes sus transgresiones. Pero si ustedes no perdonan, tampoco su Padre que está en los cielos perdonará sus transgresiones.",
+               "emphasized": [""]
+            }
+         ]
+      },
+      {
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Falta de misericordia hacia los oprimidos",
+         "content": [
+            "En verdad Dios ha escogido lo vil y lo necio."
+            ,"Lo digo por mi propia vida."
+            ,"Cuando escuchamos doctrinas como esta, nuestra necedad tiende a manifestarse."
+            ,"Si evitamos caer del lado de la hipocresía inmisericorde, nos aparatamos al otro extremo antibíblico."
+            ,"Confundimos esta misericordia con la anulación de la protección a los oprimidos."
+            ,"Concluímos que debemos levantar las consecuencias de la injusticia para mostrar misericordia."
+            ,"Pensamos que la gracia y la justicia están opuestas en todo sentido."
+            ,"La realidad es que no podemos hablar de gracia si permitimos el abuso, agresión, violencia y maltrato de los oprimidos."
+            ,"¿Cómo podemos hablar del amor de Jesucristo al prójimo si permitimos el maltratos de los desvalidos?"
+            ,"¿Cómo abrazamos la justicia del reino de Dios si permitimos la injusticia?"
+            ,"Esta es una de nuestras debilidades en el cristianismo."
+            ,"Ignoramos como poner juntas estas partes."
+            ,"Si bien la Escritura nos llama a mostrar gracia, al mismo tiempo entrega autoridad a los padres, gobiernos e iglesias para castigar lo malo."
+            ,"El legítimo castigo de la injusticia no es contrario a la gracia."
+            ,"Ambas cosas coexisten en el evangelio."
+            ,"Por ejemplo:"
+            ,"...si rehúsa escucharlos, dilo a la iglesia; y si también rehúsa escuchar a la iglesia, sea para ti como el gentil y el recaudador de impuestos. En verdad les digo, que todo lo que ustedes aten en la tierra, será atado en el cielo; y todo lo que desaten en la tierra, será desatado en el cielo."
+            ,"Jesús ordenó expulsar y atar espiritualmente a quienes rehusan obedecer en la iglesia."
+            ,"Igualmente vemos una instrucción para los gobernantes:"
+            ,"Porque los gobernantes no son motivo de temor para los de buena conducta, sino para el que hace el mal. ¿Deseas, pues, no temer a la autoridad? Haz lo bueno y tendrás elogios de ella, pues es para ti un ministro de Dios para bien. Pero si haces lo malo, teme. Porque no en vano lleva la espada, pues es ministro de Dios, un vengador que castiga al que practica lo malo."
+            ,"Pablo enseñó que Dios le entregó una espada al gobierno para traspasar a los malvados."
+            ,"Y algo semejante se dice para los indisciplinados en la iglesia:"
+            ,"...Y si alguien no obedece nuestra enseñanza en esta carta, señalen al tal y no se asocien con él, para que se avergüence."
+            ,"El Espíritu ordenó señalar a los ociosos y apartarse de ellos."
+            ,"Estas medidas fueron dadas por el Dios de gracia y forman parte del evangelio."
+            ,"Aunque debemos pedir por el arrepentimiento y salvación de nuestros opresores, al mismo tiempo, dedemos castigar el mal en la sociedad e iglesia."
+            ,"En todo momento debemos pedir gracia para los rebeldes mientras aplicamos justicia en la iglesia y aplaudimos el balanceo justo de la espada gubernamental."
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "Hechos 9:26",
+               "text": "Cuando Saulo llegó a Jerusalén, trataba de juntarse con los discípulos; pero todos le temían, no creyendo que era discípulo.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "Mateo 18:17-18",
+               "text": "...si rehúsa escucharlos, dilo a la iglesia; y si también rehúsa escuchar a la iglesia, sea para ti como el gentil y el recaudador de impuestos. En verdad les digo, que todo lo que ustedes aten en la tierra, será atado en el cielo; y todo lo que desaten en la tierra, será desatado en el cielo.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "Romanos 13:3-4",
+               "text": "Porque los gobernantes no son motivo de temor para los de buena conducta, sino para el que hace el mal. ¿Deseas, pues, no temer a la autoridad? Haz lo bueno y tendrás elogios de ella, pues es para ti un ministro de Dios para bien. Pero si haces lo malo, teme. Porque no en vano lleva la espada, pues es ministro de Dios, un vengador que castiga al que practica lo malo.",
+               "emphasized": []
+            }
+            ,{
+               "reference": "2 Tesalonicenses 3:13-14",
+               "text": "...Y si alguien no obedece nuestra enseñanza en esta carta, señalen al tal y no se asocien con él, para que se avergüence.",
+               "emphasized": []
+            }
+         ]
+      },
+      {
+         "type": "prose",
+         "id": "introduccion",
+         "title": "Un ejemplo de gracia",
+         "content": [
+            "Quisiera concluir esta enseñanza con la auto evaluación inspirada de la gracia recibida por Pablo."
+            ,"Hacia el final de su ministerio, Pablo habló del propósito de esta misericordia."
+            ,"Palabra fiel y digna de ser aceptada por todos: Cristo Jesús vino al mundo para salvar a los pecadores, entre los cuales yo soy el primero. Sin embargo, por esto hallé misericordia, para que en mí, como el primero, Jesucristo demostrar toda Su paciencia como un ejemplo para los que habrían de creer en Él para vida eterna."
+            ,"Entre las razones por las que Dios escogió a Pablo, encontramos un plan para ilustrar la gracia."
+            ,"Dios no escogió a Pablo porque estaba dispuesto a creer."
+            ,"De hecho, fue exactamente lo contrario."
+            ,"Dios escogió a uno de los más violentos agresores, perseguidores y blasfemos, para demostrar qué tipo de personas pueden salvarse."
+            ,"Dios escogió a uno de sus enemigos, para demostrar el poder de Su gracia."
+            ,"Dios quiere salvar a los pecadores."
+            ,"Independientemente de tu pasado, si sometes tu vida al Cristo resucitado, puedes ser perdonado."
+            ,"Independientemente de tu pasado, si crees que Jesús está reinando sobre el universo, y te sometes a su reino por el resto de tus días, serás perdonado."
+            ,"Cristo Jesus vino para salvar a los pecadores, de los cuales somos los primeros."
+            ,"Cristo te ofrece un lugar entre nosotros."
+            ,"¿Aceptarás su ofrecimiento, o lo rechazarás como lo hicieron los judíos?"
+         ],
+         "biblical_quotes": [
+            {
+               "reference": "1 Timoteo 1:15-16",
+               "text": "Palabra fiel y digna de ser aceptada por todos: Cristo Jesús vino al mundo para salvar a los pecadores, entre los cuales yo soy el primero. Sin embargo, por esto hallé misericordia, para que en mí, como el primero, Jesucristo demostrar toda Su paciencia como un ejemplo para los que habrían de creer en Él para vida eterna.",
+               "emphasized": []
+            }
+         ]
+      }
+   ]
+}

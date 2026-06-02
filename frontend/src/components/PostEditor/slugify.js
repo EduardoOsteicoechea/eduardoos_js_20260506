@@ -1,13 +1,20 @@
 export function slugifySegment(value) {
   if (!value?.trim()) return '';
 
-  return value
+  return normalizeKebabInput(value)
+    .replace(/^-+|-+$/g, '');
+}
+
+export function normalizeKebabInput(value) {
+  if (value == null) return '';
+
+  return String(value)
     .normalize('NFD')
     .replace(/\p{Diacritic}/gu, '')
     .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, '_')
-    .replace(/^_+|_+$/g, '');
+    .replace(/^\s+/, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/-{2,}/g, '-');
 }
 
 export function buildArticleSlug(serie, chapter, articleId) {

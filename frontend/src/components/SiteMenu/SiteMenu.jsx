@@ -5,14 +5,13 @@ import MenuSettingsPanel from './MenuSettingsPanel';
 import { HamburgerIcon, LoginIcon, ProfileIcon, SettingsIcon } from './MenuIcons';
 
 function lockBodyScroll() {
-  const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+  document.documentElement.style.overflow = 'hidden';
   document.body.style.overflow = 'hidden';
-  if (scrollbarWidth > 0) {
-    document.body.style.paddingRight = `${scrollbarWidth}px`;
-  }
+  document.body.style.paddingRight = '';
 }
 
 function unlockBodyScroll() {
+  document.documentElement.style.overflow = '';
   document.body.style.overflow = '';
   document.body.style.paddingRight = '';
 }
@@ -89,7 +88,7 @@ export default function SiteMenu({
               <button
                 type="button"
                 disabled
-                className="theme-toolbar-btn opacity-40"
+                className="theme-toolbar-btn h-8 w-8 p-0 opacity-40"
                 aria-label="Perfil (próximamente)"
                 title="Perfil (próximamente)"
               >
@@ -99,7 +98,7 @@ export default function SiteMenu({
               <button
                 type="button"
                 disabled
-                className="theme-toolbar-btn opacity-40"
+                className="theme-toolbar-btn h-8 w-8 p-0 opacity-40"
                 aria-label="Iniciar sesión (próximamente)"
                 title="Iniciar sesión (próximamente)"
               >
@@ -109,7 +108,7 @@ export default function SiteMenu({
               <button
                 type="button"
                 onClick={toggleSettings}
-                className={`theme-toolbar-btn ${
+                className={`theme-toolbar-btn h-8 w-8 p-0 ${
                   settingsOpen ? 'ring-2 ring-black dark:ring-white' : ''
                 }`}
                 aria-label="Ajustes de lectura"
@@ -117,6 +116,16 @@ export default function SiteMenu({
                 title="Ajustes"
               >
                 <SettingsIcon />
+              </button>
+
+              <button
+                type="button"
+                onClick={closeMenu}
+                className="theme-toolbar-btn h-8 w-8 border-red-500/60 bg-red-500/10 p-0 text-2xl font-bold leading-none text-red-600 hover:bg-red-500/20 dark:text-red-400"
+                aria-label="Cerrar menú"
+                title="Cerrar menú"
+              >
+                ×
               </button>
             </header>
 
@@ -168,7 +177,7 @@ export default function SiteMenu({
       <button
         type="button"
         onClick={() => setMenuOpen(true)}
-        className="theme-toolbar-btn shrink-0 px-3"
+        className="theme-toolbar-btn h-8 w-8 shrink-0 p-0"
         aria-label="Abrir menú"
         aria-expanded={menuOpen}
         aria-haspopup="dialog"

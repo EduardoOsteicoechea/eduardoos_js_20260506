@@ -44,7 +44,7 @@ export default function SavePasswordModal({
       onClick={isSubmitting ? undefined : onClose}
     >
       <div
-        className="theme-border theme-surface w-full max-w-md rounded-xl border p-6 shadow-xl"
+        className="theme-border theme-surface max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto rounded-xl border p-6 shadow-xl"
         role="dialog"
         aria-modal="true"
         aria-labelledby="save-password-title"
@@ -75,7 +75,10 @@ export default function SavePasswordModal({
           </div>
 
           {error ? (
-            <p className="text-sm text-red-600 dark:text-red-400" role="alert">
+            <p
+              className="whitespace-pre-wrap break-words text-sm text-red-600 dark:text-red-400"
+              role="alert"
+            >
               {error}
             </p>
           ) : null}

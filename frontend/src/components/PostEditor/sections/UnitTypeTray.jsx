@@ -1,5 +1,7 @@
 import { UNIT_TYPES } from './unitTypes';
 
+const ADDABLE_UNIT_TYPES = UNIT_TYPES.filter((entry) => entry.id !== 'list');
+
 export default function UnitTypeTray({ open, onSelect }) {
   if (!open) return null;
 
@@ -13,7 +15,7 @@ export default function UnitTypeTray({ open, onSelect }) {
         Elegir tipo
       </p>
       <div className="flex flex-wrap gap-2">
-        {UNIT_TYPES.map((entry) => (
+        {ADDABLE_UNIT_TYPES.map((entry) => (
           <button
             key={entry.id}
             type="button"
