@@ -47,7 +47,7 @@ jobs:
           SSH_OPTS="-i ~/.ssh/id_rsa -o StrictHostKeyChecking=yes"
           REMOTE_DIR="/home/$USER/backend"
 
-          ssh $SSH_OPTS "$USER@$HOST" "mkdir -p $REMOTE_DIR"
+          ssh $SSH_OPTS "$USER@$HOST" "mkdir -p $REMOTE_DIR/public/data"
 
           rsync -avz -e "ssh $SSH_OPTS" \
             ./dist \

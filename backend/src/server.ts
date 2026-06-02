@@ -23,6 +23,11 @@ app.use(
 
 app.use('/api', apiRouter);
 
-app.listen(PORT, () => {
-  console.log(`Backend API running on port ${PORT}`);
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Backend API running on http://0.0.0.0:${PORT}`);
+});
+
+server.on('error', (error: NodeJS.ErrnoException) => {
+  console.error('[backend] Failed to start:', error);
+  process.exit(1);
 });

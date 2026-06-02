@@ -1,6 +1,7 @@
 ---
 // Import your Tailwind CSS file
 import "../styles/global.css";
+import GlobalActivityBar from "../components/GlobalActivityBar.jsx";
 
 interface Props {
   title?: string;
@@ -81,6 +82,8 @@ const { title = "Eduardo Osteicoechea" } = Astro.props;
     <body>
         
       <slot />
+
+      <GlobalActivityBar client:load />
       
     </body>
 </html>
