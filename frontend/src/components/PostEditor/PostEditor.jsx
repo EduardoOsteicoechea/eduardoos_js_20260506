@@ -1003,11 +1003,6 @@ export default function PostEditor() {
                 Editar título
               </EditorActionButton>
             ) : null}
-            {selectedExistingArticle && !titleIsCustom ? (
-              <p className="theme-muted mt-1 text-xs">
-                {`Editando artículo existente #${selectedExistingArticle.articleId}.`}
-              </p>
-            ) : null}
           </div>
 
           <div>
