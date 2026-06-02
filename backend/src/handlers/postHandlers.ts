@@ -1,25 +1,6 @@
 import type { Request, Response } from 'express';
 import { persistPostEditorPayload } from '../postEditorStorage.js';
-import { DOCUMENTER_URL, POST_EDITOR_PASSWORD } from '../constants/index.js';
-
-async function requestDocumenterPdf(payload: unknown) {
-  const response = await fetch(
-    `${DOCUMENTER_URL.replace(/\/+$/g, '')}/documents/article-pdf`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    },
-  );
-
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok || data?.ok === false) {
-    throw new Error(
-      typeof data?.error === 'string' ? data.error : 'Falló la generación de PDF',
-    );
-  }
-  return data;
-}
+import { POST_EDITOR_PASSWORD } from '../constants/index.js';
 
 export function validatePostEditorPassword(req: Request, res: Response) {
   const { password } = req.body as { password?: string };
@@ -39,15 +20,6 @@ export async function savePostEditorArticle(req: Request, res: Response) {
     const files = Array.isArray(req.files) ? req.files : [];
 
     const result = await persistPostEditorPayload(rawPayload, files);
-    let pdfResult: unknown = null;
-    let pdfWarning: string | null = null;
-
-    try {
-      pdfResult = await requestDocumenterPdf(rawPayload);
-    } catch (error) {
-      pdfWarning = error instanceof Error ? error.message : 'No se pudo generar el PDF';
-      console.error('[post/editor][pdf]', error);
-    }
 
     return res.json({
       ok: true,
@@ -55,8 +27,6 @@ export async function savePostEditorArticle(req: Request, res: Response) {
       path: result.storagePath,
       assets: result.assetCount,
       section_article_id: result.sectionArticleId,
-      pdf: pdfResult,
-      pdf_warning: pdfWarning,
     });
   } catch (error) {
     console.error('[post/editor]', error);

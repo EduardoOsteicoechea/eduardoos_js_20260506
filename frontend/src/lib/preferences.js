@@ -49,9 +49,17 @@ export function persistTheme(theme) {
   applyThemeToDocument(theme);
 }
 
+export function applyFontSizeToDocument(px, fallback = 18) {
+  if (typeof document === 'undefined') return;
+  const size = clampFontSize(px, fallback);
+  document.documentElement.style.fontSize = `${size}px`;
+}
+
 export function persistFontSize(px) {
   if (typeof localStorage === 'undefined') return;
-  localStorage.setItem(STORAGE_KEYS.fontSize, String(clampFontSize(px)));
+  const size = clampFontSize(px);
+  localStorage.setItem(STORAGE_KEYS.fontSize, String(size));
+  applyFontSizeToDocument(size);
 }
 
 export function getStoredFontFamily() {

@@ -24,6 +24,7 @@ import {
 import { normalizeKebabInput } from './slugify';
 import { SectionEditModal } from './sections';
 import SectionUnitsPreview from './sections/SectionUnitsPreview';
+import { downloadArticlePdf } from '../../lib/articlePdfDownload';
 import { savePostPayloadWithAssets, validateEditorPassword } from './postEditorApi';
 import {
   fetchNextArticleId,
@@ -163,6 +164,7 @@ export default function PostEditor() {
   const [catalogLoading, setCatalogLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [modalError, setModalError] = useState('');
   const [notice, setNotice] = useState(null);
   const [articleIdLoading, setArticleIdLoading] = useState(false);
@@ -675,6 +677,77 @@ export default function PostEditor() {
     showNotice,
   ]);
 
+  const validateEditorForExport = useCallback(() => {
+    if (!effectiveSerie) {
+      showNotice('warning', 'Selecciona o escribe una serie.');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return null;
+    }
+    if (!effectiveChapter) {
+      showNotice('warning', 'Selecciona o escribe un capítulo (carpeta).');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return null;
+    }
+    if (!effectiveTitle) {
+      showNotice('warning', 'El título es obligatorio.');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return null;
+    }
+    if (!normalizeFolderName(form.folderName)) {
+      showNotice('warning', 'El nombre de carpeta es obligatorio.');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return null;
+    }
+    if (!effectiveArticleId || articleIdLoading) {
+      showNotice('warning', 'Espera a que se asigne el id del artículo.');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return null;
+    }
+
+    return buildPostPayload({
+      ...form,
+      title: effectiveTitle,
+      articleId: effectiveArticleId,
+      folderName: form.folderName || effectiveArticleId,
+    });
+  }, [
+    articleIdLoading,
+    effectiveArticleId,
+    effectiveChapter,
+    effectiveSerie,
+    effectiveTitle,
+    form,
+    showNotice,
+  ]);
+
+  const handleDownloadPdf = useCallback(async () => {
+    clearNotice();
+    const payload = validateEditorForExport();
+    if (!payload) return;
+
+    if (pendingMediaFiles.size > 0) {
+      showNotice(
+        'warning',
+        'Hay archivos nuevos sin guardar. Guarda el artículo antes del PDF para incluirlos.',
+      );
+      return;
+    }
+
+    setIsGeneratingPdf(true);
+    try {
+      await downloadArticlePdf(payload);
+      showNotice('success', 'PDF descargado.');
+    } catch (error) {
+      console.error('PostEditor PDF failed:', error);
+      showNotice(
+        'warning',
+        error instanceof Error ? error.message : 'No se pudo generar el PDF.',
+      );
+    } finally {
+      setIsGeneratingPdf(false);
+    }
+  }, [clearNotice, pendingMediaFiles, showNotice, validateEditorForExport]);
+
   const handleSaveWithPassword = async (password) => {
     setIsSubmitting(true);
     setModalError('');
@@ -708,16 +781,7 @@ export default function PostEditor() {
 
       setModalOpen(false);
       setPendingMediaFiles(new Map());
-      const pdfWarning =
-        typeof save.data?.pdf_warning === 'string' ? save.data.pdf_warning.trim() : '';
-      if (pdfWarning) {
-        showNotice(
-          'warning',
-          `Artículo guardado. PDF no generado: ${pdfWarning}`,
-        );
-      } else {
-        showNotice('success', 'Artículo guardado correctamente.');
-      }
+      showNotice('success', 'Artículo guardado correctamente.');
 
       if (!selectedExistingArticle?.articleId && effectiveSerie && effectiveChapter) {
         const next = await fetchNextArticleId(effectiveSerie, effectiveChapter);
@@ -742,7 +806,14 @@ export default function PostEditor() {
         icon: 'save',
         title: 'Guardar artículo',
         onClick: openSaveModal,
-        disabled: isSubmitting,
+        disabled: isSubmitting || isGeneratingPdf,
+      },
+      {
+        id: 'print',
+        icon: 'print',
+        title: 'Descargar PDF',
+        onClick: handleDownloadPdf,
+        disabled: isSubmitting || isGeneratingPdf,
       },
       {
         id: 'scroll-up',
@@ -767,7 +838,7 @@ export default function PostEditor() {
         onClick: () => setPreviewModalOpen(true),
       },
     ],
-    [isSubmitting, openSaveModal],
+    [handleDownloadPdf, isGeneratingPdf, isSubmitting, openSaveModal],
   );
 
   return (
@@ -932,11 +1003,11 @@ export default function PostEditor() {
                 Editar título
               </EditorActionButton>
             ) : null}
-            <p className="theme-muted mt-1 text-xs">
-              {selectedExistingArticle
-                ? `Editando artículo existente #${selectedExistingArticle.articleId}.`
-                : 'Escribe un nuevo título para crear un artículo nuevo.'}
-            </p>
+            {selectedExistingArticle && !titleIsCustom ? (
+              <p className="theme-muted mt-1 text-xs">
+                {`Editando artículo existente #${selectedExistingArticle.articleId}.`}
+              </p>
+            ) : null}
           </div>
 
           <div>

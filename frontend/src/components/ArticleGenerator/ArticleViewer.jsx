@@ -2,24 +2,16 @@ import { useCallback, useEffect, useState } from 'react';
 import ArticleGenerator from './ArticleGenerator';
 import ArticleActivityBar from './ArticleActivityBar';
 import {
-  THEMES,
-  applyThemeToDocument,
-  getStoredFontFamily,
-  getStoredFontSize,
-  getStoredTheme,
   getStoredViewMode,
-  persistFontFamily,
-  persistFontSize,
-  persistTheme,
   persistViewMode,
 } from '../../lib/preferences';
 import { VIEW_MODES } from '../../lib/viewModes';
+import { useSiteReadingPreferences } from '../../hooks/useSiteReadingPreferences';
 import { useSermonPlayer } from './useSermonPlayer';
-
-const MIN_FONT_PX = 14;
-const MAX_FONT_PX = 32;
-const FONT_STEP_PX = 2;
-const DEFAULT_FONT_PX = 18;
+import {
+  buildPdfPayloadFromArticle,
+  downloadArticlePdf,
+} from '../../lib/articlePdfDownload';
 
 export default function ArticleViewer({
   initialArticle,
@@ -28,16 +20,16 @@ export default function ArticleViewer({
   sermonPath: initialSermonPath,
 }) {
   const [article, setArticle] = useState(initialArticle);
-  const [baseFontSize, setBaseFontSize] = useState(DEFAULT_FONT_PX);
-  const [theme, setTheme] = useState(THEMES.light);
-  const [fontFamilyId, setFontFamilyId] = useState('montserrat');
   const [viewMode, setViewMode] = useState(VIEW_MODES.regular);
+  const [viewModeReady, setViewModeReady] = useState(false);
   const [expandedSections, setExpandedSections] = useState(() => new Set());
-  const [prefsReady, setPrefsReady] = useState(false);
   const [isReloading, setIsReloading] = useState(false);
   const [reloadError, setReloadError] = useState(null);
+  const [pdfError, setPdfError] = useState(null);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [sermonPath, setSermonPath] = useState(initialSermonPath);
 
+  const prefs = useSiteReadingPreferences();
   const sermon = useSermonPlayer(sermonPath);
 
   useEffect(() => {
@@ -61,37 +53,14 @@ export default function ArticleViewer({
   }, [initialSermonPath, slug]);
 
   useEffect(() => {
-    setBaseFontSize(getStoredFontSize(DEFAULT_FONT_PX));
-    const storedTheme = getStoredTheme();
-    const storedFontFamily = getStoredFontFamily();
-    const storedViewMode = getStoredViewMode();
-    setTheme(storedTheme);
-    setFontFamilyId(storedFontFamily);
-    setViewMode(storedViewMode);
-    applyThemeToDocument(storedTheme);
-    persistFontFamily(storedFontFamily);
-    setPrefsReady(true);
+    setViewMode(getStoredViewMode());
+    setViewModeReady(true);
   }, []);
 
   useEffect(() => {
-    if (!prefsReady) return;
-    persistFontSize(baseFontSize);
-  }, [baseFontSize, prefsReady]);
-
-  useEffect(() => {
-    if (!prefsReady) return;
-    persistTheme(theme);
-  }, [theme, prefsReady]);
-
-  useEffect(() => {
-    if (!prefsReady) return;
-    persistFontFamily(fontFamilyId);
-  }, [fontFamilyId, prefsReady]);
-
-  useEffect(() => {
-    if (!prefsReady) return;
+    if (!viewModeReady) return;
     persistViewMode(viewMode);
-  }, [viewMode, prefsReady]);
+  }, [viewMode, viewModeReady]);
 
   const toggleSection = useCallback((sectionIndex) => {
     setExpandedSections((previous) => {
@@ -103,20 +72,6 @@ export default function ArticleViewer({
       }
       return next;
     });
-  }, []);
-
-  const increaseFont = useCallback(() => {
-    setBaseFontSize((size) => Math.min(size + FONT_STEP_PX, MAX_FONT_PX));
-  }, []);
-
-  const decreaseFont = useCallback(() => {
-    setBaseFontSize((size) => Math.max(size - FONT_STEP_PX, MIN_FONT_PX));
-  }, []);
-
-  const toggleTheme = useCallback(() => {
-    setTheme((current) =>
-      current === THEMES.dark ? THEMES.light : THEMES.dark,
-    );
   }, []);
 
   const scrollToTop = useCallback(() => {
@@ -164,6 +119,24 @@ export default function ArticleViewer({
     }
   }, [jsonPath, sermon]);
 
+  const handleDownloadPdf = useCallback(async () => {
+    if (!slug) return;
+
+    setIsGeneratingPdf(true);
+    setPdfError(null);
+
+    try {
+      const payload = buildPdfPayloadFromArticle(slug, article);
+      await downloadArticlePdf(payload);
+    } catch (error) {
+      setPdfError(
+        error instanceof Error ? error.message : 'No se pudo generar el PDF',
+      );
+    } finally {
+      setIsGeneratingPdf(false);
+    }
+  }, [article, slug]);
+
   return (
     <>
       {reloadError ? (
@@ -172,10 +145,16 @@ export default function ArticleViewer({
         </p>
       ) : null}
 
+      {pdfError ? (
+        <p className="theme-border mb-4 rounded-lg border px-4 py-2 text-sm text-red-700 dark:text-red-300">
+          Error al generar PDF: {pdfError}
+        </p>
+      ) : null}
+
       <ArticleGenerator
         article={article}
         slug={slug}
-        baseFontSize={baseFontSize}
+        baseFontSize={prefs.baseFontSize}
         viewMode={viewMode}
         expandedSections={expandedSections}
         onToggleSection={toggleSection}
@@ -183,25 +162,29 @@ export default function ArticleViewer({
         sermonAudioRef={sermon.audioRef}
       />
 
-      <ArticleActivityBar
-        theme={theme}
-        fontFamilyId={fontFamilyId}
-        baseFontSize={baseFontSize}
-        viewMode={viewMode}
-        onSelectFont={setFontFamilyId}
-        onSelectViewMode={setViewMode}
-        onToggleTheme={toggleTheme}
-        onIncreaseFont={increaseFont}
-        onDecreaseFont={decreaseFont}
-        onScrollToTop={scrollToTop}
-        onScrollToBottom={scrollToBottom}
-        onReload={reloadJson}
-        isReloading={isReloading}
-        hasSermon={sermon.hasSermon}
-        isSermonPlaying={sermon.isPlaying}
-        isSermonLoading={sermon.isLoading}
-        onToggleSermon={sermon.togglePlayPause}
-      />
+      {prefs.ready ? (
+        <ArticleActivityBar
+          theme={prefs.theme}
+          fontFamilyId={prefs.fontFamilyId}
+          baseFontSize={prefs.baseFontSize}
+          viewMode={viewMode}
+          onSelectFont={prefs.onSelectFont}
+          onSelectViewMode={setViewMode}
+          onToggleTheme={prefs.onToggleTheme}
+          onIncreaseFont={prefs.onIncreaseFont}
+          onDecreaseFont={prefs.onDecreaseFont}
+          onScrollToTop={scrollToTop}
+          onScrollToBottom={scrollToBottom}
+          onReload={reloadJson}
+          isReloading={isReloading}
+          hasSermon={sermon.hasSermon}
+          isSermonPlaying={sermon.isPlaying}
+          isSermonLoading={sermon.isLoading}
+          onToggleSermon={sermon.togglePlayPause}
+          onDownloadPdf={handleDownloadPdf}
+          isGeneratingPdf={isGeneratingPdf}
+        />
+      ) : null}
     </>
   );
 }

@@ -1,8 +1,9 @@
 import EditorActionButton from './EditorActionButton';
 import { SiteMenu } from './SiteMenu';
+import { useSiteReadingPreferences } from '../hooks/useSiteReadingPreferences';
 
 export default function GlobalActivityBar() {
-  const noop = () => {};
+  const prefs = useSiteReadingPreferences();
 
   return (
     <footer
@@ -36,17 +37,20 @@ export default function GlobalActivityBar() {
       </div>
 
       <div className="theme-border flex shrink-0 items-center border-l px-2 sm:px-3">
-        <SiteMenu
-          theme="light"
-          fontFamilyId="montserrat"
-          baseFontSize={18}
-          onToggleTheme={noop}
-          onIncreaseFont={noop}
-          onDecreaseFont={noop}
-          onSelectFont={noop}
-        />
+        {prefs.ready ? (
+          <SiteMenu
+            theme={prefs.theme}
+            fontFamilyId={prefs.fontFamilyId}
+            baseFontSize={prefs.baseFontSize}
+            onToggleTheme={prefs.onToggleTheme}
+            onIncreaseFont={prefs.onIncreaseFont}
+            onDecreaseFont={prefs.onDecreaseFont}
+            onSelectFont={prefs.onSelectFont}
+          />
+        ) : (
+          <span className="theme-muted inline-block h-8 w-8" aria-hidden="true" />
+        )}
       </div>
     </footer>
   );
 }
-

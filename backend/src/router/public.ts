@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
+import { downloadArticlePdf } from '../handlers/documentHandlers.js';
 import {
   savePostEditorArticle,
   validatePostEditorPassword,
@@ -28,5 +29,6 @@ publicRouter.get('/series/articles', getSeriesArticles);
 publicRouter.get('/series/article', getSeriesArticle);
 publicRouter.post('/auth/post/editor/', validatePostEditorPassword);
 publicRouter.post('/post/editor/', upload.any(), savePostEditorArticle);
+publicRouter.post('/documents/article-pdf', downloadArticlePdf);
 publicRouter.get('/pdf/capabilities', getPdfCapabilities);
 publicRouter.post('/pdf/generate', generatePdf);

@@ -78,6 +78,10 @@ const { title = "Eduardo Osteicoechea", showGlobalActivityBar = true } =
               fontStacks[fontId],
             );
           }
+          var fontSize = localStorage.getItem("eduardoos-article-font-size");
+          if (fontSize) {
+            document.documentElement.style.fontSize = fontSize + "px";
+          }
         } catch (_) {}
       </script>
     </head>

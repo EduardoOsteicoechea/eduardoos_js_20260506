@@ -1,5 +1,6 @@
 import { SiteMenu } from '../SiteMenu';
 import EditorActionButton from '../EditorActionButton';
+import { useSiteReadingPreferences } from '../../hooks/useSiteReadingPreferences';
 
 function SaveIcon() {
   return (
@@ -15,6 +16,24 @@ function SaveIcon() {
       <path d="M4 4h13l3 3v13H4z" />
       <path d="M8 4v6h8V4" />
       <path d="M8 20v-6h8v6" />
+    </svg>
+  );
+}
+
+function PrintIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      aria-hidden="true"
+    >
+      <path d="M6 9V2h12v7" />
+      <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+      <path d="M6 14h12v8H6z" />
     </svg>
   );
 }
@@ -38,6 +57,7 @@ function EyeIcon() {
 
 function renderActionIcon(icon) {
   if (icon === 'save') return <SaveIcon />;
+  if (icon === 'print') return <PrintIcon />;
   if (icon === 'eye') return <EyeIcon />;
   return icon;
 }
@@ -54,7 +74,7 @@ function getActionButtonClassName(action) {
 }
 
 export default function PostEditorActivityBar({ actions }) {
-  const noop = () => {};
+  const prefs = useSiteReadingPreferences();
 
   return (
     <footer
@@ -98,15 +118,19 @@ export default function PostEditorActivityBar({ actions }) {
       </div>
 
       <div className="theme-border flex shrink-0 items-center border-l px-2 sm:px-3">
-        <SiteMenu
-          theme="light"
-          fontFamilyId="montserrat"
-          baseFontSize={18}
-          onToggleTheme={noop}
-          onIncreaseFont={noop}
-          onDecreaseFont={noop}
-          onSelectFont={noop}
-        />
+        {prefs.ready ? (
+          <SiteMenu
+            theme={prefs.theme}
+            fontFamilyId={prefs.fontFamilyId}
+            baseFontSize={prefs.baseFontSize}
+            onToggleTheme={prefs.onToggleTheme}
+            onIncreaseFont={prefs.onIncreaseFont}
+            onDecreaseFont={prefs.onDecreaseFont}
+            onSelectFont={prefs.onSelectFont}
+          />
+        ) : (
+          <span className="theme-muted inline-block h-8 w-8" aria-hidden="true" />
+        )}
       </div>
     </footer>
   );
