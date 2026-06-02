@@ -988,7 +988,7 @@ export default function PostEditor() {
                   type="button"
                   onClick={commitNewTitle}
                   disabled={!form.title.trim()}
-                  className="theme-toolbar-btn w-full text-sm disabled:cursor-not-allowed disabled:opacity-50"
+                  className={`${inputClassName} font-semibold transition hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-white/10`}
                 >
                   Añadir título
                 </button>
