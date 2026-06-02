@@ -175,10 +175,15 @@ function LogPanel({ title, block }) {
   const lines = Array.isArray(block?.logs) ? block.logs : [];
   const logText = lines.length ? lines.join('\n') : '(sin líneas de log)';
   const copyText = error ? `${error}\n\n${logText}` : logText;
+  const scopeLabel = block?.scope ? ` · ${block.scope}` : '';
 
   return (
     <section className="theme-border space-y-2 rounded-xl border p-4">
-      <PanelHeader title={title} subtitle={block?.service} copyText={copyText} />
+      <PanelHeader
+        title={title}
+        subtitle={`${block?.service ?? ''}${scopeLabel}`}
+        copyText={copyText}
+      />
       {error ? (
         <p className="text-sm text-red-600 dark:text-red-300">{error}</p>
       ) : null}
@@ -223,8 +228,9 @@ export default function ServerHealthDashboard() {
   const deploy = data?.deploy;
   const probes = data?.probes;
   const issues = Array.isArray(data?.issues) ? data.issues : [];
+  const warnings = Array.isArray(data?.warnings) ? data.warnings : [];
 
-  const issuesCopyText = issues.length ? issues.join('\n') : 'Sin problemas detectados.';
+  const issuesCopyText = issues.length ? issues.join('\n') : 'Sin problemas críticos.';
 
   return (
     <div className="space-y-6">
@@ -265,6 +271,16 @@ export default function ServerHealthDashboard() {
           <ul className="list-inside list-disc space-y-1 text-sm text-red-700 dark:text-red-300">
             {issues.map((issue) => (
               <li key={issue}>{issue}</li>
+            ))}
+          </ul>
+        </InfoPanel>
+      ) : null}
+
+      {data && warnings.length > 0 ? (
+        <InfoPanel title="Avisos en logs recientes" copyText={warnings.join('\n')}>
+          <ul className="list-inside list-disc space-y-1 text-sm text-amber-800 dark:text-amber-300">
+            {warnings.map((warning) => (
+              <li key={warning}>{warning}</li>
             ))}
           </ul>
         </InfoPanel>

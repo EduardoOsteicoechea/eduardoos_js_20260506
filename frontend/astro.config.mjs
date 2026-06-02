@@ -22,6 +22,10 @@ export default defineConfig({
           target: telemetryProxyTarget,
           changeOrigin: true,
         },
+        '/api/server/health/': {
+          target: telemetryProxyTarget,
+          changeOrigin: true,
+        },
         '/api': {
           target: apiProxyTarget,
           changeOrigin: true,

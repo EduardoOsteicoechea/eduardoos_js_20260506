@@ -13,6 +13,7 @@ type healthResponse struct {
 	OK         bool                   `json:"ok"`
 	Timestamp  string                 `json:"timestamp"`
 	Issues     []string               `json:"issues"`
+	Warnings   []string               `json:"warnings"`
 	Services   collect.ServicesBlock  `json:"services"`
 	Ports      collect.PortsBlock     `json:"ports"`
 	Deploy     collect.DeployBlock    `json:"deploy"`
@@ -36,20 +37,35 @@ func Health(cfg config.Config) http.HandlerFunc {
 		probes := collect.Probes(cfg)
 		issues := collect.EvaluateIssues(cfg, services, ports, deploy, probes)
 
+		backendLogs := collect.ServiceLogsFor(
+			cfg, cfg.BackendUnit, cfg.DockerBackendContainer,
+		)
+		documenterLogs := collect.ServiceLogsFor(
+			cfg, cfg.DocumenterUnit, cfg.DockerDocumenterContainer,
+		)
+
+		warnings := []string{}
+		warnings = append(warnings, collect.RecentLogWarnings(backendLogs, services.Backend.Active)...)
+		warnings = append(warnings, collect.RecentLogWarnings(documenterLogs, services.Documenter.Active)...)
+
+		if issues == nil {
+			issues = []string{}
+		}
+		if warnings == nil {
+			warnings = []string{}
+		}
+
 		payload := healthResponse{
 			OK:        len(issues) == 0,
 			Timestamp: time.Now().UTC().Format(time.RFC3339),
 			Issues:    issues,
+			Warnings:  warnings,
 			Services:  services,
 			Ports:     ports,
 			Deploy:    deploy,
 			Probes:    probes,
-			Backend: collect.ServiceLogsFor(
-				cfg, cfg.BackendUnit, cfg.DockerBackendContainer,
-			),
-			Documenter: collect.ServiceLogsFor(
-				cfg, cfg.DocumenterUnit, cfg.DockerDocumenterContainer,
-			),
+			Backend:    backendLogs,
+			Documenter: documenterLogs,
 			System: collect.SystemStats(cfg),
 		}
 
