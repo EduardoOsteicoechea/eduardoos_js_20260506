@@ -7,6 +7,7 @@ on:
     paths:
       - 'documenter/**'
       - 'deploy/systemd/eduardoos-documenter.service'
+      - 'deploy/scripts/ec2-node-service.sh'
       - '.github/workflows/deploy-documenter.yml'
   workflow_dispatch:
 
@@ -67,6 +68,10 @@ jobs:
             ../deploy/systemd/eduardoos-documenter.service \
             "$USER@$HOST:/tmp/eduardoos-documenter.service"
 
+          rsync -avz -e "ssh $SSH_OPTS" \
+            ../deploy/scripts/ec2-node-service.sh \
+            "$USER@$HOST:/tmp/ec2-node-service.sh"
+
           ssh $SSH_OPTS "$USER@$HOST" bash -s <<EOF
             set -euo pipefail
             REMOTE_DIR="/home/$USER/documenter"
@@ -78,14 +83,10 @@ jobs:
             fi
 
             sudo cp /tmp/eduardoos-documenter.service /etc/systemd/system/eduardoos-documenter.service
-            cd "\$REMOTE_DIR"
-            npm ci --omit=dev
-            sudo systemctl daemon-reload
-            sudo systemctl enable eduardoos-documenter
-            sudo systemctl restart eduardoos-documenter
-            sudo systemctl --no-pager --full status eduardoos-documenter
-
-            curl -sf "http://127.0.0.1:8090/health" >/dev/null \
-              || { echo "ERROR: documenter /health check failed"; exit 1; }
-            echo "Documenter deploy OK"
+            chmod +x /tmp/ec2-node-service.sh
+            /tmp/ec2-node-service.sh \
+              "\$REMOTE_DIR" \
+              eduardoos-documenter \
+              8090 \
+              "http://127.0.0.1:8090/health"
           EOF

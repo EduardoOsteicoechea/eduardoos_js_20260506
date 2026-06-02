@@ -7,6 +7,7 @@ on:
     paths:
       - 'backend/**'
       - 'deploy/systemd/eduardoos-backend.service'
+      - 'deploy/scripts/ec2-node-service.sh'
       - '.github/workflows/deploy-backend.yml'
   workflow_dispatch:
 
@@ -67,6 +68,10 @@ jobs:
             ../deploy/systemd/eduardoos-backend.service \
             "$USER@$HOST:/tmp/eduardoos-backend.service"
 
+          rsync -avz -e "ssh $SSH_OPTS" \
+            ../deploy/scripts/ec2-node-service.sh \
+            "$USER@$HOST:/tmp/ec2-node-service.sh"
+
           ssh $SSH_OPTS "$USER@$HOST" bash -s <<EOF
             set -euo pipefail
             REMOTE_DIR="/home/$USER/backend"
@@ -76,28 +81,18 @@ jobs:
               exit 1
             fi
 
-            # Fix older deploys that rsynced public/data into ~/backend/data/
             if [ -d "\$REMOTE_DIR/data/series" ] && [ ! -e "\$REMOTE_DIR/public/data/series" ]; then
               mkdir -p "\$REMOTE_DIR/public/data"
               mv "\$REMOTE_DIR/data/series" "\$REMOTE_DIR/public/data/series"
               rmdir "\$REMOTE_DIR/data" 2>/dev/null || true
             fi
 
-            # Retire legacy Python API (same port 8080)
-            if systemctl cat eduardoos-api.service &>/dev/null; then
-              sudo systemctl stop eduardoos-api || true
-              sudo systemctl disable eduardoos-api || true
-            fi
-
             sudo cp /tmp/eduardoos-backend.service /etc/systemd/system/eduardoos-backend.service
-            cd "\$REMOTE_DIR"
-            npm ci --omit=dev
-            sudo systemctl daemon-reload
-            sudo systemctl enable eduardoos-backend
-            sudo systemctl restart eduardoos-backend
-            sudo systemctl --no-pager --full status eduardoos-backend
-
-            curl -sf "http://127.0.0.1:8080/api/series/catalog" >/dev/null \
-              || { echo "ERROR: backend /api/series/catalog did not return JSON"; exit 1; }
-            echo "Backend deploy OK"
+            chmod +x /tmp/ec2-node-service.sh
+            /tmp/ec2-node-service.sh \
+              "\$REMOTE_DIR" \
+              eduardoos-backend \
+              8080 \
+              "http://127.0.0.1:8080/api/series/catalog" \
+              eduardoos-api
           EOF

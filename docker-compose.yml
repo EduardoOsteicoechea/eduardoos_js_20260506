@@ -43,6 +43,8 @@ services:
       LOG_LINES: 80
       DOCKER_BACKEND_CONTAINER: eduardoos-backend
       DOCKER_DOCUMENTER_CONTAINER: eduardoos-documenter
+      BACKEND_HEALTH_URL: http://backend:8080/api/series/catalog
+      DOCUMENTER_HEALTH_URL: http://documenter:8090/health
       HOST_PROC: /host/proc
       DISK_PATH: /
     volumes:

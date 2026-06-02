@@ -14,6 +14,11 @@ Environment=BACKEND_UNIT=eduardoos-backend
 Environment=DOCUMENTER_UNIT=eduardoos-documenter
 Environment=HOST_PROC=/proc
 Environment=DISK_PATH=/
+Environment=BACKEND_DIST_PATH=/home/ec2-user/backend/dist/server.js
+Environment=DOCUMENTER_DIST_PATH=/home/ec2-user/documenter/dist/server.js
+Environment=BACKEND_HEALTH_URL=http://127.0.0.1:8080/api/series/catalog
+Environment=DOCUMENTER_HEALTH_URL=http://127.0.0.1:8090/health
+Environment=LEGACY_API_UNIT=eduardoos-api
 ExecStart=/home/ec2-user/telemetry/telemetry
 Restart=always
 RestartSec=3
