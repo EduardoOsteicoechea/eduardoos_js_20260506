@@ -5,9 +5,11 @@ import GlobalActivityBar from "../components/GlobalActivityBar.jsx";
 
 interface Props {
   title?: string;
+  showGlobalActivityBar?: boolean;
 }
 
-const { title = "Eduardo Osteicoechea" } = Astro.props;
+const { title = "Eduardo Osteicoechea", showGlobalActivityBar = true } =
+  Astro.props;
 ---
 
 <!doctype html>
@@ -83,7 +85,7 @@ const { title = "Eduardo Osteicoechea" } = Astro.props;
         
       <slot />
 
-      <GlobalActivityBar client:load />
+      {showGlobalActivityBar ? <GlobalActivityBar client:load /> : null}
       
     </body>
 </html>

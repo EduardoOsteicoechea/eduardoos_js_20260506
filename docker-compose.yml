@@ -32,6 +32,29 @@ services:
       - "8090:8090"
     restart: unless-stopped
 
+  telemetry:
+    build:
+      context: ./telemetry
+      dockerfile: Dockerfile
+    container_name: eduardoos-telemetry
+    environment:
+      PORT: 8100
+      LOG_MODE: docker
+      LOG_LINES: 80
+      DOCKER_BACKEND_CONTAINER: eduardoos-backend
+      DOCKER_DOCUMENTER_CONTAINER: eduardoos-documenter
+      HOST_PROC: /host/proc
+      DISK_PATH: /
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc:/host/proc:ro
+    ports:
+      - "8100:8100"
+    depends_on:
+      - backend
+      - documenter
+    restart: unless-stopped
+
   frontend:
     build:
       context: ./frontend
@@ -43,9 +66,11 @@ services:
     environment:
       PUBLIC_API_BASE: http://backend:8080
       PUBLIC_DOCUMENTER_BASE: http://documenter:8090
+      PUBLIC_TELEMETRY_BASE: http://telemetry:8100
     depends_on:
       - backend
       - documenter
+      - telemetry
     ports:
       - "4321:4321"
     restart: unless-stopped

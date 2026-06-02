@@ -784,7 +784,7 @@ export default function PostEditor() {
         />
       ) : null}
 
-      <section className="theme-border rounded-xl border bg-transparend p-5">
+      <section className="">
         <div className="space-y-4">
           <CatalogSelect
             id="post-serie"

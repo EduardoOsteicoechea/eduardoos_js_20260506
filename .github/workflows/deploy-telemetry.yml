@@ -1,0 +1,68 @@
+name: Deploy Telemetry to EC2
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'telemetry/**'
+      - 'deploy/systemd/eduardoos-telemetry.service'
+      - '.github/workflows/deploy-telemetry.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy-telemetry:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./telemetry
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache-dependency-path: telemetry/go.sum
+
+      - name: Build Linux binary
+        run: CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o telemetry ./cmd/server
+
+      - name: Sync and Restart Service on EC2
+        env:
+          SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+          HOST: ${{ secrets.EC2_HOST }}
+          USER: ${{ secrets.EC2_USER }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+          SSH_OPTS="-i ~/.ssh/id_rsa -o StrictHostKeyChecking=yes"
+          REMOTE_DIR="/home/$USER/telemetry"
+
+          ssh $SSH_OPTS "$USER@$HOST" "mkdir -p $REMOTE_DIR"
+
+          rsync -avz -e "ssh $SSH_OPTS" \
+            ./telemetry \
+            "$USER@$HOST:$REMOTE_DIR/telemetry"
+
+          rsync -avz -e "ssh $SSH_OPTS" \
+            ../deploy/systemd/eduardoos-telemetry.service \
+            "$USER@$HOST:/tmp/eduardoos-telemetry.service"
+
+          ssh $SSH_OPTS "$USER@$HOST" bash -s <<EOF
+            set -euo pipefail
+            chmod +x /home/$USER/telemetry/telemetry
+            sudo cp /tmp/eduardoos-telemetry.service /etc/systemd/system/eduardoos-telemetry.service
+            sudo systemctl daemon-reload
+            sudo systemctl enable eduardoos-telemetry
+            sudo systemctl restart eduardoos-telemetry
+            sudo systemctl --no-pager --full status eduardoos-telemetry
+            curl -sf "http://127.0.0.1:8100/api/server/healt" >/dev/null \
+              || { echo "ERROR: telemetry /api/server/healt check failed"; exit 1; }
+            echo "Telemetry deploy OK"
+          EOF

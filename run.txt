@@ -66,6 +66,10 @@ docker compose logs -f
 # 12) Quick status
 docker compose ps
 
+# 13) Telemetry API (logs + RAM/disk)
+#     API:  http://localhost:8100/api/server/healt
+#     UI:   http://localhost:4321/server/healt
+
 # ==========================================================
 # WINDOWS (PowerShell/CMD) - run from project root
 # ==========================================================

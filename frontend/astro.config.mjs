@@ -6,6 +6,8 @@ import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 
 const apiProxyTarget = process.env.PUBLIC_API_BASE || 'http://localhost:8080';
+const telemetryProxyTarget =
+  process.env.PUBLIC_TELEMETRY_BASE || 'http://localhost:8100';
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,6 +18,10 @@ export default defineConfig({
     plugins: [tailwindcss()],
     server: {
       proxy: {
+        '/api/server/healt': {
+          target: telemetryProxyTarget,
+          changeOrigin: true,
+        },
         '/api': {
           target: apiProxyTarget,
           changeOrigin: true,

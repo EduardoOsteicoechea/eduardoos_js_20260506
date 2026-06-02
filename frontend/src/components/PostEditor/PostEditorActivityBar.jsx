@@ -58,7 +58,7 @@ export default function PostEditorActivityBar({ actions }) {
 
   return (
     <footer
-      className="theme-border theme-surface fixed bottom-0 left-0 right-0 z-50 flex h-[45px] border-t"
+      className="theme-border theme-surface fixed bottom-0 left-0 right-0 z-[55] flex h-[45px] border-t"
       role="toolbar"
       aria-label="Controles del editor de artículos"
     >

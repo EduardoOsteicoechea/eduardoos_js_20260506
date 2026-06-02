@@ -3,7 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import { PostEditor } from "../../components/PostEditor";
 ---
 
-<Layout title="Editor de artículos | Eduardo Osteicoechea">
+<Layout title="Editor de artículos | Eduardo Osteicoechea" showGlobalActivityBar={false}>
   <main class="mx-auto max-w-4xl px-5 py-10">
     <PostEditor client:load />
   </main>
