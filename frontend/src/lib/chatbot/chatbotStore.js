@@ -15,6 +15,9 @@ let revision = 0;
 let trayOpen = false;
 let pathname = '/';
 
+/** @type {import('./chatLanguage').ChatLanguageId | null} */
+let pendingHomeIntroLang = null;
+
 /** @type {import('./chatLanguage').ChatLanguageId} */
 let preferredLanguage = getStoredChatLanguage();
 
@@ -108,6 +111,25 @@ export function openChatbotTray() {
   syncDom();
   emit();
   refreshPageContext();
+}
+
+/**
+ * Opens the tray and queues a welcome assistant message for ChatbotPanel.
+ * @param {import('./chatLanguage').ChatLanguageId} [lang]
+ */
+export function openChatbotWithHomeIntro(lang = preferredLanguage) {
+  pendingHomeIntroLang = lang;
+  trayOpen = true;
+  syncDom();
+  refreshPageContext();
+  emit();
+}
+
+/** @returns {import('./chatLanguage').ChatLanguageId | null} */
+export function pullPendingHomeIntroLang() {
+  const lang = pendingHomeIntroLang;
+  pendingHomeIntroLang = null;
+  return lang;
 }
 
 export function closeChatbotTray() {

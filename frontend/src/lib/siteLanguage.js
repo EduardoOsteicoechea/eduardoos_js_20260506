@@ -28,6 +28,8 @@ export const SITE_LABELS = {
     es: 'Series y artículos del catálogo del sitio.',
   },
   seriesSection: { en: 'Series', es: 'Series' },
+  letsTalk: { en: "Let's talk", es: 'Hablemos' },
+  askAnything: { en: 'Ask anything', es: 'Pregunta lo que quieras' },
 };
 
 /** @returns {SiteLanguageId} */

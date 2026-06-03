@@ -1,5 +1,11 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
 import { sendChatbotMessage } from '../../lib/chatbot/chatbotApi';
+import {
+  getChatbotRevision,
+  pullPendingHomeIntroLang,
+  subscribeChatbot,
+} from '../../lib/chatbot/chatbotStore';
+import { getHomeIntroMessage } from '../../lib/chatbot/homeIntroMessage';
 import { isNavigationIntent, navigateTo } from '../../lib/chatbot/navigate';
 import ChatbotContextBar from './ChatbotContextBar';
 import ChatbotInput from './ChatbotInput';
@@ -47,6 +53,27 @@ export default function ChatbotPanel() {
     /** @type {import('./ChatbotMessageList').ChatMessage[]} */ ([]),
   );
   const [busy, setBusy] = useState(false);
+
+  const chatbotRevision = useSyncExternalStore(
+    subscribeChatbot,
+    getChatbotRevision,
+    () => 0,
+  );
+
+  useEffect(() => {
+    const introLang = pullPendingHomeIntroLang();
+    if (!introLang) return;
+
+    setMessages([
+      {
+        id: crypto.randomUUID(),
+        role: 'assistant',
+        content: getHomeIntroMessage(introLang),
+        createdAt: messageTimestamp(),
+      },
+    ]);
+    setDraft('');
+  }, [chatbotRevision]);
 
   const sendMessage = useCallback(async () => {
     const text = draft.trim();

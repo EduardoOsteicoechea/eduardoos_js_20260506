@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import HomeCtaButtons from "../components/HomeCta/HomeCtaButtons.jsx";
 import HomeSkillsGrid from "../components/HomeSkills/HomeSkillsGrid.jsx";
 ---
 
@@ -14,6 +15,8 @@ import HomeSkillsGrid from "../components/HomeSkills/HomeSkillsGrid.jsx";
       Architecture, Art, Technology, Software Engineering, AI integrations and
       Cloud-Based Solutions.
     </p>
+
+    <HomeCtaButtons client:load />
 
     <HomeSkillsGrid />
 
