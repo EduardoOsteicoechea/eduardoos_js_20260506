@@ -52,5 +52,8 @@ pnpm-debug.log*
 .Spotlight-V100
 .Trashes
 ehthumbs.db
-Thumbs.dbchatbot/chatbot.exe
+Thumbs.db
+
+# Local Go build artifacts
+chatbot/chatbot.exe
 chatbot/chatbot
