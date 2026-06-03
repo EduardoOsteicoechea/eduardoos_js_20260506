@@ -397,7 +397,7 @@
   }
 
   .ui-control--md {
-    min-width: 2rem;
+    min-width: var(--ui-control-min-height);
     padding-left: 0.75rem;
     padding-right: 0.75rem;
   }
@@ -405,6 +405,7 @@
   .ui-control--md.ui-control--icon-only {
     width: var(--ui-control-min-height);
     min-width: var(--ui-control-min-height);
+    height: var(--ui-control-min-height);
     padding: 0;
   }
 

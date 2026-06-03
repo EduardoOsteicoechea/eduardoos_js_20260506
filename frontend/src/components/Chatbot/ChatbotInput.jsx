@@ -1,6 +1,11 @@
 import { UI_FIELD_CLASS } from '../../lib/uiClasses';
 import { SiteControlButton } from '../ui';
-import { NewChatIcon, SendIcon, SuggestIcon } from './ChatbotActionIcons';
+import {
+  CloseTrayIcon,
+  NewChatIcon,
+  SendIcon,
+  SuggestIcon,
+} from './ChatbotActionIcons';
 
 /**
  * @param {{
@@ -72,8 +77,7 @@ export default function ChatbotInput({
             size="md"
             variant="close"
             onClick={onCloseTray}
-            label="›"
-            className="text-lg font-bold leading-none"
+            icon={<CloseTrayIcon />}
             aria-label={closeTrayLabel}
             title={closeTrayLabel}
           />
