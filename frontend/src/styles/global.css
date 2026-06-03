@@ -57,6 +57,35 @@
     animation: chatbot-message-glow-fade 3s ease-out forwards;
   }
 
+  .chatbot-message-content {
+    @apply leading-relaxed text-black/90 dark:text-white/90;
+  }
+
+  .chatbot-message-content .chatbot-md-p {
+    @apply mb-2 last:mb-0;
+  }
+
+  .chatbot-message-content .chatbot-md-ul,
+  .chatbot-message-content .chatbot-md-ol {
+    @apply my-2 space-y-1 pl-5;
+  }
+
+  .chatbot-message-content .chatbot-md-ul {
+    @apply list-disc;
+  }
+
+  .chatbot-message-content .chatbot-md-ol {
+    @apply list-decimal;
+  }
+
+  .chatbot-message-content .chatbot-md-li {
+    @apply pl-0.5;
+  }
+
+  .chatbot-message-content .chatbot-md-strong {
+    @apply font-semibold text-black dark:text-white;
+  }
+
   .theme-border {
     @apply border-black/15 dark:border-white/15;
   }

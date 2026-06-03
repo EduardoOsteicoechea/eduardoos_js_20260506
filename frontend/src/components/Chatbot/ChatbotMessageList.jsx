@@ -1,5 +1,6 @@
 import { formatMessageTime } from '../../lib/chatbot/formatMessageTime';
 import { navigateTo } from '../../lib/chatbot/navigate';
+import ChatMessageContent from './ChatMessageContent';
 
 /**
  * @typedef {{ type: 'navigate', path: string, label?: string }} ChatMessageAction
@@ -47,7 +48,11 @@ export default function ChatbotMessageList({ messages, preferredLanguage = 'en' 
           >
             {formatMessageTime(message.createdAt, preferredLanguage)}
           </time>
-          <span className="whitespace-pre-wrap">{message.content}</span>
+          {message.role === 'assistant' ? (
+            <ChatMessageContent content={message.content} />
+          ) : (
+            <span className="whitespace-pre-wrap">{message.content}</span>
+          )}
           {message.actions?.map((action) =>
             action.type === 'navigate' ? (
               <button
