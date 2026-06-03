@@ -7,7 +7,12 @@ import {
 /** Routes where the AI chatbot tray is open by default (first match wins). */
 export const CHATBOT_OPEN_BY_DEFAULT_ROUTES = ['/', '/profile', '/profile/*'];
 
-export const CHATBOT_TRAY_WIDTH = 'min(22rem, 44vw)';
+/** @deprecated Use CSS var --chatbot-tray-width (see chatbotTrayWidthStore). */
+export const CHATBOT_TRAY_WIDTH = 'var(--chatbot-tray-width, min(22rem, 44vw))';
+
+export const CHATBOT_TRAY_DEFAULT_WIDTH_PX = 352;
+export const CHATBOT_TRAY_MIN_WIDTH_PX = 280;
+export const CHATBOT_TRAY_MAX_VW = 90;
 
 /**
  * @param {string} pathname

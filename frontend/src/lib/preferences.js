@@ -46,9 +46,17 @@ export function getStoredFontSize(fallback = 18) {
   return clampFontSize(localStorage.getItem(STORAGE_KEYS.fontSize), fallback);
 }
 
+export function hasExplicitThemePreference() {
+  if (typeof localStorage === 'undefined') return false;
+  const stored = localStorage.getItem(STORAGE_KEYS.theme);
+  return stored === THEMES.light || stored === THEMES.dark;
+}
+
 export function applyThemeToDocument(theme) {
   if (typeof document === 'undefined') return;
-  document.documentElement.classList.toggle('dark', theme === THEMES.dark);
+  const isDark = theme === THEMES.dark;
+  document.documentElement.classList.toggle('dark', isDark);
+  document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
 }
 
 export function persistTheme(theme) {

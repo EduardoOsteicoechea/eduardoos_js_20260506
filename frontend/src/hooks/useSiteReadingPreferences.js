@@ -1,92 +1,52 @@
-import { useCallback, useEffect, useState } from 'react';
-import { applyFontFamilyToDocument } from '../lib/fonts';
+import { useCallback, useEffect, useSyncExternalStore } from 'react';
 import {
-  THEMES,
-  applyFontSizeToDocument,
-  applyThemeToDocument,
-  clampFontSize,
-  getStoredFontFamily,
-  getStoredFontSize,
-  getStoredTheme,
-  getSystemTheme,
-  persistFontFamily,
-  persistFontSize,
-  persistTheme,
-} from '../lib/preferences';
-
-const DEFAULT_FONT_PX = 18;
-const FONT_STEP_PX = 2;
-const MIN_FONT_PX = 14;
-const MAX_FONT_PX = 32;
+  ensureReadingPreferencesHydrated,
+  decreaseReadingFontSize,
+  getReadingPreferencesRevision,
+  getReadingPreferencesSnapshot,
+  increaseReadingFontSize,
+  setReadingFontFamily,
+  subscribeReadingPreferences,
+  toggleReadingTheme,
+} from '../lib/readingPreferencesStore';
 
 /**
  * Shared theme / font size / font family state for SiteMenu (and article reader).
  */
 export function useSiteReadingPreferences() {
-  const [theme, setTheme] = useState(THEMES.light);
-  const [fontFamilyId, setFontFamilyId] = useState('montserrat');
-  const [baseFontSize, setBaseFontSize] = useState(DEFAULT_FONT_PX);
-  const [ready, setReady] = useState(false);
-
   useEffect(() => {
-    const storedTheme = getStoredTheme();
-    const storedFontFamily = getStoredFontFamily();
-    const storedFontSize = getStoredFontSize(DEFAULT_FONT_PX);
-
-    setTheme(storedTheme);
-    setFontFamilyId(storedFontFamily);
-    setBaseFontSize(storedFontSize);
-    applyThemeToDocument(storedTheme);
-    applyFontFamilyToDocument(storedFontFamily);
-    applyFontSizeToDocument(storedFontSize);
-    setReady(true);
-
-    const media = window.matchMedia('(prefers-color-scheme: dark)');
-    const onSystemThemeChange = () => {
-      if (localStorage.getItem('eduardoos-theme')) return;
-      const next = getSystemTheme();
-      setTheme(next);
-      applyThemeToDocument(next);
-    };
-
-    media.addEventListener('change', onSystemThemeChange);
-    return () => media.removeEventListener('change', onSystemThemeChange);
+    ensureReadingPreferencesHydrated();
   }, []);
 
+  useSyncExternalStore(
+    subscribeReadingPreferences,
+    getReadingPreferencesRevision,
+    () => 0,
+  );
+
+  const snapshot = getReadingPreferencesSnapshot();
+
   const onToggleTheme = useCallback(() => {
-    setTheme((current) => {
-      const next = current === THEMES.dark ? THEMES.light : THEMES.dark;
-      persistTheme(next);
-      return next;
-    });
+    toggleReadingTheme();
   }, []);
 
   const onIncreaseFont = useCallback(() => {
-    setBaseFontSize((size) => {
-      const next = clampFontSize(Math.min(size + FONT_STEP_PX, MAX_FONT_PX));
-      persistFontSize(next);
-      return next;
-    });
+    increaseReadingFontSize();
   }, []);
 
   const onDecreaseFont = useCallback(() => {
-    setBaseFontSize((size) => {
-      const next = clampFontSize(Math.max(size - FONT_STEP_PX, MIN_FONT_PX));
-      persistFontSize(next);
-      return next;
-    });
+    decreaseReadingFontSize();
   }, []);
 
   const onSelectFont = useCallback((id) => {
-    setFontFamilyId(id);
-    persistFontFamily(id);
+    setReadingFontFamily(id);
   }, []);
 
   return {
-    ready,
-    theme,
-    fontFamilyId,
-    baseFontSize,
+    ready: snapshot.ready,
+    theme: snapshot.theme,
+    fontFamilyId: snapshot.fontFamilyId,
+    baseFontSize: snapshot.baseFontSize,
     onToggleTheme,
     onIncreaseFont,
     onDecreaseFont,

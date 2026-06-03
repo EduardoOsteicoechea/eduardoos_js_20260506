@@ -77,11 +77,19 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
           var prefersDark =
             window.matchMedia &&
             window.matchMedia("(prefers-color-scheme: dark)").matches;
-          if (
+          var useDark =
             storedTheme === "dark" ||
-            (storedTheme !== "light" && prefersDark)
-          ) {
-            document.documentElement.classList.add("dark");
+            (storedTheme !== "light" && prefersDark);
+          document.documentElement.classList.toggle("dark", useDark);
+          document.documentElement.style.colorScheme = useDark
+            ? "dark"
+            : "light";
+          var trayWidth = localStorage.getItem("eduardoos-chatbot-tray-width");
+          if (trayWidth) {
+            document.documentElement.style.setProperty(
+              "--chatbot-tray-width",
+              trayWidth + "px",
+            );
           }
           var fontId = localStorage.getItem("eduardoos-font-family");
           var fontStacks = {

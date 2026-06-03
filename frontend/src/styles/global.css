@@ -9,6 +9,7 @@
     --ui-control-min-height: var(--ui-control-size);
     --activity-bar-height: 45px;
     --activity-bar-control-size: var(--ui-control-size);
+    --chatbot-tray-width: 22rem;
     scrollbar-gutter: auto;
     scrollbar-width: none;
     @apply antialiased;
@@ -133,6 +134,42 @@
 
   .site-chrome .chatbot-tray {
     @apply pointer-events-auto bottom-0 top-0 h-auto max-h-none;
+    width: var(--chatbot-tray-width, 22rem);
+    max-width: 90vw;
+  }
+
+  .chatbot-tray--resizable {
+    transition-property: transform;
+  }
+
+  .chatbot-tray__resize-handle {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 20;
+    width: 6px;
+    margin-left: -3px;
+    cursor: col-resize;
+    touch-action: none;
+  }
+
+  .chatbot-tray__resize-handle::after {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    border-radius: 1px;
+    background: color-mix(in srgb, currentColor 18%, transparent);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  .chatbot-tray--resizable:hover .chatbot-tray__resize-handle::after,
+  .chatbot-tray__resize-handle:focus-visible::after {
+    opacity: 1;
   }
 
   .site-chrome--reserve-bar .site-chrome__chat-region {
@@ -157,9 +194,10 @@
     }
   }
 
-  @media (min-width: 768px) and (max-width: 1023px) {
-    .site-chrome .chatbot-tray {
-      width: min(22rem, 44vw) !important;
+  @media (min-width: 768px) {
+    .site-chrome .chatbot-tray.chatbot-tray--resizable {
+      width: var(--chatbot-tray-width, 22rem);
+      max-width: 90vw;
     }
   }
 
