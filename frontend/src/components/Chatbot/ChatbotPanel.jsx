@@ -4,7 +4,12 @@ import { isNavigationIntent, navigateTo } from '../../lib/chatbot/navigate';
 import ChatbotContextBar from './ChatbotContextBar';
 import ChatbotInput from './ChatbotInput';
 import ChatbotMessageList from './ChatbotMessageList';
+import { getSiteLabel } from '../../lib/siteLanguage';
 import { useChatbot } from './useChatbot';
+
+function messageTimestamp() {
+  return new Date().toISOString();
+}
 
 function buildStubReply(pageType, userText) {
   return `Recibí tu mensaje sobre "${userText.slice(0, 80)}${userText.length > 80 ? '…' : ''}". El servicio chatbot respondió en modo local. Contexto de página: ${pageType}.`;
@@ -51,6 +56,7 @@ export default function ChatbotPanel() {
       id: crypto.randomUUID(),
       role: 'user',
       content: text,
+      createdAt: messageTimestamp(),
     };
 
     setDraft('');
@@ -77,6 +83,7 @@ export default function ChatbotPanel() {
           id: crypto.randomUUID(),
           role: 'assistant',
           content: replyText,
+          createdAt: messageTimestamp(),
           actions: navigateAction ? [navigateAction] : undefined,
         },
       ]);
@@ -94,6 +101,7 @@ export default function ChatbotPanel() {
           id: crypto.randomUUID(),
           role: 'assistant',
           content: fallback,
+          createdAt: messageTimestamp(),
         },
       ]);
     } finally {
@@ -112,22 +120,6 @@ export default function ChatbotPanel() {
 
   return (
     <div className="chatbot-panel theme-surface flex h-full min-h-0 flex-col">
-      <header className="theme-border flex shrink-0 items-center justify-between gap-2 border-b px-3 py-2">
-        <div className="min-w-0">
-          <h2 className="truncate text-sm font-bold">Asistente AI</h2>
-          <p className="theme-muted truncate text-xs">{pageContext.pathname}</p>
-        </div>
-        <button
-          type="button"
-          onClick={closeTray}
-          className="theme-toolbar-btn h-8 w-8 shrink-0 border-red-500/60 bg-red-500/10 p-0 text-lg font-bold leading-none text-red-600 hover:bg-red-500/20 dark:text-red-400"
-          aria-label="Cerrar panel"
-          title="Cerrar"
-        >
-          ›
-        </button>
-      </header>
-
       <ChatbotContextBar />
       <ChatbotMessageList
         messages={messages}
@@ -140,6 +132,8 @@ export default function ChatbotPanel() {
         onNewChat={handleNewChat}
         onSuggest={handleSuggest}
         onCycleLanguage={cycleLanguage}
+        onCloseTray={closeTray}
+        closeTrayLabel={getSiteLabel('closePanel', languageConfig.id)}
         languageLabel={languageConfig.label}
         languageCode={languageConfig.id.toUpperCase()}
         inputPlaceholder={languageConfig.inputPlaceholder}

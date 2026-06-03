@@ -20,6 +20,7 @@ export const SITE_LABELS = {
   settings: { en: 'Settings', es: 'Ajustes' },
   menu: { en: 'Menu', es: 'Menú' },
   closeMenu: { en: 'Close menu', es: 'Cerrar menú' },
+  closePanel: { en: 'Close assistant', es: 'Cerrar asistente' },
   openMenu: { en: 'Open menu', es: 'Abrir menú' },
   seriesIndexTitle: { en: 'Posts', es: 'Publicaciones' },
   seriesIndexSubtitle: {

@@ -1,8 +1,9 @@
+import { formatMessageTime } from '../../lib/chatbot/formatMessageTime';
 import { navigateTo } from '../../lib/chatbot/navigate';
 
 /**
  * @typedef {{ type: 'navigate', path: string, label?: string }} ChatMessageAction
- * @typedef {{ id: string, role: 'user' | 'assistant' | 'system', content: string, actions?: ChatMessageAction[] }} ChatMessage
+ * @typedef {{ id: string, role: 'user' | 'assistant' | 'system', content: string, createdAt: string, actions?: ChatMessageAction[] }} ChatMessage
  */
 
 /**
@@ -34,6 +35,12 @@ export default function ChatbotMessageList({ messages, preferredLanguage = 'en' 
                 : 'mr-4 rounded-lg border border-black/10 bg-white px-3 py-2 text-sm shadow-sm dark:border-white/10 dark:bg-black/40'
           }
         >
+          <time
+            dateTime={message.createdAt}
+            className="theme-muted mb-1 block text-[10px] font-medium tabular-nums"
+          >
+            {formatMessageTime(message.createdAt, preferredLanguage)}
+          </time>
           <span className="whitespace-pre-wrap">{message.content}</span>
           {message.actions?.map((action) =>
             action.type === 'navigate' ? (

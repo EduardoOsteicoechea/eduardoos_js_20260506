@@ -17,6 +17,8 @@ import {
  *   languageCode: string,
  *   inputPlaceholder: string,
  *   sendLabel: string,
+ *   onCloseTray: () => void,
+ *   closeTrayLabel?: string,
  *   disabled?: boolean,
  * }} props
  */
@@ -31,10 +33,14 @@ export default function ChatbotInput({
   languageCode,
   inputPlaceholder,
   sendLabel,
+  onCloseTray,
+  closeTrayLabel = 'Close',
   disabled,
 }) {
   const iconBtn =
     'theme-toolbar-btn flex h-8 w-8 shrink-0 items-center justify-center p-0 disabled:cursor-not-allowed disabled:opacity-50';
+  const closeBtn =
+    'theme-toolbar-btn flex h-8 w-8 shrink-0 items-center justify-center border-red-500/60 bg-red-500/10 p-0 text-lg font-bold leading-none text-red-600 hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-50 dark:text-red-400';
 
   return (
     <div className="theme-border shrink-0 border-t p-3">
@@ -95,17 +101,29 @@ export default function ChatbotInput({
           </button>
         </div>
 
-        <button
-          type="button"
-          onClick={onSend}
-          disabled={disabled || !value.trim()}
-          className="theme-toolbar-btn flex h-8 shrink-0 items-center gap-1.5 border-green-500/60 bg-green-500/15 px-2.5 text-xs font-semibold text-green-700 hover:bg-green-500/25 disabled:cursor-not-allowed disabled:opacity-50 dark:text-green-300"
-          title={sendLabel}
-          aria-label={sendLabel}
-        >
-          <SendIcon />
-          <span>{sendLabel}</span>
-        </button>
+        <div className="ml-auto flex shrink-0 items-center gap-2 border-l border-black/10 pl-2 dark:border-white/10">
+          <button
+            type="button"
+            onClick={onCloseTray}
+            className={closeBtn}
+            aria-label={closeTrayLabel}
+            title={closeTrayLabel}
+          >
+            ›
+          </button>
+
+          <button
+            type="button"
+            onClick={onSend}
+            disabled={disabled || !value.trim()}
+            className="theme-toolbar-btn flex h-8 shrink-0 items-center gap-1.5 border-green-500/60 bg-green-500/15 px-2.5 text-xs font-semibold text-green-700 hover:bg-green-500/25 disabled:cursor-not-allowed disabled:opacity-50 dark:text-green-300"
+            title={sendLabel}
+            aria-label={sendLabel}
+          >
+            <SendIcon />
+            <span>{sendLabel}</span>
+          </button>
+        </div>
       </div>
     </div>
   );
