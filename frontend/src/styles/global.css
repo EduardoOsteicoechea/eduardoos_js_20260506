@@ -112,12 +112,13 @@
 
   @media (max-width: 767px) {
     html.page-home .site-chrome .chatbot-tray {
-      top: 10%;
+      top: 0;
       left: 0;
       right: 0;
+      bottom: 0;
       width: 100% !important;
-      height: 90%;
-      max-height: 90%;
+      height: 100%;
+      max-height: 100%;
       border-left-width: 0;
       border-top-width: 1px;
     }
@@ -134,19 +135,27 @@
   }
 
   .post-editor-metadata__row {
-    @apply grid grid-cols-1 border-b border-black/10 last:border-b-0 dark:border-white/10 sm:grid-cols-2;
+    @apply grid grid-cols-2 border-b border-black/10 last:border-b-0 dark:border-white/10;
   }
 
   .post-editor-metadata__cell {
-    @apply border-black/10 p-3 sm:p-4 dark:border-white/10 sm:[&:nth-child(odd)]:border-r;
+    @apply border-black/10 p-3 sm:p-4 dark:border-white/10 [&:nth-child(odd)]:border-r;
+  }
+
+  .post-editor-page {
+    @apply pt-0;
   }
 
   .post-editor-metadata__cell--full {
     @apply border-t border-black/10 p-3 sm:p-4 dark:border-white/10;
   }
 
+  .global-activity-bar .activity-bar-social-btn {
+    @apply h-8 w-8 min-h-8 min-w-8 p-0;
+  }
+
   .global-activity-bar .activity-bar-social-btn svg {
-    @apply h-6 w-6;
+    @apply h-7 w-7;
   }
 
   .chatbot-panel {

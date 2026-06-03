@@ -842,19 +842,7 @@ export default function PostEditor() {
   );
 
   return (
-    <div className="post-editor space-y-8 pb-20">
-      {catalogLoading ? (
-        <p className="theme-muted text-sm">Cargando series desde /data/series/…</p>
-      ) : null}
-
-      {notice ? (
-        <EditorStatusNotice
-          variant={notice.variant}
-          message={notice.message}
-          onDismiss={clearNotice}
-        />
-      ) : null}
-
+    <div className="post-editor space-y-6 pb-20">
       <section className="post-editor-metadata" aria-label="Metadatos del artículo">
         <div className="post-editor-metadata__row">
           <div className="post-editor-metadata__cell">
@@ -1005,7 +993,7 @@ export default function PostEditor() {
               </span>
             </div>
             {titleIsCustom ? (
-              <div className="mt-2 space-y-2">
+              <div className="mt-2 flex items-stretch gap-2">
                 <input
                   id="post-title-custom"
                   type="text"
@@ -1017,7 +1005,7 @@ export default function PostEditor() {
                       commitNewTitle();
                     }
                   }}
-                  className={inputClassName}
+                  className={`${inputClassName} min-w-0 flex-1`}
                   placeholder="Escribe el nuevo título"
                   required
                 />
@@ -1025,7 +1013,7 @@ export default function PostEditor() {
                   type="button"
                   onClick={commitNewTitle}
                   disabled={!form.title.trim()}
-                  className={`${inputClassName} font-semibold transition hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-white/10`}
+                  className="theme-toolbar-btn shrink-0 px-3 text-sm font-semibold whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Añadir título
                 </button>
@@ -1051,7 +1039,19 @@ export default function PostEditor() {
         ) : null}
       </section>
 
-      <section className="space-y-4">
+      {catalogLoading ? (
+        <p className="theme-muted px-5 text-sm">Cargando series desde /data/series/…</p>
+      ) : null}
+
+      {notice ? (
+        <EditorStatusNotice
+          variant={notice.variant}
+          message={notice.message}
+          onDismiss={clearNotice}
+        />
+      ) : null}
+
+      <section className="space-y-4 px-5">
         <div className="flex items-center justify-between gap-3">
           <EditorActionButton variant="primary" onClick={addSection}>
             + Sección
