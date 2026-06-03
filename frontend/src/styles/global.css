@@ -11,18 +11,6 @@
     @apply antialiased;
   }
 
-  @media (max-width: 767px) {
-    html.page-home {
-      --activity-bar-height: 90px;
-    }
-  }
-
-  @media (min-width: 768px) and (max-width: 1023px) {
-    html.page-home {
-      --activity-bar-height: 60px;
-    }
-  }
-
   html::-webkit-scrollbar,
   body::-webkit-scrollbar {
     width: 0;
@@ -49,8 +37,21 @@
 
   @media (max-width: 767px) {
     html.page-home .page-background__image-wrap {
-      max-width: min(70vw, 18rem);
-      opacity: 0.92;
+      left: 50% !important;
+      top: 10.5rem !important;
+      height: min(32vh, 13.5rem) !important;
+      max-height: min(32vh, 13.5rem) !important;
+      max-width: min(50vw, 11.5rem);
+      transform: translateX(-50%) scale(var(--bg-scale, 0.92)) !important;
+      transform-origin: center top;
+      opacity: 0.95;
+    }
+
+    html.page-home .page-background__image {
+      height: 100%;
+      width: auto;
+      max-height: 100%;
+      object-fit: contain;
     }
 
     html.has-page-background.page-home .home-main {
@@ -108,28 +109,8 @@
     }
   }
 
-  html.page-home .global-activity-bar {
-    @apply gap-3 px-3 sm:px-4;
-  }
-
-  @media (max-width: 767px) {
-    html.page-home .global-activity-bar .h-8 {
-      @apply h-11 w-11;
-    }
-
-    html.page-home .global-activity-bar .theme-toolbar-btn {
-      @apply min-h-11 min-w-11 px-3 text-base;
-    }
-  }
-
-  @media (min-width: 768px) and (max-width: 1023px) {
-    html.page-home .global-activity-bar .h-8 {
-      @apply h-10 w-10;
-    }
-
-    html.page-home .global-activity-bar .theme-toolbar-btn {
-      @apply min-h-10 min-w-10;
-    }
+  .global-activity-bar .activity-bar-social-btn svg {
+    @apply h-6 w-6;
   }
 
   .chatbot-panel {

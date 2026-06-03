@@ -74,7 +74,17 @@ export const PAGE_BACKGROUND_ROUTES = [
     show: true,
     overlay: 'rgba(255,255,255,0)',
     blurPx: 0,
-    position: DEFAULT_POSITION,
+    position: {
+      ...DEFAULT_POSITION,
+      mobile: {
+        objectPosition: 'center bottom',
+        translateX: '0%',
+        translateY: '0%',
+        scale: '0.92',
+        leftPx: 0,
+        topPx: 0,
+      },
+    },
   },
   {
     patterns: ['/profile', '/profile/*'],

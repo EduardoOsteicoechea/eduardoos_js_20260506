@@ -6,7 +6,7 @@ import { useSiteReadingPreferences } from '../hooks/useSiteReadingPreferences';
 import { LINKEDIN_URL, WHATSAPP_URL } from '../lib/contactLinks';
 
 const socialBtn =
-  'flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-black/15 bg-white transition hover:bg-black/5 dark:border-white/15 dark:bg-black dark:hover:bg-white/10';
+  'theme-toolbar-btn activity-bar-social-btn h-8 w-8 shrink-0 p-0';
 
 export default function GlobalActivityBar() {
   const prefs = useSiteReadingPreferences();
