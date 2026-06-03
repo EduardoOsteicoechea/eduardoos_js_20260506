@@ -1,3 +1,5 @@
+import { UI_FIELD_CLASS } from '../../lib/uiClasses';
+import { SiteControlButton } from '../ui';
 import {
   LanguageIcon,
   NewChatIcon,
@@ -37,11 +39,6 @@ export default function ChatbotInput({
   closeTrayLabel = 'Close',
   disabled,
 }) {
-  const iconBtn =
-    'theme-toolbar-btn flex h-8 w-8 shrink-0 items-center justify-center p-0 disabled:cursor-not-allowed disabled:opacity-50';
-  const closeBtn =
-    'theme-toolbar-btn flex h-8 w-8 shrink-0 items-center justify-center border-red-500/60 bg-red-500/10 p-0 text-lg font-bold leading-none text-red-600 hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-50 dark:text-red-400';
-
   return (
     <div className="theme-border shrink-0 border-t p-3">
       <input
@@ -56,73 +53,69 @@ export default function ChatbotInput({
         }}
         disabled={disabled}
         placeholder={inputPlaceholder}
-        className="theme-border w-full rounded-lg border bg-transparent px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+        className={`${UI_FIELD_CLASS} text-sm`}
         aria-label="Message for assistant"
       />
 
       <div className="mt-2 flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5">
-          <button
-            type="button"
-            onClick={onCycleLanguage}
+          <SiteControlButton
+            size="md"
             disabled={disabled}
-            className={iconBtn}
+            onClick={onCycleLanguage}
             title={`Language: ${languageLabel} (click to switch)`}
             aria-label={`Reply language: ${languageLabel}. Click to switch.`}
-          >
-            <span className="relative inline-flex">
-              <LanguageIcon />
-              <span className="absolute -bottom-1 -right-1 rounded bg-black px-0.5 text-[8px] font-bold leading-none text-white dark:bg-white dark:text-black">
-                {languageCode}
+            icon={
+              <span className="relative inline-flex">
+                <LanguageIcon />
+                <span className="absolute -bottom-1 -right-1 rounded bg-black px-0.5 text-[8px] font-bold leading-none text-white dark:bg-white dark:text-black">
+                  {languageCode}
+                </span>
               </span>
-            </span>
-          </button>
+            }
+          />
 
-          <button
-            type="button"
-            onClick={onSuggest}
+          <SiteControlButton
+            size="md"
             disabled={disabled}
-            className={iconBtn}
+            onClick={onSuggest}
             title="Suggest question"
             aria-label="Suggest question"
-          >
-            <SuggestIcon />
-          </button>
+            icon={<SuggestIcon />}
+          />
 
-          <button
-            type="button"
-            onClick={onNewChat}
+          <SiteControlButton
+            size="md"
             disabled={disabled}
-            className={iconBtn}
+            onClick={onNewChat}
             title="New chat"
             aria-label="New chat"
-          >
-            <NewChatIcon />
-          </button>
+            icon={<NewChatIcon />}
+          />
         </div>
 
         <div className="ml-auto flex shrink-0 items-center gap-2 border-l border-black/10 pl-2 dark:border-white/10">
-          <button
-            type="button"
+          <SiteControlButton
+            size="md"
+            variant="close"
             onClick={onCloseTray}
-            className={closeBtn}
+            label="›"
+            className="text-lg font-bold leading-none"
             aria-label={closeTrayLabel}
             title={closeTrayLabel}
-          >
-            ›
-          </button>
+          />
 
-          <button
-            type="button"
+          <SiteControlButton
+            size="md"
+            variant="success"
             onClick={onSend}
             disabled={disabled || !value.trim()}
-            className="theme-toolbar-btn flex h-8 shrink-0 items-center gap-1.5 border-green-500/60 bg-green-500/15 px-2.5 text-xs font-semibold text-green-700 hover:bg-green-500/25 disabled:cursor-not-allowed disabled:opacity-50 dark:text-green-300"
+            icon={<SendIcon />}
+            label={sendLabel}
+            className="ui-control--icon-label text-xs"
             title={sendLabel}
             aria-label={sendLabel}
-          >
-            <SendIcon />
-            <span>{sendLabel}</span>
-          </button>
+          />
         </div>
       </div>
     </div>

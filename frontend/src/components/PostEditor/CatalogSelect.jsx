@@ -1,12 +1,12 @@
+import { UI_FIELD_CLASS } from '../../lib/uiClasses';
 import { previewSlug } from './catalogHelpers';
 import { normalizeKebabInput } from './slugify';
 
 const NEW_OPTION = '__new__';
 
-const inputClassName =
-  'theme-border w-full rounded-lg border bg-transparent px-3 py-2 text-base outline-none focus:ring-2 focus:ring-black dark:focus:ring-white';
+const inputClassName = UI_FIELD_CLASS;
 
-const selectClassName = `${inputClassName} h-10`;
+const selectClassName = inputClassName;
 
 export default function CatalogSelect({
   id,

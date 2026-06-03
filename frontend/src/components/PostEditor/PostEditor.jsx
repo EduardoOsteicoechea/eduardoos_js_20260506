@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import EditorActionButton from '../EditorActionButton';
+import { UI_FIELD_CLASS } from '../../lib/uiClasses';
 import EditorStatusNotice from '../EditorStatusNotice';
 import SavePasswordModal from './SavePasswordModal';
 import CatalogSelect from './CatalogSelect';
@@ -33,8 +34,7 @@ import {
   fetchSeriesCatalog,
 } from './seriesCatalogApi';
 
-const inputClassName =
-  'theme-border w-full rounded-lg border bg-transparent px-3 py-2 text-base outline-none focus:ring-2 focus:ring-black dark:focus:ring-white';
+const inputClassName = UI_FIELD_CLASS;
 
 const labelClassName = 'mb-1 block text-sm font-medium';
 
@@ -1005,18 +1005,18 @@ export default function PostEditor() {
                       commitNewTitle();
                     }
                   }}
-                  className={`${inputClassName} min-h-11 min-w-0 flex-1 sm:min-h-0`}
+                  className={`${inputClassName} min-w-0 flex-1`}
                   placeholder="Escribe el nuevo título"
                   required
                 />
-                <button
+                <EditorActionButton
                   type="button"
                   onClick={commitNewTitle}
                   disabled={!form.title.trim()}
-                  className={`${inputClassName} shrink-0 px-3 text-sm font-semibold whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50 sm:px-4`}
+                  className="shrink-0 whitespace-nowrap"
                 >
                   Añadir título
-                </button>
+                </EditorActionButton>
               </div>
             ) : null}
             {selectedExistingArticle && !titleIsCustom ? (

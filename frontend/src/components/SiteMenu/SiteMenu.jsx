@@ -4,6 +4,7 @@ import { useSiteLanguage } from '../../hooks/useSiteLanguage';
 import { PUBLIC_NAV_LINKS } from '../../lib/siteNav';
 import { getSiteLabel } from '../../lib/siteLanguage';
 import MenuSettingsPanel from './MenuSettingsPanel';
+import { SiteControlButton } from '../ui';
 import { HamburgerIcon, SettingsIcon } from './MenuIcons';
 
 function lockBodyScroll() {
@@ -169,12 +170,13 @@ export default function SiteMenu({
 
   return (
     <>
-      <button
-        type="button"
+      <SiteControlButton
+        size="bar"
+        variant="default"
+        active={menuOpen}
         onClick={toggleMenu}
-        className={`site-menu-toggle theme-toolbar-btn activity-bar-control relative z-[230] shrink-0 p-0 ${
-          menuOpen ? 'ring-2 ring-black dark:ring-white' : ''
-        }`}
+        icon={<HamburgerIcon />}
+        className="site-menu-toggle relative z-[230]"
         aria-label={
           menuOpen ? getSiteLabel('closeMenu', lang) : getSiteLabel('openMenu', lang)
         }
@@ -182,9 +184,7 @@ export default function SiteMenu({
         aria-controls="site-menu-drawer"
         aria-haspopup="dialog"
         title={getSiteLabel('menu', lang)}
-      >
-        <HamburgerIcon />
-      </button>
+      />
 
       {mounted && menuLayer ? createPortal(menuLayer, document.body) : null}
     </>

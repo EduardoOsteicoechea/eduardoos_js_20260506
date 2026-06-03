@@ -1,14 +1,9 @@
 import { LinkedInIcon, WhatsAppIcon } from '../ActivityBarSocialIcons';
-import { ChatbotToggleButton } from '../Chatbot';
-import EditorActionButton from '../EditorActionButton';
+import ChatbotToggleButton from '../Chatbot/ChatbotToggleButton';
+import { SiteControlButton } from '../ui';
 import { SiteMenu } from '../SiteMenu';
 import { LINKEDIN_URL, WHATSAPP_URL } from '../../lib/contactLinks';
 import { renderEditorActionIcon } from './ActivityBarEditorIcons';
-
-const controlBtn =
-  'theme-toolbar-btn activity-bar-control shrink-0 p-0';
-
-const socialBtn = `${controlBtn} activity-bar-social-btn`;
 
 /**
  * @typedef {Object} ActivityBarEditorAction
@@ -30,89 +25,86 @@ const socialBtn = `${controlBtn} activity-bar-social-btn`;
 export default function ActivityBarControl({ controlId, menuPrefs, editorAction }) {
   if (editorAction) {
     const isSave = editorAction.icon === 'save' || editorAction.id === 'save';
-    const className = `${controlBtn} flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-50`;
 
     return (
-      <EditorActionButton
-        key={editorAction.id}
-        variant={isSave ? 'success' : undefined}
+      <SiteControlButton
+        size="bar"
+        variant={isSave ? 'success' : 'default'}
         onClick={editorAction.onClick}
         disabled={Boolean(editorAction.disabled)}
-        className={className}
         title={editorAction.title}
         aria-label={editorAction.title}
-      >
-        {renderEditorActionIcon(editorAction.icon ?? editorAction.label)}
-      </EditorActionButton>
+        icon={renderEditorActionIcon(editorAction.icon ?? editorAction.label)}
+      />
     );
   }
 
   switch (controlId) {
     case 'scroll-up':
       return (
-        <EditorActionButton
+        <SiteControlButton
+          size="bar"
+          label="↑"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className={`${controlBtn} flex items-center justify-center`}
           title="Ir al inicio"
           aria-label="Ir al inicio"
-        >
-          ↑
-        </EditorActionButton>
+        />
       );
 
     case 'scroll-down':
       return (
-        <EditorActionButton
+        <SiteControlButton
+          size="bar"
+          label="↓"
           onClick={() =>
             window.scrollTo({
               top: document.documentElement.scrollHeight,
               behavior: 'smooth',
             })
           }
-          className={`${controlBtn} flex items-center justify-center`}
           title="Ir al final"
           aria-label="Ir al final"
-        >
-          ↓
-        </EditorActionButton>
+        />
       );
 
     case 'whatsapp':
       return (
-        <a
+        <SiteControlButton
+          as="a"
           href={WHATSAPP_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className={socialBtn}
+          size="bar"
+          variant="ghost"
+          icon={<WhatsAppIcon />}
           aria-label="WhatsApp +584147281033"
           title="WhatsApp"
-        >
-          <WhatsAppIcon />
-        </a>
+        />
       );
 
     case 'linkedin':
       return (
-        <a
+        <SiteControlButton
+          as="a"
           href={LINKEDIN_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className={socialBtn}
+          size="bar"
+          variant="ghost"
+          icon={<LinkedInIcon />}
           aria-label="LinkedIn Eduardo Osteicoechea"
           title="LinkedIn"
-        >
-          <LinkedInIcon />
-        </a>
+        />
       );
 
     case 'chatbot':
-      return <ChatbotToggleButton className="activity-bar-control" />;
+      return <ChatbotToggleButton />;
 
     case 'site-menu':
       if (!menuPrefs?.ready) {
         return (
           <span
-            className="theme-muted inline-block activity-bar-control"
+            className="ui-control ui-control--bar ui-control--placeholder"
             aria-hidden="true"
           />
         );

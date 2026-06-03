@@ -5,8 +5,10 @@
 @layer base {
   html {
     --font-family: "Montserrat", sans-serif;
+    --ui-control-size: 2rem;
+    --ui-control-min-height: var(--ui-control-size);
     --activity-bar-height: 45px;
-    --activity-bar-control-size: 2rem;
+    --activity-bar-control-size: var(--ui-control-size);
     scrollbar-gutter: auto;
     scrollbar-width: none;
     @apply antialiased;
@@ -14,8 +16,8 @@
 
   @media (max-width: 767px) {
     html.page-home {
+      --ui-control-size: 2.75rem;
       --activity-bar-height: 56px;
-      --activity-bar-control-size: 2.75rem;
     }
   }
 
@@ -162,73 +164,133 @@
     @apply pt-0;
   }
 
-  .post-editor-title-row button {
-    min-height: 2.75rem;
-  }
-
-  @media (min-width: 640px) {
-    .post-editor-title-row button {
-      min-height: 0;
-    }
-  }
-
   .post-editor-metadata__cell--full {
     @apply border-t border-black/10 p-3 sm:p-4 dark:border-white/10;
   }
 
   .activity-bar {
     pointer-events: auto;
+    --ui-control-size: 2rem;
     --activity-bar-height: 45px;
-    --activity-bar-control-size: 2rem;
   }
 
   .activity-bar--home {
     --activity-bar-height: 45px;
-    --activity-bar-control-size: 2rem;
   }
 
   @media (max-width: 767px) {
     .activity-bar--home {
+      --ui-control-size: 2.75rem;
       --activity-bar-height: 56px;
-      --activity-bar-control-size: 2.75rem;
-    }
-
-    html.page-home {
-      --activity-bar-height: 56px;
-      --activity-bar-control-size: 2.75rem;
     }
   }
 
   .activity-bar--standard,
   .activity-bar--editor {
+    --ui-control-size: 2rem;
     --activity-bar-height: 45px;
-    --activity-bar-control-size: 2rem;
   }
 
-  .activity-bar .activity-bar-control {
-    height: var(--activity-bar-control-size);
-    width: var(--activity-bar-control-size);
-    min-height: var(--activity-bar-control-size);
-    min-width: var(--activity-bar-control-size);
+  .ui-field {
+    min-height: var(--ui-control-min-height);
+    box-sizing: border-box;
   }
 
-  .activity-bar .activity-bar-social-btn {
-    @apply p-0;
+  .ui-control {
+    @apply inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md border text-sm font-semibold transition;
+    min-height: var(--ui-control-min-height);
+    @apply border-black/20 bg-white text-black hover:bg-black/5;
+    @apply dark:border-white/20 dark:bg-black dark:text-white dark:hover:bg-white/10;
   }
 
-  .activity-bar .activity-bar-social-btn svg {
-    height: calc(var(--activity-bar-control-size) - 0.5rem);
-    width: calc(var(--activity-bar-control-size) - 0.5rem);
+  .ui-control--default {
+    /* base .ui-control styles */
+  }
+
+  .ui-control--primary {
+    @apply border-blue-500/60 bg-blue-500/10 text-blue-700 hover:bg-blue-500/20 dark:text-blue-300;
+  }
+
+  .ui-control--success {
+    @apply border-green-500/60 bg-green-500/15 text-green-700 hover:bg-green-500/25 dark:text-green-300;
+  }
+
+  .ui-control--danger {
+    @apply border-red-500/60 bg-red-500/10 text-red-700 hover:bg-red-500/20 dark:text-red-300;
+  }
+
+  .ui-control--close {
+    @apply border-red-500/60 bg-red-500/10 text-red-600 hover:bg-red-500/20 dark:text-red-400;
+  }
+
+  .ui-control--ghost {
+    @apply border-0 bg-transparent shadow-none hover:bg-black/5 dark:hover:bg-white/10;
+  }
+
+  .ui-control--bar {
+    height: var(--ui-control-size);
+    width: var(--ui-control-size);
+    min-height: var(--ui-control-size);
+    min-width: var(--ui-control-size);
+    padding: 0;
+  }
+
+  .ui-control--bar.ui-control--label-only {
+    width: auto;
+    min-width: var(--ui-control-size);
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .ui-control--md {
+    min-width: 2rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .ui-control--md.ui-control--icon-only {
+    width: var(--ui-control-min-height);
+    min-width: var(--ui-control-min-height);
+    padding: 0;
+  }
+
+  .ui-control--active {
+    @apply ring-2 ring-black dark:ring-white;
+  }
+
+  .ui-control--placeholder {
+    @apply pointer-events-none border-0 bg-transparent opacity-0;
+  }
+
+  .ui-control__icon {
+    @apply inline-flex shrink-0 items-center justify-center;
+    height: calc(var(--ui-control-size) - 0.5rem);
+    width: calc(var(--ui-control-size) - 0.5rem);
+  }
+
+  .ui-control--md .ui-control__icon {
+    height: 1rem;
+    width: 1rem;
+  }
+
+  .ui-control__icon svg {
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+
+  .ui-control:disabled {
+    @apply cursor-not-allowed opacity-50;
   }
 
   @media (max-width: 767px) {
-    .activity-bar--home .activity-bar-control {
+    .activity-bar--home .ui-control--bar.ui-control--label-only {
       @apply text-sm;
     }
 
-    .activity-bar--home .activity-bar-social-btn svg {
-      height: calc(var(--activity-bar-control-size) - 0.35rem);
-      width: calc(var(--activity-bar-control-size) - 0.35rem);
+    .activity-bar--home .ui-control__icon {
+      height: calc(var(--ui-control-size) - 0.35rem);
+      width: calc(var(--ui-control-size) - 0.35rem);
     }
   }
 
@@ -282,7 +344,13 @@
   }
 
   .theme-toolbar-btn {
-    @apply flex h-8 shrink-0 min-w-8 items-center justify-center rounded-md border border-black/20 bg-white px-3 text-sm font-semibold text-black transition hover:bg-black/5 dark:border-white/20 dark:bg-black dark:text-white dark:hover:bg-white/10;
+    @apply inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md border text-sm font-semibold transition;
+    min-height: var(--ui-control-min-height);
+    min-width: 2rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    @apply border-black/20 bg-white text-black hover:bg-black/5;
+    @apply dark:border-white/20 dark:bg-black dark:text-white dark:hover:bg-white/10;
   }
 
   /* Override browser default <mark> (often yellow + black text) */
