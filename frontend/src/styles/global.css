@@ -14,6 +14,10 @@
     --site-body-fg: #000000;
     --site-page-bg: #ffffff;
     --site-page-overlay: rgb(0 0 0 / 0.04);
+    --vv-height: 100dvh;
+    --vv-offset-top: 0px;
+    --vv-offset-left: 0px;
+    --vv-width: 100%;
     scrollbar-gutter: auto;
     scrollbar-width: none;
     @apply antialiased;
@@ -155,15 +159,40 @@
   }
 
   .site-chrome {
-    @apply pointer-events-none fixed inset-0 z-[200] flex flex-col justify-end;
+    position: fixed;
+    top: var(--vv-offset-top, 0);
+    left: var(--vv-offset-left, 0);
+    width: var(--vv-width, 100%);
+    height: var(--vv-height, 100dvh);
+    max-height: var(--vv-height, 100dvh);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    pointer-events: none;
+    overflow: hidden;
   }
 
   .site-chrome__chat-region {
-    @apply relative min-h-0 flex-1 overflow-hidden;
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    pointer-events: none;
   }
 
   .site-chrome__bar {
-    @apply pointer-events-auto relative z-[30] shrink-0;
+    position: relative;
+    flex: 0 0 auto;
+    width: 100%;
+    z-index: 30;
+    pointer-events: auto;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background-color: inherit;
+  }
+
+  .site-chrome__bar .activity-bar {
+    background-color: inherit;
   }
 
   .site-chrome .chatbot-tray {

@@ -120,6 +120,30 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
             document.documentElement.lang = siteLang;
             document.documentElement.dataset.siteLang = siteLang;
           }
+          if (window.visualViewport) {
+            var vv = window.visualViewport;
+            var syncVv = function () {
+              document.documentElement.style.setProperty(
+                "--vv-height",
+                vv.height + "px",
+              );
+              document.documentElement.style.setProperty(
+                "--vv-offset-top",
+                vv.offsetTop + "px",
+              );
+              document.documentElement.style.setProperty(
+                "--vv-offset-left",
+                vv.offsetLeft + "px",
+              );
+              document.documentElement.style.setProperty(
+                "--vv-width",
+                vv.width + "px",
+              );
+            };
+            syncVv();
+            vv.addEventListener("resize", syncVv);
+            vv.addEventListener("scroll", syncVv);
+          }
         } catch (_) {}
       </script>
     </head>

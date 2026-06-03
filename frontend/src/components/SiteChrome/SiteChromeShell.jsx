@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import ChatbotTray from '../Chatbot/ChatbotTray';
 import { ActivityBar } from '../ActivityBar';
+import { useVisualViewportChrome } from '../../hooks/useVisualViewportChrome';
 import {
   initChatbotStore,
   setChatbotPathname,
@@ -24,6 +25,8 @@ export default function SiteChromeShell({
   reserveBottomBar = false,
 }) {
   const [mounted, setMounted] = useState(false);
+
+  useVisualViewportChrome();
 
   useEffect(() => {
     setMounted(true);

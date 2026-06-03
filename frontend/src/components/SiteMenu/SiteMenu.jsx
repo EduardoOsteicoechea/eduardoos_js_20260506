@@ -83,14 +83,24 @@ export default function SiteMenu({
       <>
         <button
           type="button"
-          className="site-menu-backdrop fixed inset-x-0 top-0 bottom-[var(--activity-bar-height)] z-[200] bg-black/40"
+          className="site-menu-backdrop fixed inset-x-0 z-[200] bg-black/40"
+          style={{
+            top: 'var(--vv-offset-top, 0)',
+            bottom:
+              'calc(var(--activity-bar-height) + env(safe-area-inset-bottom, 0px))',
+          }}
           aria-label={getSiteLabel('closeMenu', lang)}
           onClick={closeMenu}
         />
 
         <div
           id="site-menu-drawer"
-          className="site-menu-drawer fixed top-0 right-0 bottom-[var(--activity-bar-height)] z-[210] flex w-[min(100vw,20rem)] flex-col"
+          className="site-menu-drawer fixed right-0 z-[210] flex w-[min(100vw,20rem)] flex-col"
+          style={{
+            top: 'var(--vv-offset-top, 0)',
+            height:
+              'calc(var(--vv-height, 100dvh) - var(--activity-bar-height) - env(safe-area-inset-bottom, 0px))',
+          }}
           role="dialog"
           aria-modal="true"
           aria-label={getSiteLabel('menu', lang)}
