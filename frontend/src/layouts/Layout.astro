@@ -77,13 +77,18 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
           var prefersDark =
             window.matchMedia &&
             window.matchMedia("(prefers-color-scheme: dark)").matches;
-          var useDark =
-            storedTheme === "dark" ||
-            (storedTheme !== "light" && prefersDark);
-          document.documentElement.classList.toggle("dark", useDark);
-          document.documentElement.style.colorScheme = useDark
-            ? "dark"
-            : "light";
+          var resolvedTheme =
+            storedTheme === "dark" || storedTheme === "light"
+              ? storedTheme
+              : prefersDark
+                ? "dark"
+                : "light";
+          document.documentElement.classList.toggle(
+            "dark",
+            resolvedTheme === "dark",
+          );
+          document.documentElement.dataset.theme = resolvedTheme;
+          document.documentElement.style.colorScheme = resolvedTheme;
           var trayWidth = localStorage.getItem("eduardoos-chatbot-tray-width");
           if (trayWidth) {
             document.documentElement.style.setProperty(

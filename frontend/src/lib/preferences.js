@@ -52,11 +52,23 @@ export function hasExplicitThemePreference() {
   return stored === THEMES.light || stored === THEMES.dark;
 }
 
+/** @param {string} theme */
+export function resolveThemeFlags(theme) {
+  const isDark = theme === THEMES.dark;
+  return {
+    isDark,
+    dataTheme: isDark ? THEMES.dark : THEMES.light,
+    colorScheme: isDark ? 'dark' : 'light',
+  };
+}
+
 export function applyThemeToDocument(theme) {
   if (typeof document === 'undefined') return;
-  const isDark = theme === THEMES.dark;
-  document.documentElement.classList.toggle('dark', isDark);
-  document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+  const { isDark, dataTheme, colorScheme } = resolveThemeFlags(theme);
+  const root = document.documentElement;
+  root.classList.toggle('dark', isDark);
+  root.dataset.theme = dataTheme;
+  root.style.colorScheme = colorScheme;
 }
 
 export function persistTheme(theme) {

@@ -5,7 +5,7 @@ import { PUBLIC_NAV_LINKS } from '../../lib/siteNav';
 import { getSiteLabel } from '../../lib/siteLanguage';
 import MenuSettingsPanel from './MenuSettingsPanel';
 import { SiteControlButton } from '../ui';
-import { HamburgerIcon, SettingsIcon } from './MenuIcons';
+import { HamburgerIcon, renderNavLinkIcon, SettingsIcon } from './MenuIcons';
 
 function lockBodyScroll() {
   document.documentElement.style.overflow = 'hidden';
@@ -131,10 +131,13 @@ export default function SiteMenu({
                   <li key={link.href}>
                     <a
                       href={link.href}
-                      className="theme-border block rounded-lg border px-4 py-3 font-medium transition hover:bg-black/5 dark:hover:bg-white/10"
+                      className="theme-border flex items-center gap-3 rounded-lg border px-3 py-3 font-medium transition hover:bg-black/5 dark:hover:bg-white/10"
                       onClick={closeMenu}
                     >
-                      {getSiteLabel(link.labelKey, lang)}
+                      <span className="theme-border flex h-9 w-9 shrink-0 items-center justify-center rounded-md border bg-black/[0.03] dark:bg-white/[0.06]">
+                        {renderNavLinkIcon(link.icon)}
+                      </span>
+                      <span>{getSiteLabel(link.labelKey, lang)}</span>
                     </a>
                   </li>
                 ))}

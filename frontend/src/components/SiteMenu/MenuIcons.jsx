@@ -49,6 +49,54 @@ export function LoginIcon() {
   );
 }
 
+const navIconProps = {
+  width: 20,
+  height: 20,
+  viewBox: '0 0 24 24',
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 2,
+  strokeLinecap: 'round',
+  strokeLinejoin: 'round',
+  'aria-hidden': true,
+};
+
+export function HomeIcon() {
+  return (
+    <svg {...navIconProps}>
+      <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1z" />
+    </svg>
+  );
+}
+
+export function PostsIcon() {
+  return (
+    <svg {...navIconProps}>
+      <path d="M6 4h12v16H6z" />
+      <path d="M9 8h6M9 12h6M9 16h4" />
+    </svg>
+  );
+}
+
+export function EditorIcon() {
+  return (
+    <svg {...navIconProps}>
+      <path d="M4 5h16M4 12h10M4 19h16" />
+      <path d="M17 9l3 3-8 8H9v-3z" />
+    </svg>
+  );
+}
+
+/**
+ * @param {import('../../lib/siteNav').NavLinkIconId | string} iconId
+ */
+export function renderNavLinkIcon(iconId) {
+  if (iconId === 'home') return <HomeIcon />;
+  if (iconId === 'posts') return <PostsIcon />;
+  if (iconId === 'editor') return <EditorIcon />;
+  return null;
+}
+
 export function SettingsIcon() {
   return (
     <svg

@@ -10,9 +10,39 @@
     --activity-bar-height: 45px;
     --activity-bar-control-size: var(--ui-control-size);
     --chatbot-tray-width: 22rem;
+    --site-body-bg: #ffffff;
+    --site-body-fg: #000000;
+    --site-page-bg: #ffffff;
+    --site-page-overlay: rgb(0 0 0 / 0.04);
     scrollbar-gutter: auto;
     scrollbar-width: none;
     @apply antialiased;
+  }
+
+  /* Explicit menu toggle — must override OS / prefers-color-scheme */
+  html[data-theme='light'] {
+    color-scheme: light;
+    --site-body-bg: #ffffff;
+    --site-body-fg: #000000;
+    --site-page-bg: #ffffff;
+    --site-page-overlay: rgb(0 0 0 / 0.04);
+  }
+
+  html[data-theme='dark'] {
+    color-scheme: dark;
+    --site-body-bg: #000000;
+    --site-body-fg: #ffffff;
+    --site-page-bg: #000000;
+    --site-page-overlay: rgb(0 0 0 / 0.4);
+  }
+
+  /* No saved preference: follow .dark (set from prefers-color-scheme on load) */
+  html:not([data-theme]).dark {
+    color-scheme: dark;
+    --site-body-bg: #000000;
+    --site-body-fg: #ffffff;
+    --site-page-bg: #000000;
+    --site-page-overlay: rgb(0 0 0 / 0.4);
   }
 
   @media (max-width: 767px) {
@@ -32,11 +62,13 @@
   body {
     font-family: var(--font-family);
     scrollbar-width: none;
-    @apply min-h-screen bg-white text-black dark:bg-black dark:text-white;
+    min-height: 100vh;
+    background-color: var(--site-body-bg);
+    color: var(--site-body-fg);
   }
 
   body.has-page-background {
-    @apply bg-transparent;
+    background-color: transparent;
   }
 
   input:not([type='checkbox']):not([type='radio']):not([type='hidden']):not([type='file']):not([type='range']):not([type='color']),
@@ -54,11 +86,13 @@
   }
 
   .page-background {
-    @apply bg-white dark:bg-black;
+    background-color: var(--site-page-bg);
+    transition: background-color 0.2s ease;
   }
 
   .page-background__overlay {
-    @apply bg-black/[0.04] transition-colors duration-200 dark:bg-black/40;
+    background-color: var(--site-page-overlay);
+    transition: background-color 0.2s ease;
   }
 
   @media (max-width: 767px) {
