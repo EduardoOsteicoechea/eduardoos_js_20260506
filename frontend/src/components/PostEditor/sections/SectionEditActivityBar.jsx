@@ -7,7 +7,7 @@ export default function SectionEditActivityBar({
 }) {
   return (
     <footer
-      className="theme-border theme-surface flex h-[45px] shrink-0 items-center justify-between gap-2 border-t px-3"
+      className="theme-border theme-surface flex h-[var(--activity-bar-height)] shrink-0 items-center justify-between gap-2 border-t px-3"
       role="toolbar"
       aria-label="Controles de la sección"
     >

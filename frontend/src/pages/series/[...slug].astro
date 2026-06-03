@@ -211,9 +211,12 @@ const props = Astro.props as PageProps;
 
 {props.routeKind === "article" ? (
 
-  <Layout title={`${props.article.title} | Eduardo Osteicoechea`}>
+  <Layout
+    title={`${props.article.title} | Eduardo Osteicoechea`}
+    activityBarMode="article"
+  >
 
-    <main class="mx-auto max-w-3xl px-5 pb-[65px] pt-10">
+    <main class="mx-auto max-w-3xl px-5 pb-[calc(var(--activity-bar-height)+1.25rem)] pt-10">
 
       <SeriesBackLink client:load />
 

@@ -13,6 +13,7 @@ import { renderEditorActionIcon } from './ActivityBarEditorIcons';
  * @property {string} title
  * @property {() => void} onClick
  * @property {boolean} [disabled]
+ * @property {boolean} [active]
  */
 
 /**
@@ -25,16 +26,27 @@ import { renderEditorActionIcon } from './ActivityBarEditorIcons';
 export default function ActivityBarControl({ controlId, menuPrefs, editorAction }) {
   if (editorAction) {
     const isSave = editorAction.icon === 'save' || editorAction.id === 'save';
+    const iconKey = editorAction.icon;
+    const hasIconKey = Boolean(iconKey);
+    const labelOnly = Boolean(editorAction.label) && !hasIconKey;
 
     return (
       <SiteControlButton
         size="bar"
         variant={isSave ? 'success' : 'default'}
+        active={Boolean(editorAction.active)}
         onClick={editorAction.onClick}
         disabled={Boolean(editorAction.disabled)}
         title={editorAction.title}
         aria-label={editorAction.title}
-        icon={renderEditorActionIcon(editorAction.icon ?? editorAction.label)}
+        label={labelOnly ? editorAction.label : undefined}
+        icon={
+          hasIconKey
+            ? renderEditorActionIcon(iconKey)
+            : labelOnly
+              ? undefined
+              : renderEditorActionIcon(editorAction.label)
+        }
       />
     );
   }

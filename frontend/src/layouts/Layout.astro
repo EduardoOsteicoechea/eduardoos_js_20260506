@@ -12,10 +12,14 @@ const pageHome = isHomePath(pathname);
 interface Props {
   title?: string;
   showGlobalActivityBar?: boolean;
+  activityBarMode?: "default" | "article" | "editor";
 }
 
-const { title = "Eduardo Osteicoechea", showGlobalActivityBar = true } =
-  Astro.props;
+const {
+  title = "Eduardo Osteicoechea",
+  showGlobalActivityBar = true,
+  activityBarMode = "default",
+} = Astro.props;
 
 const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
 ---
@@ -107,6 +111,7 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
       <SiteChromeShell
         client:load
         pathname={pathname}
+        activityBarMode={activityBarMode}
         showActivityBar={showGlobalActivityBar}
         reserveBottomBar={!showGlobalActivityBar}
       />

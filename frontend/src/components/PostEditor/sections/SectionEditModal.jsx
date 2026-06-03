@@ -5,9 +5,7 @@ import { addUnitToSection } from './actions/addUnitToSection';
 import SectionEditActivityBar from './SectionEditActivityBar';
 import SectionUnitEditor from './SectionUnitEditor';
 import UnitTypeTray from './UnitTypeTray';
-
-const inputClassName =
-  'theme-border w-full rounded-lg border bg-transparent px-3 py-2 text-lg font-semibold outline-none focus:ring-2 focus:ring-black dark:focus:ring-white';
+import { inputClassName } from './editorInputStyles';
 
 export default function SectionEditModal({
   section,

@@ -10,10 +10,16 @@ import {
 /**
  * Fixed overlay shell: chat tray stacks above the activity bar so inputs are never hidden.
  *
- * @param {{ pathname: string, showActivityBar?: boolean, reserveBottomBar?: boolean }} props
+ * @param {{
+ *   pathname: string,
+ *   activityBarMode?: import('../../config/activityBarConfig').ActivityBarPageMode,
+ *   showActivityBar?: boolean,
+ *   reserveBottomBar?: boolean,
+ * }} props
  */
 export default function SiteChromeShell({
   pathname,
+  activityBarMode = 'default',
   showActivityBar = true,
   reserveBottomBar = false,
 }) {
@@ -43,7 +49,7 @@ export default function SiteChromeShell({
       </div>
       {showActivityBar ? (
         <div className="site-chrome__bar">
-          <ActivityBar pathname={pathname} />
+          <ActivityBar pathname={pathname} pageMode={activityBarMode} />
         </div>
       ) : null}
     </div>,

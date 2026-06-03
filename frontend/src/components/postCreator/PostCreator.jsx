@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { UI_FIELD_CLASS } from '../../lib/uiClasses';
 
 export default function PostCreator() {
   // State to hold our dynamic input fields
@@ -36,7 +37,7 @@ export default function PostCreator() {
               value={field.value}
               onChange={(e) => updateField(field.id, e.target.value)}
               placeholder={`Dynamic Input ${index + 1}`}
-              className="flex-1 px-4 py-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none text-slate-900"
+              className={`${UI_FIELD_CLASS} flex-1`}
             />
             {fields.length > 1 && (
               <button

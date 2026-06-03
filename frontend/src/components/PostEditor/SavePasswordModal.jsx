@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { UI_FIELD_CLASS } from '../../lib/uiClasses';
 
 export default function SavePasswordModal({
   open,
@@ -70,7 +71,7 @@ export default function SavePasswordModal({
               value={password}
               disabled={isSubmitting}
               onChange={(event) => setPassword(event.target.value)}
-              className="theme-border w-full rounded-lg border bg-transparent px-3 py-2 text-base outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+              className={UI_FIELD_CLASS}
             />
           </div>
 

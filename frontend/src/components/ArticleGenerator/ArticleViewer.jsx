@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import ArticleGenerator from './ArticleGenerator';
-import ArticleActivityBar from './ArticleActivityBar';
+import { useArticleActivityBarActions } from './useArticleActivityBarActions';
 import {
   getStoredViewMode,
   persistViewMode,
@@ -137,6 +137,21 @@ export default function ArticleViewer({
     }
   }, [article, slug]);
 
+  const { viewModePanel } = useArticleActivityBarActions({
+    viewMode,
+    onSelectViewMode: setViewMode,
+    onScrollToTop: scrollToTop,
+    onScrollToBottom: scrollToBottom,
+    onReload: reloadJson,
+    isReloading,
+    onDownloadPdf: handleDownloadPdf,
+    isGeneratingPdf,
+    hasSermon: sermon.hasSermon,
+    isSermonPlaying: sermon.isPlaying,
+    isSermonLoading: sermon.isLoading,
+    onToggleSermon: sermon.togglePlayPause,
+  });
+
   return (
     <>
       {reloadError ? (
@@ -162,29 +177,7 @@ export default function ArticleViewer({
         sermonAudioRef={sermon.audioRef}
       />
 
-      {prefs.ready ? (
-        <ArticleActivityBar
-          theme={prefs.theme}
-          fontFamilyId={prefs.fontFamilyId}
-          baseFontSize={prefs.baseFontSize}
-          viewMode={viewMode}
-          onSelectFont={prefs.onSelectFont}
-          onSelectViewMode={setViewMode}
-          onToggleTheme={prefs.onToggleTheme}
-          onIncreaseFont={prefs.onIncreaseFont}
-          onDecreaseFont={prefs.onDecreaseFont}
-          onScrollToTop={scrollToTop}
-          onScrollToBottom={scrollToBottom}
-          onReload={reloadJson}
-          isReloading={isReloading}
-          hasSermon={sermon.hasSermon}
-          isSermonPlaying={sermon.isPlaying}
-          isSermonLoading={sermon.isLoading}
-          onToggleSermon={sermon.togglePlayPause}
-          onDownloadPdf={handleDownloadPdf}
-          isGeneratingPdf={isGeneratingPdf}
-        />
-      ) : null}
+      {prefs.ready ? viewModePanel : null}
     </>
   );
 }

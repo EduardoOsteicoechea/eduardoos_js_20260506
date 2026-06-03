@@ -3,7 +3,9 @@ import { normalizePagePath } from './pageBackgroundRoutes';
 
 /** @typedef {'scroll-up' | 'scroll-down' | 'whatsapp' | 'linkedin' | 'chatbot' | 'site-menu'} ActivityBarControlId */
 
-/** @typedef {'home' | 'standard' | 'editor'} ActivityBarVariant */
+/** @typedef {'home' | 'standard' | 'editor' | 'article'} ActivityBarVariant */
+
+/** @typedef {'default' | 'article' | 'editor'} ActivityBarPageMode */
 
 /**
  * @typedef {Object} ActivityBarLayout
@@ -39,10 +41,21 @@ export const EDITOR_ACTIVITY_BAR_RIGHT = ['chatbot', 'site-menu'];
 
 /**
  * @param {string} pathname
+ * @param {ActivityBarPageMode} [pageMode]
  * @returns {ActivityBarLayout}
  */
-export function resolveActivityBarLayout(pathname) {
+export function resolveActivityBarLayout(pathname, pageMode = 'default') {
   const path = normalizePagePath(pathname);
+
+  if (pageMode === 'article') {
+    return {
+      variant: 'article',
+      ariaLabel: 'Controles del artículo',
+      right: STANDARD_ACTIVITY_BAR_RIGHT,
+      leftFromProps: true,
+      fixed: false,
+    };
+  }
 
   if (isHomePath(path)) {
     return {
@@ -54,14 +67,13 @@ export function resolveActivityBarLayout(pathname) {
     };
   }
 
-  if (path === '/post/editor' || path.startsWith('/post/editor/')) {
+  if (pageMode === 'editor' || path === '/post/editor' || path.startsWith('/post/editor/')) {
     return {
       variant: 'editor',
       ariaLabel: 'Controles del editor de artículos',
       right: EDITOR_ACTIVITY_BAR_RIGHT,
       leftFromProps: true,
-      fixed: true,
-      zIndex: 55,
+      fixed: false,
     };
   }
 

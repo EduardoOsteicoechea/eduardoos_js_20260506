@@ -4,8 +4,11 @@ import { UI_FIELD_CLASS } from '../../lib/uiClasses';
 import EditorStatusNotice from '../EditorStatusNotice';
 import SavePasswordModal from './SavePasswordModal';
 import CatalogSelect from './CatalogSelect';
-import { ActivityBar } from '../ActivityBar';
 import PostEditorPreviewModal from './PostEditorPreviewModal';
+import {
+  clearActivityBarLeftActions,
+  setActivityBarLeftActions,
+} from '../../lib/activityBarActionsStore';
 import {
   canEditChapter,
   getEffectiveChapter,
@@ -841,8 +844,13 @@ export default function PostEditor() {
     [handleDownloadPdf, isGeneratingPdf, isSubmitting, openSaveModal],
   );
 
+  useEffect(() => {
+    setActivityBarLeftActions(activityActions);
+    return () => clearActivityBarLeftActions();
+  }, [activityActions]);
+
   return (
-    <div className="post-editor space-y-6 pb-20">
+    <div className="post-editor space-y-6 pb-[calc(var(--activity-bar-height)+1.25rem)]">
       <section className="post-editor-metadata" aria-label="Metadatos del artículo">
         <div className="post-editor-metadata__row">
           <div className="post-editor-metadata__cell">
@@ -1201,8 +1209,6 @@ export default function PostEditor() {
           </div>
         </div>
       ) : null}
-
-      <ActivityBar pathname="/post/editor" leftActions={activityActions} />
     </div>
   );
 }

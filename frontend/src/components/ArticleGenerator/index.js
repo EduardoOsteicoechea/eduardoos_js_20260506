@@ -7,7 +7,7 @@ export { default as SectionContent } from './SectionContent';
 export { default as VisualizationModePanel } from './VisualizationModePanel';
 export { useSermonPlayer } from './useSermonPlayer';
 export { default as SermonPlayer } from './SermonPlayer';
-export { default as ArticleActivityBar } from './ArticleActivityBar';
+export { useArticleActivityBarActions } from './useArticleActivityBarActions';
 export { default as FontPickerPanel } from './FontPickerPanel';
 export { default as MainHeading } from './MainHeading';
 export { default as SectionHeading } from './SectionHeading';

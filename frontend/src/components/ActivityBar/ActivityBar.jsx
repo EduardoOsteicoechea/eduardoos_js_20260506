@@ -1,8 +1,12 @@
-import { useMemo } from 'react';
+import { useMemo, useSyncExternalStore } from 'react';
 import {
   getActivityBarLeftControls,
   resolveActivityBarLayout,
 } from '../../config/activityBarConfig';
+import {
+  getActivityBarLeftActions,
+  subscribeActivityBarLeftActions,
+} from '../../lib/activityBarActionsStore';
 import { useSiteReadingPreferences } from '../../hooks/useSiteReadingPreferences';
 import ActivityBarControl from './ActivityBarControl';
 
@@ -13,20 +17,33 @@ import ActivityBarControl from './ActivityBarControl';
 /**
  * @param {{
  *   pathname: string,
+ *   pageMode?: import('../../config/activityBarConfig').ActivityBarPageMode,
  *   leftActions?: ActivityBarEditorAction[],
  *   className?: string,
  * }} props
  */
 export default function ActivityBar({
   pathname,
+  pageMode = 'default',
   leftActions = [],
   className = '',
 }) {
-  const layout = useMemo(() => resolveActivityBarLayout(pathname), [pathname]);
+  const layout = useMemo(
+    () => resolveActivityBarLayout(pathname, pageMode),
+    [pathname, pageMode],
+  );
   const menuPrefs = useSiteReadingPreferences();
+  const storedLeftActions = useSyncExternalStore(
+    subscribeActivityBarLeftActions,
+    getActivityBarLeftActions,
+    () => [],
+  );
 
   const builtinLeft = getActivityBarLeftControls(layout);
-  const showEditorLeft = layout.leftFromProps && leftActions.length > 0;
+  const dynamicLeftActions =
+    leftActions.length > 0 ? leftActions : storedLeftActions;
+  const showEditorLeft =
+    layout.leftFromProps && dynamicLeftActions.length > 0;
 
   const footerClass = [
     'activity-bar',
@@ -58,7 +75,7 @@ export default function ActivityBar({
     >
       <div className="activity-bar__primary flex min-w-0 flex-1 items-center gap-2 overflow-x-auto overflow-y-hidden px-3 sm:gap-3 sm:px-4">
         {showEditorLeft
-          ? leftActions.map((action) => (
+          ? dynamicLeftActions.map((action) => (
               <ActivityBarControl
                 key={action.id}
                 menuPrefs={menuPrefs}
