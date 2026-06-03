@@ -4,6 +4,11 @@ import { constants } from 'node:fs';
 
 import { dirname, join, relative, sep } from 'node:path';
 
+import { formatSegmentLabel } from '../series/formatSegmentLabel.js';
+import { resolveSeriesDataRoot } from './seriesDataRoot';
+
+export { formatSegmentLabel };
+
 import type {
 
   ArticleData,
@@ -22,7 +27,7 @@ import type {
 
 
 
-const SERIES_ROOT = join(process.cwd(), 'public/data/series');
+const SERIES_ROOT = resolveSeriesDataRoot();
 
 const DATA_FILE = 'data.json';
 
@@ -135,20 +140,6 @@ export function getAncestorSlugs(slug: string): string[] {
   }
 
   return ancestors;
-
-}
-
-
-
-export function formatSegmentLabel(segment: string): string {
-
-  return segment
-
-    .split(/[_-]/g)
-
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-
-    .join(' ');
 
 }
 

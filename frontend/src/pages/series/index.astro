@@ -1,19 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { discoverArticles } from "../../lib/articles/discover";
-
-const articles = await discoverArticles();
-
-const grouped = articles.reduce<Record<string, typeof articles>>((acc, entry) => {
-  const serie = entry.data.serie ?? entry.data.series ?? "general";
-  if (!acc[serie]) acc[serie] = [];
-  acc[serie].push(entry);
-  return acc;
-}, {});
-
-const seriesRoots = [...new Set(articles.map((entry) => entry.slug.split("/")[0]))].sort(
-  (a, b) => a.localeCompare(b, "es"),
-);
+import SeriesCatalogIndex from "../../components/series/SeriesCatalogIndex.jsx";
 ---
 
 <Layout title="Estudios bíblicos | Eduardo Osteicoechea">
@@ -21,67 +8,13 @@ const seriesRoots = [...new Set(articles.map((entry) => entry.slug.split("/")[0]
     <header class="mb-10">
       <h1 class="text-3xl font-bold">Estudios bíblicos</h1>
       <p class="theme-muted mt-3 text-lg">
-        Artículos generados desde los archivos JSON en la serie Romanos.
+        Series and articles loaded from the site catalog.
       </p>
     </header>
 
-    {
-      seriesRoots.length > 0 ? (
-        <section class="mb-12">
-          <h2 class="mb-4 text-xl font-semibold">Series</h2>
-          <ul class="space-y-3">
-            {seriesRoots.map((root) => (
-              <li>
-                <a
-                  href={`/series/${root}`}
-                  class="theme-border block rounded-lg border px-5 py-4 font-semibold transition hover:bg-black/5 dark:hover:bg-white/10"
-                >
-                  {root.charAt(0).toUpperCase() + root.slice(1)}
-                  <span class="theme-muted mt-1 block font-mono text-xs font-normal">
-                    /series/{root}
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null
-    }
-
-    {
-      Object.entries(grouped).map(([serie, entries]) => (
-        <section class="mb-12">
-          <h2 class="mb-4 text-xl font-semibold capitalize">
-            Serie {serie}
-          </h2>
-          <ul class="space-y-3">
-            {entries.map((entry) => (
-              <li>
-                <a
-                  href={`/series/${entry.slug}`}
-                  class="theme-border block rounded-lg border px-5 py-4 transition hover:bg-black/5 dark:hover:bg-white/10"
-                >
-                  <span class="font-semibold">
-                    {entry.data.title}
-                  </span>
-                  {entry.data.chapter != null ? (
-                    <span class="theme-muted ml-2 text-sm">
-                      · Cap. {entry.data.chapter}
-                    </span>
-                  ) : null}
-                  <span class="theme-muted mt-1 block font-mono text-xs">
-                    /series/{entry.slug}
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))
-    }
-
-    {articles.length === 0 ? (
-      <p class="theme-muted">No se encontraron artículos en public/data/series.</p>
-    ) : null}
+    <section>
+      <h2 class="mb-4 text-xl font-semibold">Series</h2>
+      <SeriesCatalogIndex client:load />
+    </section>
   </main>
 </Layout>
