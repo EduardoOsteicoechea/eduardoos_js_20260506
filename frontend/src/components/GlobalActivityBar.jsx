@@ -1,7 +1,12 @@
+import { LinkedInIcon, WhatsAppIcon } from './ActivityBarSocialIcons';
 import { ChatbotToggleButton } from './Chatbot';
 import EditorActionButton from './EditorActionButton';
 import { SiteMenu } from './SiteMenu';
 import { useSiteReadingPreferences } from '../hooks/useSiteReadingPreferences';
+import { LINKEDIN_URL, WHATSAPP_URL } from '../lib/contactLinks';
+
+const socialBtn =
+  'flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-black/15 bg-white transition hover:bg-black/5 dark:border-white/15 dark:bg-black dark:hover:bg-white/10';
 
 export default function GlobalActivityBar() {
   const prefs = useSiteReadingPreferences();
@@ -38,6 +43,28 @@ export default function GlobalActivityBar() {
       </div>
 
       <div className="theme-border flex shrink-0 items-center gap-2 border-l px-2 sm:gap-3 sm:px-3">
+        <a
+          href={WHATSAPP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={socialBtn}
+          aria-label="WhatsApp +584147281033"
+          title="WhatsApp"
+        >
+          <WhatsAppIcon />
+        </a>
+
+        <a
+          href={LINKEDIN_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={socialBtn}
+          aria-label="LinkedIn Eduardo Osteicoechea"
+          title="LinkedIn"
+        >
+          <LinkedInIcon />
+        </a>
+
         <ChatbotToggleButton />
         {prefs.ready ? (
           <SiteMenu
