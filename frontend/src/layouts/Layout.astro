@@ -1,8 +1,7 @@
 ---
 // Import your Tailwind CSS file
 import "../styles/global.css";
-import GlobalActivityBar from "../components/GlobalActivityBar.jsx";
-import { ChatbotRoot } from "../components/Chatbot";
+import { SiteChromeShell } from "../components/SiteChrome";
 import PageBackground from "../components/PageBackground/PageBackground.astro";
 import { isHomePath } from "../config/homeLayout";
 import { getPageBackgroundConfig } from "../config/pageBackgroundRoutes";
@@ -105,8 +104,11 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
         <slot />
       </div>
 
-      <ChatbotRoot client:load pathname={pathname} />
-
-      {showGlobalActivityBar ? <GlobalActivityBar client:load /> : null}
+      <SiteChromeShell
+        client:load
+        pathname={pathname}
+        showActivityBar={showGlobalActivityBar}
+        reserveBottomBar={!showGlobalActivityBar}
+      />
     </body>
 </html>

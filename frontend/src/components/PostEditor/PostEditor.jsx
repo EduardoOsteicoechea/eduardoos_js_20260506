@@ -855,44 +855,81 @@ export default function PostEditor() {
         />
       ) : null}
 
-      <section className="">
-        <div className="space-y-4">
-          <CatalogSelect
-            id="post-serie"
-            label="Serie"
-            options={seriesOptions}
-            value={form.serie}
-            isCustom={form.serieIsCustom}
-            customValue={form.serieCustom}
-            disabled={catalogLoading}
-            newOptionLabel="+ Nueva serie…"
-            customPlaceholder="Ej. cartas paulinas"
-            onSelectExisting={handleSerieExisting}
-            onEnableCustom={handleSerieCustom}
-            onCustomValueChange={handleSerieCustomChange}
-            onCommitCustom={commitSerie}
-          />
+      <section className="post-editor-metadata" aria-label="Metadatos del artículo">
+        <div className="post-editor-metadata__row">
+          <div className="post-editor-metadata__cell">
+            <CatalogSelect
+              id="post-serie"
+              label="Serie"
+              options={seriesOptions}
+              value={form.serie}
+              isCustom={form.serieIsCustom}
+              customValue={form.serieCustom}
+              disabled={catalogLoading}
+              newOptionLabel="+ Nueva serie…"
+              customPlaceholder="Ej. cartas paulinas"
+              onSelectExisting={handleSerieExisting}
+              onEnableCustom={handleSerieCustom}
+              onCustomValueChange={handleSerieCustomChange}
+              onCommitCustom={commitSerie}
+            />
+          </div>
 
-          <CatalogSelect
-            id="post-chapter"
-            label="Sección"
-            options={chapterOptions}
-            value={form.chapter}
-            isCustom={form.chapterIsCustom}
-            customValue={form.chapterCustom}
-            disabled={catalogLoading || !chapterFieldEnabled}
-            newOptionLabel="+ Nuevo capítulo…"
-            customPlaceholder="Ej. efesios"
-            onSelectExisting={handleChapterExisting}
-            onEnableCustom={handleChapterCustom}
-            onCustomValueChange={handleChapterCustomChange}
-            onCommitCustom={commitChapter}
-          />
+          <div className="post-editor-metadata__cell">
+            <CatalogSelect
+              id="post-chapter"
+              label="Sección"
+              options={chapterOptions}
+              value={form.chapter}
+              isCustom={form.chapterIsCustom}
+              customValue={form.chapterCustom}
+              disabled={catalogLoading || !chapterFieldEnabled}
+              newOptionLabel="+ Nuevo capítulo…"
+              customPlaceholder="Ej. efesios"
+              onSelectExisting={handleChapterExisting}
+              onEnableCustom={handleChapterCustom}
+              onCustomValueChange={handleChapterCustomChange}
+              onCommitCustom={commitChapter}
+            />
+          </div>
+        </div>
 
-          <div>
-            <label htmlFor="post-title" className={labelClassName}>
-              Título
+        <div className="post-editor-metadata__row">
+          <div className="post-editor-metadata__cell">
+            <label htmlFor="post-creator" className={labelClassName}>
+              Autor
             </label>
+            <input
+              id="post-creator"
+              type="text"
+              value={form.creator}
+              onChange={(event) => updateField('creator', event.target.value)}
+              className={inputClassName}
+            />
+          </div>
+
+          <div className="post-editor-metadata__cell">
+            <label htmlFor="post-folder-name" className={labelClassName}>
+              Nombre de carpeta
+            </label>
+            <input
+              id="post-folder-name"
+              type="text"
+              value={form.folderName}
+              onChange={(event) =>
+                updateField('folderName', normalizeKebabInput(event.target.value))
+              }
+              placeholder="ej: el_origen_de_pablo"
+              maxLength={50}
+              className={inputClassName}
+            />
+          </div>
+        </div>
+
+        <div className="post-editor-metadata__cell post-editor-metadata__cell--full">
+          <label htmlFor="post-title" className={labelClassName}>
+            Título
+          </label>
             <div className="relative">
               <select
                 id="post-title"
@@ -1003,41 +1040,10 @@ export default function PostEditor() {
                 Editar título
               </EditorActionButton>
             ) : null}
-          </div>
-
-          <div>
-            <label htmlFor="post-creator" className={labelClassName}>
-              Autor
-            </label>
-            <input
-              id="post-creator"
-              type="text"
-              value={form.creator}
-              onChange={(event) => updateField('creator', event.target.value)}
-              className={inputClassName}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="post-folder-name" className={labelClassName}>
-              Nombre de carpeta
-            </label>
-            <input
-              id="post-folder-name"
-              type="text"
-              value={form.folderName}
-              onChange={(event) =>
-                updateField('folderName', normalizeKebabInput(event.target.value))
-              }
-              placeholder="ej: el_origen_de_pablo"
-              maxLength={50}
-              className={inputClassName}
-            />
-          </div>
         </div>
 
         {articleIdLoading ? (
-          <p className="theme-muted text-sm">
+          <p className="theme-muted px-3 py-2 text-sm sm:px-4">
             {selectedExistingArticle
               ? 'Cargando artículo existente…'
               : 'Asignando id del artículo…'}

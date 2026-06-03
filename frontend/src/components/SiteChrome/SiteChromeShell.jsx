@@ -1,0 +1,52 @@
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import ChatbotTray from '../Chatbot/ChatbotTray';
+import GlobalActivityBar from '../GlobalActivityBar';
+import {
+  initChatbotStore,
+  setChatbotPathname,
+} from '../../lib/chatbot/chatbotStore';
+
+/**
+ * Fixed overlay shell: chat tray stacks above the activity bar so inputs are never hidden.
+ *
+ * @param {{ pathname: string, showActivityBar?: boolean, reserveBottomBar?: boolean }} props
+ */
+export default function SiteChromeShell({
+  pathname,
+  showActivityBar = true,
+  reserveBottomBar = false,
+}) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    initChatbotStore(pathname);
+  }, []);
+
+  useEffect(() => {
+    setChatbotPathname(pathname);
+  }, [pathname]);
+
+  if (!mounted) return null;
+
+  return createPortal(
+    <div
+      className={`site-chrome${!showActivityBar && reserveBottomBar ? ' site-chrome--reserve-bar' : ''}`}
+      data-site-chrome
+    >
+      <div className="site-chrome__chat-region">
+        <ChatbotTray inline />
+      </div>
+      {showActivityBar ? (
+        <div className="site-chrome__bar">
+          <GlobalActivityBar />
+        </div>
+      ) : null}
+    </div>,
+    document.body,
+  );
+}

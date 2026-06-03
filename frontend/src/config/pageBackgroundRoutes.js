@@ -77,10 +77,10 @@ export const PAGE_BACKGROUND_ROUTES = [
     position: {
       ...DEFAULT_POSITION,
       mobile: {
-        objectPosition: 'center bottom',
+        objectPosition: 'left center',
         translateX: '0%',
         translateY: '0%',
-        scale: '0.92',
+        scale: '1',
         leftPx: 0,
         topPx: 0,
       },

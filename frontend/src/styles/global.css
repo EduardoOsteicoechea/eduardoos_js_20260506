@@ -37,25 +37,29 @@
 
   @media (max-width: 767px) {
     html.page-home .page-background__image-wrap {
-      left: 50% !important;
-      top: 10.5rem !important;
-      height: min(32vh, 13.5rem) !important;
-      max-height: min(32vh, 13.5rem) !important;
-      max-width: min(50vw, 11.5rem);
-      transform: translateX(-50%) scale(var(--bg-scale, 0.92)) !important;
-      transform-origin: center top;
-      opacity: 0.95;
+      left: -20vh !important;
+      top: 0 !important;
+      height: 100dvh !important;
+      max-height: 100dvh !important;
+      max-width: none;
+      width: auto;
+      transform: scale(var(--bg-scale, 1)) !important;
+      transform-origin: left center;
+      opacity: 1;
     }
 
     html.page-home .page-background__image {
+      display: block;
       height: 100%;
       width: auto;
+      min-height: 100%;
       max-height: 100%;
       object-fit: contain;
+      object-position: left center;
     }
 
     html.has-page-background.page-home .home-main {
-      @apply relative z-[2] mx-3 max-w-none rounded-xl border border-black/10 bg-white/92 p-4 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-black/92 sm:mx-4 sm:p-5;
+      @apply relative z-[2] mx-3 max-w-none rounded-xl border border-black/10 bg-white/90 p-4 shadow-sm backdrop-blur-sm dark:border-white/10 dark:bg-black/88 sm:mx-4 sm:p-5;
     }
   }
 
@@ -82,31 +86,63 @@
     }
   }
 
-  .chatbot-tray {
+  .site-chrome {
+    @apply pointer-events-none fixed inset-0 z-[200] flex flex-col justify-end;
+  }
+
+  .site-chrome__chat-region {
+    @apply relative min-h-0 flex-1;
+  }
+
+  .site-chrome__bar {
+    @apply pointer-events-auto relative z-[30] shrink-0;
+  }
+
+  .site-chrome .chatbot-tray {
+    @apply pointer-events-auto bottom-0 top-0 h-auto max-h-none;
+  }
+
+  .site-chrome--reserve-bar .site-chrome__chat-region {
+    padding-bottom: var(--activity-bar-height);
+  }
+
+  .site-chrome--reserve-bar .chatbot-tray {
     bottom: var(--activity-bar-height);
-    height: calc(100dvh - var(--activity-bar-height));
-    max-height: calc(100dvh - var(--activity-bar-height));
-    pointer-events: auto;
   }
 
   @media (max-width: 767px) {
-    html.page-home .chatbot-tray {
-      top: auto;
+    html.page-home .site-chrome .chatbot-tray {
+      top: 10%;
       left: 0;
       right: 0;
       width: 100% !important;
-      height: 90vh;
-      max-height: 90vh;
-      bottom: var(--activity-bar-height);
+      height: 90%;
+      max-height: 90%;
       border-left-width: 0;
       border-top-width: 1px;
     }
   }
 
   @media (min-width: 768px) and (max-width: 1023px) {
-    html.page-home .chatbot-tray {
+    html.page-home .site-chrome .chatbot-tray {
       width: min(22rem, 44vw) !important;
     }
+  }
+
+  .post-editor-metadata {
+    @apply relative left-1/2 w-screen max-w-none -translate-x-1/2 border-y border-black/10 bg-black/[0.06] p-0 dark:border-white/10 dark:bg-white/[0.06];
+  }
+
+  .post-editor-metadata__row {
+    @apply grid grid-cols-1 border-b border-black/10 last:border-b-0 dark:border-white/10 sm:grid-cols-2;
+  }
+
+  .post-editor-metadata__cell {
+    @apply border-black/10 p-3 sm:p-4 dark:border-white/10 sm:[&:nth-child(odd)]:border-r;
+  }
+
+  .post-editor-metadata__cell--full {
+    @apply border-t border-black/10 p-3 sm:p-4 dark:border-white/10;
   }
 
   .global-activity-bar .activity-bar-social-btn svg {

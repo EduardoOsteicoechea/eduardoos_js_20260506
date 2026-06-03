@@ -5,9 +5,7 @@ import {
 } from '../../lib/chatbot/chatbotStore';
 import ChatbotTray from './ChatbotTray';
 
-/**
- * @param {{ pathname: string }} props
- */
+/** @deprecated Prefer SiteChromeShell; kept for pages that mount chat without the global bar. */
 export default function ChatbotRoot({ pathname }) {
   useEffect(() => {
     initChatbotStore(pathname);
