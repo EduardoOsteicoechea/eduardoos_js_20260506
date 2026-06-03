@@ -120,7 +120,7 @@ export default function ChatbotPanel() {
         <button
           type="button"
           onClick={closeTray}
-          className="theme-toolbar-btn h-8 w-8 shrink-0 p-0 text-lg leading-none"
+          className="theme-toolbar-btn h-8 w-8 shrink-0 border-red-500/60 bg-red-500/10 p-0 text-lg font-bold leading-none text-red-600 hover:bg-red-500/20 dark:text-red-400"
           aria-label="Cerrar panel"
           title="Cerrar"
         >

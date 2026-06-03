@@ -27,8 +27,9 @@ export default function MenuSettingsPanel({
           <button
             type="button"
             onClick={onClose}
-            className="theme-toolbar-btn shrink-0 px-2.5"
+            className="theme-toolbar-btn h-8 w-8 shrink-0 border-red-500/60 bg-red-500/10 p-0 text-2xl font-bold leading-none text-red-600 hover:bg-red-500/20 dark:text-red-400"
             aria-label="Cerrar ajustes"
+            title="Cerrar ajustes"
           >
             ×
           </button>
