@@ -11,7 +11,7 @@ export default function HomeSkillsGrid() {
         My skills include
       </h2>
 
-      <ul className="mt-6 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+      <ul className="mt-6 grid list-none grid-cols-1 gap-3 p-0 min-[420px]:grid-cols-2 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
         {HOME_SKILLS.map((skill) => (
           <li key={skill.id}>
             <article className="theme-border flex aspect-square flex-col rounded-lg border bg-white/80 p-3 backdrop-blur-[2px] dark:bg-black/75">

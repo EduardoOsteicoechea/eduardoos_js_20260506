@@ -13,7 +13,7 @@ export default function GlobalActivityBar() {
 
   return (
     <footer
-      className="theme-border theme-surface global-activity-bar fixed bottom-0 left-0 right-0 z-[220] flex h-[45px] border-t"
+      className="theme-border theme-surface global-activity-bar fixed bottom-0 left-0 right-0 z-[220] flex h-[var(--activity-bar-height)] border-t"
       role="toolbar"
       aria-label="Controles globales"
     >

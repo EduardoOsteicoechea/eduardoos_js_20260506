@@ -5,9 +5,22 @@
 @layer base {
   html {
     --font-family: "Montserrat", sans-serif;
+    --activity-bar-height: 45px;
     scrollbar-gutter: auto;
     scrollbar-width: none;
     @apply antialiased;
+  }
+
+  @media (max-width: 767px) {
+    html.page-home {
+      --activity-bar-height: 90px;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    html.page-home {
+      --activity-bar-height: 60px;
+    }
   }
 
   html::-webkit-scrollbar,
@@ -34,6 +47,32 @@
     @apply mx-auto w-full max-w-3xl;
   }
 
+  @media (max-width: 767px) {
+    html.page-home .page-background__image-wrap {
+      max-width: min(70vw, 18rem);
+      opacity: 0.92;
+    }
+
+    html.has-page-background.page-home .home-main {
+      @apply relative z-[2] mx-3 max-w-none rounded-xl border border-black/10 bg-white/92 p-4 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-black/92 sm:mx-4 sm:p-5;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    html.has-page-background.page-home .home-main {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: min(52rem, 92vw);
+      padding-right: 1.25rem;
+    }
+
+    html.has-page-background.page-home.chatbot-tray-open .home-main {
+      max-width: min(36rem, calc(100vw - min(22rem, 44vw) - 2rem));
+      margin-right: min(22rem, 44vw);
+      margin-left: auto;
+    }
+  }
+
   @media (min-width: 1024px) {
     html.has-page-background .home-main {
       margin-left: min(36vw, 34rem);
@@ -43,10 +82,54 @@
   }
 
   .chatbot-tray {
-    bottom: 45px;
-    height: calc(100dvh - 45px);
-    max-height: calc(100dvh - 45px);
+    bottom: var(--activity-bar-height);
+    height: calc(100dvh - var(--activity-bar-height));
+    max-height: calc(100dvh - var(--activity-bar-height));
     pointer-events: auto;
+  }
+
+  @media (max-width: 767px) {
+    html.page-home .chatbot-tray {
+      top: auto;
+      left: 0;
+      right: 0;
+      width: 100% !important;
+      height: 90vh;
+      max-height: 90vh;
+      bottom: var(--activity-bar-height);
+      border-left-width: 0;
+      border-top-width: 1px;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    html.page-home .chatbot-tray {
+      width: min(22rem, 44vw) !important;
+    }
+  }
+
+  html.page-home .global-activity-bar {
+    @apply gap-3 px-3 sm:px-4;
+  }
+
+  @media (max-width: 767px) {
+    html.page-home .global-activity-bar .h-8 {
+      @apply h-11 w-11;
+    }
+
+    html.page-home .global-activity-bar .theme-toolbar-btn {
+      @apply min-h-11 min-w-11 px-3 text-base;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    html.page-home .global-activity-bar .h-8 {
+      @apply h-10 w-10;
+    }
+
+    html.page-home .global-activity-bar .theme-toolbar-btn {
+      @apply min-h-10 min-w-10;
+    }
   }
 
   .chatbot-panel {
@@ -134,7 +217,7 @@
 
   .site-menu-drawer {
     animation: site-menu-slide-in 0.25s ease-out;
-    max-height: calc(100dvh - 45px);
+    max-height: calc(100dvh - var(--activity-bar-height));
   }
 
   .site-menu-tray {

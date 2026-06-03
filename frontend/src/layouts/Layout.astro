@@ -4,9 +4,11 @@ import "../styles/global.css";
 import GlobalActivityBar from "../components/GlobalActivityBar.jsx";
 import { ChatbotRoot } from "../components/Chatbot";
 import PageBackground from "../components/PageBackground/PageBackground.astro";
+import { isHomePath } from "../config/homeLayout";
 import { getPageBackgroundConfig } from "../config/pageBackgroundRoutes";
 
 const pathname = Astro.url.pathname;
+const pageHome = isHomePath(pathname);
 
 interface Props {
   title?: string;
@@ -20,7 +22,7 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class:list={{ "page-home": pageHome }}>
     <head>
       <meta charset="utf-8" />
       <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

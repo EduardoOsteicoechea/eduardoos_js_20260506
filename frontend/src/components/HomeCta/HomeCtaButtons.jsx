@@ -4,7 +4,7 @@ import { useSiteLanguage } from '../../hooks/useSiteLanguage';
 import { getSiteLabel } from '../../lib/siteLanguage';
 
 const ctaBase =
-  'inline-flex min-h-11 min-w-[9rem] flex-1 items-center justify-center rounded-lg border px-6 py-3 text-sm font-bold uppercase tracking-wide transition sm:flex-none';
+  'inline-flex min-h-12 w-full min-w-0 flex-1 items-center justify-center rounded-lg border px-6 py-3.5 text-sm font-bold uppercase tracking-wide transition sm:min-h-11 sm:min-w-[9rem] sm:w-auto sm:flex-none sm:py-3';
 
 const letsTalkClass = `${ctaBase} border-green-600/70 bg-green-500/20 text-green-900 hover:bg-green-500/30 dark:border-green-400/60 dark:bg-green-500/25 dark:text-green-200 dark:hover:bg-green-500/35`;
 
@@ -14,7 +14,7 @@ export default function HomeCtaButtons() {
   const lang = useSiteLanguage();
 
   return (
-    <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-stretch">
+    <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-stretch">
       <a
         href={WHATSAPP_URL}
         target="_blank"

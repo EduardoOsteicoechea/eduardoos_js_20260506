@@ -82,14 +82,14 @@ export default function SiteMenu({
       <>
         <button
           type="button"
-          className="site-menu-backdrop fixed inset-x-0 top-0 bottom-[45px] z-[200] bg-black/40"
+          className="site-menu-backdrop fixed inset-x-0 top-0 bottom-[var(--activity-bar-height)] z-[200] bg-black/40"
           aria-label={getSiteLabel('closeMenu', lang)}
           onClick={closeMenu}
         />
 
         <div
           id="site-menu-drawer"
-          className="site-menu-drawer fixed top-0 right-0 bottom-[45px] z-[210] flex w-[min(100vw,20rem)] flex-col"
+          className="site-menu-drawer fixed top-0 right-0 bottom-[var(--activity-bar-height)] z-[210] flex w-[min(100vw,20rem)] flex-col"
           role="dialog"
           aria-modal="true"
           aria-label={getSiteLabel('menu', lang)}
