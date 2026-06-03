@@ -1,20 +1,8 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import SeriesCatalogIndex from "../../components/series/SeriesCatalogIndex.jsx";
+import SeriesIndexPage from "../../components/series/SeriesIndexPage.jsx";
 ---
 
-<Layout title="Estudios bíblicos | Eduardo Osteicoechea">
-  <main class="mx-auto max-w-4xl px-5 py-10">
-    <header class="mb-10">
-      <h1 class="text-3xl font-bold">Estudios bíblicos</h1>
-      <p class="theme-muted mt-3 text-lg">
-        Series and articles loaded from the site catalog.
-      </p>
-    </header>
-
-    <section>
-      <h2 class="mb-4 text-xl font-semibold">Series</h2>
-      <SeriesCatalogIndex client:load />
-    </section>
-  </main>
+<Layout title="Posts | Eduardo Osteicoechea">
+  <SeriesIndexPage client:load />
 </Layout>

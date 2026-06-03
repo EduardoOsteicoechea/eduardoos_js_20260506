@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useSiteLanguage } from '../../hooks/useSiteLanguage';
 import { PUBLIC_NAV_LINKS } from '../../lib/siteNav';
+import { getSiteLabel } from '../../lib/siteLanguage';
 import MenuSettingsPanel from './MenuSettingsPanel';
 import { HamburgerIcon } from './MenuIcons';
 
@@ -28,6 +30,7 @@ export default function SiteMenu({
   const [menuOpen, setMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const lang = useSiteLanguage();
 
   useEffect(() => {
     setMounted(true);
@@ -72,19 +75,34 @@ export default function SiteMenu({
       <>
         <button
           type="button"
-          className="site-menu-backdrop fixed inset-0 z-[200] bg-black/40"
-          aria-label="Cerrar menú"
+          className="site-menu-backdrop fixed inset-x-0 top-0 bottom-[45px] z-[200] bg-black/40"
+          aria-label={getSiteLabel('closeMenu', lang)}
           onClick={closeMenu}
         />
 
         <div
-          className="site-menu-drawer fixed top-0 right-0 z-[210] flex h-[100dvh] min-h-[100svh] w-[min(100vw,20rem)] flex-col"
+          className="site-menu-drawer fixed top-0 right-0 bottom-[45px] z-[210] flex w-[min(100vw,20rem)] flex-col"
           role="dialog"
           aria-modal="true"
-          aria-label="Menú del sitio"
+          aria-label={getSiteLabel('menu', lang)}
         >
           <aside className="theme-border theme-surface site-menu-tray relative flex h-full min-h-0 flex-1 flex-col overflow-hidden border-l shadow-xl">
-            <nav className="min-h-0 flex-1 overflow-y-auto px-4 py-4" aria-label="Navegación">
+            <header className="theme-border flex shrink-0 items-center justify-between gap-2 border-b px-4 py-3">
+              <h2 className="text-sm font-bold tracking-wide">
+                {getSiteLabel('menu', lang)}
+              </h2>
+              <button
+                type="button"
+                onClick={closeMenu}
+                className="theme-toolbar-btn h-8 w-8 border-red-500/60 bg-red-500/10 p-0 text-2xl font-bold leading-none text-red-600 hover:bg-red-500/20 dark:text-red-400"
+                aria-label={getSiteLabel('closeMenu', lang)}
+                title={getSiteLabel('closeMenu', lang)}
+              >
+                ×
+              </button>
+            </header>
+
+            <nav className="min-h-0 flex-1 overflow-y-auto px-4 py-4" aria-label="Navigation">
               <ul className="space-y-1">
                 {PUBLIC_NAV_LINKS.map((link) => (
                   <li key={link.href}>
@@ -93,7 +111,7 @@ export default function SiteMenu({
                       className="theme-border block rounded-lg border px-4 py-3 font-medium transition hover:bg-black/5 dark:hover:bg-white/10"
                       onClick={closeMenu}
                     >
-                      {link.label}
+                      {getSiteLabel(link.labelKey, lang)}
                     </a>
                   </li>
                 ))}
@@ -104,10 +122,10 @@ export default function SiteMenu({
                     className={`theme-border w-full rounded-lg border px-4 py-3 text-left font-medium transition hover:bg-black/5 dark:hover:bg-white/10 ${
                       settingsOpen ? 'ring-2 ring-black dark:ring-white' : ''
                     }`}
-                    aria-label="Ajustes de lectura"
+                    aria-label={getSiteLabel('settings', lang)}
                     aria-expanded={settingsOpen}
                   >
-                    Ajustes
+                    {getSiteLabel('settings', lang)}
                   </button>
                 </li>
               </ul>
@@ -146,10 +164,10 @@ export default function SiteMenu({
         type="button"
         onClick={() => setMenuOpen(true)}
         className="theme-toolbar-btn h-8 w-8 shrink-0 p-0"
-        aria-label="Abrir menú"
+        aria-label={getSiteLabel('openMenu', lang)}
         aria-expanded={menuOpen}
         aria-haspopup="dialog"
-        title="Menú"
+        title={getSiteLabel('menu', lang)}
       >
         <HamburgerIcon />
       </button>

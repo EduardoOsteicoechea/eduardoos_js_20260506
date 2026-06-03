@@ -473,7 +473,7 @@ export function getSeriesBreadcrumbs(slug: string): { href: string; label: strin
 
   const crumbs: { href: string; label: string }[] = [
 
-    { href: '/series', label: 'Estudios bíblicos' },
+    { href: '/series', label: 'Posts', labelKey: 'posts' },
 
   ];
 

@@ -2,7 +2,10 @@
 
 import Layout from "../../layouts/Layout.astro";
 
-import SeriesBreadcrumbs from "../../components/series/SeriesBreadcrumbs.astro";
+import SeriesBreadcrumbs from "../../components/series/SeriesBreadcrumbs.jsx";
+import SeriesBackLink from "../../components/series/SeriesBackLink.jsx";
+import SeriesPostsHeading from "../../components/series/SeriesPostsHeading.jsx";
+import SeriesEmptyMessage from "../../components/series/SeriesEmptyMessage.jsx";
 
 import SeriesChildCards from "../../components/series/SeriesChildCards.astro";
 
@@ -212,21 +215,7 @@ const props = Astro.props as PageProps;
 
     <main class="mx-auto max-w-3xl px-5 pb-[65px] pt-10">
 
-      <nav class="mb-8">
-
-        <a
-
-          href="/series"
-
-          class="text-sm font-medium underline opacity-80 hover:opacity-100"
-
-        >
-
-          ← Todos los estudios
-
-        </a>
-
-      </nav>
+      <SeriesBackLink client:load />
 
 
 
@@ -254,7 +243,7 @@ const props = Astro.props as PageProps;
 
     <main class="mx-auto max-w-4xl px-5 py-10">
 
-      <SeriesBreadcrumbs crumbs={props.breadcrumbs} currentLabel={props.pageTitle} />
+      <SeriesBreadcrumbs crumbs={props.breadcrumbs} currentLabel={props.pageTitle} client:load />
 
 
 
@@ -262,7 +251,7 @@ const props = Astro.props as PageProps;
 
         <p class="theme-muted text-sm uppercase tracking-wide">
 
-          {props.hub.series ? `Serie ${props.hub.series}` : "Estudio bíblico"}
+          {props.hub.series ? `Serie ${props.hub.series}` : "Series"}
 
         </p>
 
@@ -326,7 +315,7 @@ const props = Astro.props as PageProps;
 
       <section>
 
-        <h2 class="mb-4 text-xl font-semibold">Estudios</h2>
+        <SeriesPostsHeading client:load />
 
         <SeriesHubPosts posts={props.hubPosts} />
 
@@ -342,7 +331,7 @@ const props = Astro.props as PageProps;
 
     <main class="mx-auto max-w-4xl px-5 py-10">
 
-      <SeriesBreadcrumbs crumbs={props.breadcrumbs} currentLabel={props.pageTitle} />
+      <SeriesBreadcrumbs crumbs={props.breadcrumbs} currentLabel={props.pageTitle} client:load />
 
 
 
@@ -360,7 +349,7 @@ const props = Astro.props as PageProps;
 
       ) : (
 
-        <p class="theme-muted">No hay estudios en esta ruta.</p>
+        <SeriesEmptyMessage client:load />
 
       )}
 

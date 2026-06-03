@@ -4,6 +4,7 @@ import {
   getStoredChatLanguage,
   setStoredChatLanguage,
 } from './chatLanguage';
+import { notifySiteLanguageChange } from '../siteLanguage';
 import { extractPageContext } from './extractPageContext';
 import { getGlobalChatContext } from './globalContext';
 
@@ -93,6 +94,7 @@ export function setChatbotLanguage(languageId) {
   if (languageId === preferredLanguage) return;
   preferredLanguage = languageId;
   setStoredChatLanguage(languageId);
+  notifySiteLanguageChange();
   emit();
 }
 

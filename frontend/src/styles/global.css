@@ -95,9 +95,13 @@
     color-scheme: light dark;
   }
 
+  .global-activity-bar {
+    pointer-events: auto;
+  }
+
   .site-menu-drawer {
     animation: site-menu-slide-in 0.25s ease-out;
-    max-height: 100dvh;
+    max-height: calc(100dvh - 45px);
   }
 
   .site-menu-tray {

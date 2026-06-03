@@ -26,7 +26,14 @@ export const CHAT_LANGUAGES = [
 export function getStoredChatLanguage() {
   if (typeof localStorage === 'undefined') return 'en';
   const stored = localStorage.getItem(CHAT_LANGUAGE_STORAGE_KEY);
-  return CHAT_LANGUAGES.some((lang) => lang.id === stored) ? /** @type {ChatLanguageId} */ (stored) : 'en';
+  if (CHAT_LANGUAGES.some((lang) => lang.id === stored)) {
+    return /** @type {ChatLanguageId} */ (stored);
+  }
+  if (typeof document !== 'undefined') {
+    const htmlLang = document.documentElement.lang?.toLowerCase();
+    if (htmlLang?.startsWith('es')) return 'es';
+  }
+  return 'en';
 }
 
 /** @param {ChatLanguageId} id */

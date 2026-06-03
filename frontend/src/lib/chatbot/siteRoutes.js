@@ -10,8 +10,9 @@ export const CHATBOT_NAV_ROUTES = [
   { path: '/', label: 'Inicio', description: 'Home — BIM services and skills' },
   {
     path: '/series',
-    label: 'Estudios bíblicos',
-    description: 'Series index and biblical studies hub',
+    label: 'Posts',
+    labelKey: 'posts',
+    description: 'Posts and series index',
   },
   {
     path: '/post/editor',
