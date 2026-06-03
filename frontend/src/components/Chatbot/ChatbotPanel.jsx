@@ -70,6 +70,7 @@ export default function ChatbotPanel() {
         role: 'assistant',
         content: getHomeIntroMessage(introLang),
         createdAt: messageTimestamp(),
+        highlightGlow: true,
       },
     ]);
     setDraft('');
