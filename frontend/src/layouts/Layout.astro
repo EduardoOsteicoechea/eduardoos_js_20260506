@@ -2,6 +2,7 @@
 // Import your Tailwind CSS file
 import "../styles/global.css";
 import { SiteChromeShell } from "../components/SiteChrome";
+import { PageLanguageApplier } from "../components/SiteLanguage";
 import PageBackground from "../components/PageBackground/PageBackground.astro";
 import { isHomePath } from "../config/homeLayout";
 import { getPageBackgroundConfig } from "../config/pageBackgroundRoutes";
@@ -114,6 +115,11 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
           if (fontSize) {
             document.documentElement.style.fontSize = fontSize + "px";
           }
+          var siteLang = localStorage.getItem("eduardoos-chatbot-language");
+          if (siteLang === "es" || siteLang === "en") {
+            document.documentElement.lang = siteLang;
+            document.documentElement.dataset.siteLang = siteLang;
+          }
         } catch (_) {}
       </script>
     </head>
@@ -127,6 +133,8 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
       <div class="page-content relative z-[1] min-h-screen">
         <slot />
       </div>
+
+      <PageLanguageApplier client:load />
 
       <SiteChromeShell
         client:load

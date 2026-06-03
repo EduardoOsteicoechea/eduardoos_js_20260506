@@ -1,7 +1,7 @@
 import { isHomePath } from './homeLayout';
 import { normalizePagePath } from './pageBackgroundRoutes';
 
-/** @typedef {'scroll-up' | 'scroll-down' | 'whatsapp' | 'linkedin' | 'chatbot' | 'site-menu'} ActivityBarControlId */
+/** @typedef {'site-language' | 'scroll-up' | 'scroll-down' | 'whatsapp' | 'linkedin' | 'chatbot' | 'site-menu'} ActivityBarControlId */
 
 /** @typedef {'home' | 'standard' | 'editor' | 'article'} ActivityBarVariant */
 
@@ -92,6 +92,6 @@ export function resolveActivityBarLayout(pathname, pageMode = 'default') {
  * @returns {ActivityBarControlId[]}
  */
 export function getActivityBarLeftControls(layout) {
-  if (layout.leftFromProps) return [];
-  return STANDARD_ACTIVITY_BAR_LEFT;
+  if (layout.leftFromProps) return ['site-language'];
+  return ['site-language', ...STANDARD_ACTIVITY_BAR_LEFT];
 }

@@ -1,5 +1,6 @@
 import { LinkedInIcon, WhatsAppIcon } from '../ActivityBarSocialIcons';
 import ChatbotToggleButton from '../Chatbot/ChatbotToggleButton';
+import { SiteLanguageButton } from '../SiteLanguage';
 import { SiteControlButton } from '../ui';
 import { SiteMenu } from '../SiteMenu';
 import { LINKEDIN_URL, WHATSAPP_URL } from '../../lib/contactLinks';
@@ -53,6 +54,9 @@ export default function ActivityBarControl({ controlId, menuPrefs, editorAction 
   }
 
   switch (controlId) {
+    case 'site-language':
+      return <SiteLanguageButton />;
+
     case 'scroll-up':
       return (
         <SiteControlButton

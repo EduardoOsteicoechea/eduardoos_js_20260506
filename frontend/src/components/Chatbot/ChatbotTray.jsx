@@ -20,8 +20,8 @@ export default function ChatbotTray({ inline = false }) {
 
   const tray = (
     <aside
-      className={`chatbot-tray theme-border theme-surface absolute right-0 top-0 z-[10] flex flex-col border-l shadow-2xl transition-[transform] duration-300 ease-out ${
-        open ? 'translate-x-0' : 'pointer-events-none translate-x-full'
+      className={`chatbot-tray theme-border theme-surface absolute right-0 top-0 z-[10] flex flex-col border-l shadow-2xl transition-[transform,visibility,box-shadow] duration-300 ease-out ${
+        open ? 'chatbot-tray--open' : 'chatbot-tray--closed pointer-events-none'
       } ${resizable ? 'chatbot-tray--resizable' : ''}`}
       style={{ width: resizable ? `${widthPx}px` : undefined }}
       aria-hidden={!open}
