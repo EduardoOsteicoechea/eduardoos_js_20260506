@@ -7,16 +7,26 @@ import (
 )
 
 type Config struct {
-	Port                   string
-	BindHost               string
-	InternalToken          string
-	PublicAuthEnabled      bool
-	LLMAPIURL              string
-	LLMAPIKey              string
-	LLMModel               string
+	Port              string
+	BindHost          string
+	InternalToken     string
+	PublicAuthEnabled bool
+	LLMAPIURL         string
+	LLMAPIKey         string
+	LLMModel          string
+	GuidelinesPath    string
+	KnowledgeDir      string
+	KnowledgeMaxChars int
 }
 
 func Load() Config {
+	maxKnowledge := 28000
+	if v := strings.TrimSpace(os.Getenv("KNOWLEDGE_MAX_CHARS")); v != "" {
+		if n, err := strconv.Atoi(v); err == nil && n > 0 {
+			maxKnowledge = n
+		}
+	}
+
 	return Config{
 		Port:              envOr("PORT", "8110"),
 		BindHost:          envOr("BIND_HOST", "127.0.0.1"),
@@ -25,6 +35,9 @@ func Load() Config {
 		LLMAPIURL:         envOr("LLM_API_URL", "https://api.deepseek.com/chat/completions"),
 		LLMAPIKey:         strings.TrimSpace(os.Getenv("LLM_API_KEY")),
 		LLMModel:          envOr("LLM_MODEL", "deepseek-chat"),
+		GuidelinesPath:    envOr("GUIDELINES_PATH", "guidelines/RESPONSE_GUIDELINES.md"),
+		KnowledgeDir:      envOr("KNOWLEDGE_DIR", "guidelines/knowledge"),
+		KnowledgeMaxChars: maxKnowledge,
 	}
 }
 

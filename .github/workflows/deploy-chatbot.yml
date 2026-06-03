@@ -74,6 +74,20 @@ jobs:
             ./chatbot \
             "$EC2_USER@$EC2_HOST:$REMOTE_DIR/chatbot"
 
+          ssh $SSH_OPTS "$EC2_USER@$EC2_HOST" "mkdir -p $REMOTE_DIR/guidelines/knowledge"
+
+          rsync -avz -e "ssh $SSH_OPTS" \
+            ./guidelines/knowledge/ \
+            "$EC2_USER@$EC2_HOST:$REMOTE_DIR/guidelines/knowledge/"
+
+          rsync -avz --ignore-existing -e "ssh $SSH_OPTS" \
+            ./guidelines/RESPONSE_GUIDELINES.md \
+            "$EC2_USER@$EC2_HOST:$REMOTE_DIR/guidelines/RESPONSE_GUIDELINES.md"
+
+          rsync -avz -e "ssh $SSH_OPTS" \
+            ./guidelines/README.md \
+            "$EC2_USER@$EC2_HOST:$REMOTE_DIR/guidelines/README.md"
+
           rsync -avz -e "ssh $SSH_OPTS" \
             ../deploy/systemd/eduardoos-chatbot.service \
             "$EC2_USER@$EC2_HOST:/tmp/eduardoos-chatbot.service"

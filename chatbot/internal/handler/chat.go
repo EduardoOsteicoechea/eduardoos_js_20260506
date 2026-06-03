@@ -8,7 +8,9 @@ import (
 	"strings"
 
 	"github.com/eduardoos/chatbot/internal/config"
+	"github.com/eduardoos/chatbot/internal/guidelines"
 	"github.com/eduardoos/chatbot/internal/llm"
+	"github.com/eduardoos/chatbot/internal/navigation"
 )
 
 type historyItem struct {
@@ -24,9 +26,10 @@ type chatRequest struct {
 }
 
 type chatResponse struct {
-	OK    bool   `json:"ok"`
-	Reply string `json:"reply"`
-	Stub  bool   `json:"stub,omitempty"`
+	OK      bool                `json:"ok"`
+	Reply   string              `json:"reply"`
+	Actions []navigation.Action `json:"actions,omitempty"`
+	Stub    bool                `json:"stub,omitempty"`
 }
 
 func pageTypeFromContext(raw json.RawMessage) string {
@@ -45,19 +48,7 @@ func pageTypeFromContext(raw json.RawMessage) string {
 	return parsed.PageType
 }
 
-func buildSystemPrompt(pageContext, globalContext json.RawMessage) string {
-	var parts []string
-	parts = append(parts, "You are Eduardo Osteicoechea's site assistant. Answer concisely in the user's language.")
-	if len(pageContext) > 0 {
-		parts = append(parts, "Page context JSON:\n"+string(pageContext))
-	}
-	if len(globalContext) > 0 {
-		parts = append(parts, "Global context JSON:\n"+string(globalContext))
-	}
-	return strings.Join(parts, "\n\n")
-}
-
-func Chat(cfg config.Config) http.HandlerFunc {
+func Chat(cfg config.Config, guide guidelines.Bundle) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			w.Header().Set("Allow", http.MethodPost)
@@ -84,7 +75,15 @@ func Chat(cfg config.Config) http.HandlerFunc {
 		}
 
 		pageType := pageTypeFromContext(req.PageContext)
-		systemPrompt := buildSystemPrompt(req.PageContext, req.GlobalContext)
+		siteNav := navigation.ExtractSiteNavigation(req.GlobalContext)
+		systemPrompt := navigation.AppendToSystemPrompt(
+			guidelines.BuildSystemPrompt(
+				guide,
+				cfg.LLMModel,
+				req.PageContext,
+				req.GlobalContext,
+			),
+		)
 
 		var userPrompt strings.Builder
 		for _, item := range req.History {
@@ -104,11 +103,14 @@ func Chat(cfg config.Config) http.HandlerFunc {
 			stub = true
 		}
 
+		cleanReply, actions := navigation.ParseReply(reply, siteNav)
+
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		_ = json.NewEncoder(w).Encode(chatResponse{
-			OK:    true,
-			Reply: reply,
-			Stub:  stub,
+			OK:      true,
+			Reply:   cleanReply,
+			Actions: actions,
+			Stub:    stub,
 		})
 	}
 }

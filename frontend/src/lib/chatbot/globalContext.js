@@ -1,3 +1,5 @@
+import { getSiteNavigationContext } from './siteRoutes';
+
 export const GLOBAL_CONTEXT_SCHEMA_VERSION = 1;
 
 /**
@@ -11,12 +13,14 @@ export const GLOBAL_CONTEXT_SCHEMA_VERSION = 1;
  * @property {string[]} permissions
  * @property {string | null} userDisplayName
  * @property {string} statusMessage
+ * @property {ReturnType<typeof getSiteNavigationContext>} siteNavigation
  */
 
 /**
+ * @param {string} [pathname]
  * @returns {GlobalChatContext}
  */
-export function getGlobalChatContext() {
+export function getGlobalChatContext(pathname = '/') {
   return {
     schemaVersion: GLOBAL_CONTEXT_SCHEMA_VERSION,
     implemented: false,
@@ -24,6 +28,7 @@ export function getGlobalChatContext() {
     permissions: [],
     userDisplayName: null,
     statusMessage:
-      'Global session context is not available yet. Only page context is active.',
+      'Global session context is not available yet. Page context and site navigation are active.',
+    siteNavigation: getSiteNavigationContext(pathname),
   };
 }

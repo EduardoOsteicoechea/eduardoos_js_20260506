@@ -5,7 +5,9 @@
  *   globalContext: unknown,
  *   history?: { role: string, content: string }[],
  * }} params
- * @returns {Promise<string>}
+ * @typedef {{ type: 'navigate', path: string, label?: string }} ChatbotAction
+ *
+ * @returns {Promise<{ reply: string, actions: ChatbotAction[] }>}
  */
 export async function sendChatbotMessage({
   message,
@@ -35,8 +37,26 @@ export async function sendChatbotMessage({
     throw new Error(err);
   }
 
-  if (typeof data?.reply === 'string') return data.reply;
-  if (typeof data?.message === 'string') return data.message;
+  const reply =
+    typeof data?.reply === 'string'
+      ? data.reply
+      : typeof data?.message === 'string'
+        ? data.message
+        : null;
 
-  throw new Error('Chat API returned an unexpected response shape');
+  if (reply === null) {
+    throw new Error('Chat API returned an unexpected response shape');
+  }
+
+  const actions = Array.isArray(data?.actions)
+    ? data.actions.filter(
+        (a) =>
+          a &&
+          a.type === 'navigate' &&
+          typeof a.path === 'string' &&
+          a.path.startsWith('/'),
+      )
+    : [];
+
+  return { reply, actions };
 }

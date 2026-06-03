@@ -73,7 +73,7 @@ export function getChatbotPageContext() {
 }
 
 export function getChatbotGlobalContext() {
-  return getGlobalChatContext();
+  return getGlobalChatContext(pathname);
 }
 
 export function openChatbotTray() {

@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { sendChatbotMessage } from '../../lib/chatbot/chatbotApi';
+import { isNavigationIntent, navigateTo } from '../../lib/chatbot/navigate';
 import ChatbotContextBar from './ChatbotContextBar';
 import ChatbotInput from './ChatbotInput';
 import ChatbotMessageList from './ChatbotMessageList';
@@ -46,12 +47,14 @@ export default function ChatbotPanel() {
       .map((m) => ({ role: m.role, content: m.content }));
 
     try {
-      const replyText = await sendChatbotMessage({
+      const { reply: replyText, actions } = await sendChatbotMessage({
         message: text,
         pageContext,
         globalContext,
         history,
       });
+
+      const navigateAction = actions.find((a) => a.type === 'navigate');
 
       setMessages((prev) => [
         ...prev,
@@ -59,8 +62,13 @@ export default function ChatbotPanel() {
           id: crypto.randomUUID(),
           role: 'assistant',
           content: replyText,
+          actions: navigateAction ? [navigateAction] : undefined,
         },
       ]);
+
+      if (navigateAction && isNavigationIntent(text)) {
+        navigateTo(navigateAction.path);
+      }
     } catch (error) {
       const fallback =
         error instanceof Error ? error.message : buildStubReply(pageContext.pageType, text);
