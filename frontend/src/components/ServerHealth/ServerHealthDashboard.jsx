@@ -339,6 +339,23 @@ export default function ServerHealthDashboard() {
           </InfoPanel>
 
           <InfoPanel
+            title="Chatbot"
+            subtitle={services.chatbot?.unit}
+            copyText={formatUnitText(services.chatbot)}
+          >
+            <ul className="space-y-1 text-sm">
+              <li>
+                Activo:{' '}
+                <StatusBadge
+                  ok={services.chatbot?.active}
+                  label={services.chatbot?.active ? 'sí' : 'no'}
+                />
+              </li>
+              <li>Estado: {services.chatbot?.state}</li>
+            </ul>
+          </InfoPanel>
+
+          <InfoPanel
             title="Telemetry"
             subtitle={services.telemetry?.unit}
             copyText={formatUnitText(services.telemetry)}
@@ -359,8 +376,13 @@ export default function ServerHealthDashboard() {
 
       {ports ? (
         <InfoPanel
-          title="Puertos (8080 / 8090 / 8100)"
-          copyText={[formatPortText(ports.backend), formatPortText(ports.documenter), formatPortText(ports.telemetry)].join('\n\n')}
+          title="Puertos (8080 / 8090 / 8100 / 8110)"
+          copyText={[
+            formatPortText(ports.backend),
+            formatPortText(ports.documenter),
+            formatPortText(ports.chatbot),
+            formatPortText(ports.telemetry),
+          ].join('\n\n')}
         >
           <ul className="space-y-2 text-sm">
             <li>
@@ -373,6 +395,12 @@ export default function ServerHealthDashboard() {
               <strong>8090 documenter:</strong>{' '}
               {ports.documenter?.listening
                 ? `${ports.documenter.process ?? '?'} (pid ${ports.documenter.pid ?? '?'})`
+                : 'no escucha'}
+            </li>
+            <li>
+              <strong>8110 chatbot:</strong>{' '}
+              {ports.chatbot?.listening
+                ? `${ports.chatbot.process ?? '?'} (pid ${ports.chatbot.pid ?? '?'})`
                 : 'no escucha'}
             </li>
             <li>
@@ -414,7 +442,11 @@ export default function ServerHealthDashboard() {
       {probes ? (
         <InfoPanel
           title="Probes HTTP"
-          copyText={`${formatProbeText(probes.backend_catalog)}\n\n${formatProbeText(probes.documenter_health)}`}
+          copyText={[
+            formatProbeText(probes.backend_catalog),
+            formatProbeText(probes.documenter_health),
+            formatProbeText(probes.chatbot_health),
+          ].join('\n\n')}
         >
           <ul className="space-y-2 text-sm">
             <li>
@@ -432,6 +464,15 @@ export default function ServerHealthDashboard() {
               {probes.documenter_health?.status ? ` HTTP ${probes.documenter_health.status}` : ''}
             </li>
             <li className="theme-muted break-all text-xs">{probes.documenter_health?.url}</li>
+            <li>
+              Chatbot /health:{' '}
+              <StatusBadge ok={probes.chatbot_health?.ok} label={probes.chatbot_health?.ok ? 'OK' : 'falló'} />
+              {probes.chatbot_health?.status ? ` HTTP ${probes.chatbot_health.status}` : ''}
+              {probes.chatbot_health?.latency_ms != null
+                ? ` · ${probes.chatbot_health.latency_ms} ms`
+                : ''}
+            </li>
+            <li className="theme-muted break-all text-xs">{probes.chatbot_health?.url}</li>
           </ul>
         </InfoPanel>
       ) : null}
@@ -473,6 +514,7 @@ export default function ServerHealthDashboard() {
         <>
           <LogPanel title="Logs backend" block={data.backend} />
           <LogPanel title="Logs documenter" block={data.documenter} />
+          <LogPanel title="Logs chatbot" block={data.chatbot} />
         </>
       ) : null}
     </div>

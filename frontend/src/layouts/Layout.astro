@@ -2,6 +2,11 @@
 // Import your Tailwind CSS file
 import "../styles/global.css";
 import GlobalActivityBar from "../components/GlobalActivityBar.jsx";
+import { ChatbotRoot } from "../components/Chatbot";
+import PageBackground from "../components/PageBackground/PageBackground.astro";
+import { getPageBackgroundConfig } from "../config/pageBackgroundRoutes";
+
+const pathname = Astro.url.pathname;
 
 interface Props {
   title?: string;
@@ -10,6 +15,8 @@ interface Props {
 
 const { title = "Eduardo Osteicoechea", showGlobalActivityBar = true } =
   Astro.props;
+
+const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
 ---
 
 <!doctype html>
@@ -85,11 +92,19 @@ const { title = "Eduardo Osteicoechea", showGlobalActivityBar = true } =
         } catch (_) {}
       </script>
     </head>
-    <body>
-        
-      <slot />
+    <body
+      class:list={{
+        "has-page-background": pageBackground.show,
+      }}
+    >
+      <PageBackground pathname={pathname} />
+
+      <div class="page-content relative z-[1] min-h-screen">
+        <slot />
+      </div>
+
+      <ChatbotRoot client:load pathname={pathname} />
 
       {showGlobalActivityBar ? <GlobalActivityBar client:load /> : null}
-      
     </body>
 </html>

@@ -3,6 +3,22 @@
 name: eduardoos-com
 
 services:
+  chatbot:
+    build:
+      context: ./chatbot
+      dockerfile: Dockerfile
+    container_name: eduardoos-chatbot
+    env_file:
+      - ./chatbot/.env
+    environment:
+      PORT: 8110
+      BIND_HOST: 0.0.0.0
+      CHATBOT_INTERNAL_TOKEN: dev-internal-chatbot-token
+      CHATBOT_PUBLIC_AUTH_ENABLED: "false"
+    expose:
+      - "8110"
+    restart: unless-stopped
+
   backend:
     build:
       context: ./backend
@@ -13,10 +29,15 @@ services:
       POST_EDITOR_PASSWORD: editor-dev
       SERIES_DATA_ROOT: /app/public/data/series
       DOCUMENTER_URL: http://documenter:8090
+      CHATBOT_URL: http://chatbot:8110
+      CHATBOT_INTERNAL_TOKEN: dev-internal-chatbot-token
+      CHATBOT_PUBLIC_AUTH_ENABLED: "false"
     ports:
       - "8080:8080"
     volumes:
       - ./backend/public/data:/app/public/data
+    depends_on:
+      - chatbot
     restart: unless-stopped
 
   documenter:
@@ -45,6 +66,10 @@ services:
       DOCKER_DOCUMENTER_CONTAINER: eduardoos-documenter
       BACKEND_HEALTH_URL: http://backend:8080/api/series/catalog
       DOCUMENTER_HEALTH_URL: http://documenter:8090/health
+      CHATBOT_HEALTH_URL: http://chatbot:8110/health
+      CHATBOT_UNIT: eduardoos-chatbot
+      CHATBOT_PORT: 8110
+      DOCKER_CHATBOT_CONTAINER: eduardoos-chatbot
       HOST_PROC: /host/proc
       DISK_PATH: /
     volumes:
@@ -55,6 +80,7 @@ services:
     depends_on:
       - backend
       - documenter
+      - chatbot
     restart: unless-stopped
 
   frontend:
@@ -72,6 +98,7 @@ services:
     depends_on:
       - backend
       - documenter
+      - chatbot
       - telemetry
     ports:
       - "4321:4321"

@@ -7,6 +7,7 @@ on:
     paths:
       - 'telemetry/**'
       - 'deploy/systemd/eduardoos-telemetry.service'
+      - 'deploy/systemd/eduardoos-chatbot.service'
       - '.github/workflows/deploy-telemetry.yml'
   workflow_dispatch:
 

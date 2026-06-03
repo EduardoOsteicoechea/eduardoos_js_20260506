@@ -13,18 +13,22 @@ type Config struct {
 	BackendUnit               string
 	DocumenterUnit            string
 	TelemetryUnit             string
+	ChatbotUnit               string
 	LegacyAPIUnit             string
 	DockerBackendContainer    string
 	DockerDocumenterContainer string
+	DockerChatbotContainer    string
 	HostProcRoot              string
 	DiskPath                  string
 	BackendDistPath           string
 	DocumenterDistPath        string
 	BackendHealthURL          string
 	DocumenterHealthURL       string
+	ChatbotHealthURL          string
 	BackendPort               int
 	DocumenterPort            int
 	TelemetryPort             int
+	ChatbotPort               int
 }
 
 func Load() Config {
@@ -43,6 +47,7 @@ func Load() Config {
 	backendPort := envInt("BACKEND_PORT", 8080)
 	documenterPort := envInt("DOCUMENTER_PORT", 8090)
 	telemetryPort := envInt("TELEMETRY_PORT", 8100)
+	chatbotPort := envInt("CHATBOT_PORT", 8110)
 
 	return Config{
 		Port:                      envOr("PORT", "8100"),
@@ -51,9 +56,11 @@ func Load() Config {
 		BackendUnit:               envOr("BACKEND_UNIT", "eduardoos-backend"),
 		DocumenterUnit:            envOr("DOCUMENTER_UNIT", "eduardoos-documenter"),
 		TelemetryUnit:             envOr("TELEMETRY_UNIT", "eduardoos-telemetry"),
+		ChatbotUnit:               envOr("CHATBOT_UNIT", "eduardoos-chatbot"),
 		LegacyAPIUnit:             envOr("LEGACY_API_UNIT", "eduardoos-api"),
 		DockerBackendContainer:    envOr("DOCKER_BACKEND_CONTAINER", "eduardoos-backend"),
 		DockerDocumenterContainer: envOr("DOCKER_DOCUMENTER_CONTAINER", "eduardoos-documenter"),
+		DockerChatbotContainer:    envOr("DOCKER_CHATBOT_CONTAINER", "eduardoos-chatbot"),
 		HostProcRoot:              strings.TrimSuffix(envOr("HOST_PROC", "/proc"), "/"),
 		DiskPath:                  envOr("DISK_PATH", "/"),
 		BackendDistPath: envOr(
@@ -72,9 +79,14 @@ func Load() Config {
 			"DOCUMENTER_HEALTH_URL",
 			"http://127.0.0.1:8090/health",
 		),
+		ChatbotHealthURL: envOr(
+			"CHATBOT_HEALTH_URL",
+			"http://127.0.0.1:8110/health",
+		),
 		BackendPort:    backendPort,
 		DocumenterPort: documenterPort,
 		TelemetryPort:  telemetryPort,
+		ChatbotPort:    chatbotPort,
 	}
 }
 

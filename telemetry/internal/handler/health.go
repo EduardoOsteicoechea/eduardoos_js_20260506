@@ -20,6 +20,7 @@ type healthResponse struct {
 	Probes     collect.ProbesBlock    `json:"probes"`
 	Backend    collect.ServiceLogs    `json:"backend"`
 	Documenter collect.ServiceLogs    `json:"documenter"`
+	Chatbot    collect.ServiceLogs    `json:"chatbot"`
 	System     collect.SystemBlock    `json:"system"`
 }
 
@@ -43,10 +44,14 @@ func Health(cfg config.Config) http.HandlerFunc {
 		documenterLogs := collect.ServiceLogsFor(
 			cfg, cfg.DocumenterUnit, cfg.DockerDocumenterContainer,
 		)
+		chatbotLogs := collect.ServiceLogsFor(
+			cfg, cfg.ChatbotUnit, cfg.DockerChatbotContainer,
+		)
 
 		warnings := []string{}
 		warnings = append(warnings, collect.RecentLogWarnings(backendLogs, services.Backend.Active)...)
 		warnings = append(warnings, collect.RecentLogWarnings(documenterLogs, services.Documenter.Active)...)
+		warnings = append(warnings, collect.RecentLogWarnings(chatbotLogs, services.Chatbot.Active)...)
 
 		if issues == nil {
 			issues = []string{}
@@ -66,6 +71,7 @@ func Health(cfg config.Config) http.HandlerFunc {
 			Probes:    probes,
 			Backend:    backendLogs,
 			Documenter: documenterLogs,
+			Chatbot:    chatbotLogs,
 			System: collect.SystemStats(cfg),
 		}
 

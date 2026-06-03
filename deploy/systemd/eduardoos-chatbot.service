@@ -1,0 +1,17 @@
+[Unit]
+Description=Eduardoos Chatbot API
+After=network.target
+
+[Service]
+Type=simple
+User=ec2-user
+WorkingDirectory=/home/ec2-user/chatbot
+EnvironmentFile=-/home/ec2-user/chatbot/.env
+Environment=PORT=8110
+Environment=BIND_HOST=127.0.0.1
+ExecStart=/home/ec2-user/chatbot/chatbot
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

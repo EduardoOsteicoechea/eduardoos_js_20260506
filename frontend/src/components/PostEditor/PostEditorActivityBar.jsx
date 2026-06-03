@@ -1,3 +1,4 @@
+import { ChatbotToggleButton } from '../Chatbot';
 import { SiteMenu } from '../SiteMenu';
 import EditorActionButton from '../EditorActionButton';
 import { useSiteReadingPreferences } from '../../hooks/useSiteReadingPreferences';
@@ -117,7 +118,8 @@ export default function PostEditorActivityBar({ actions }) {
         })}
       </div>
 
-      <div className="theme-border flex shrink-0 items-center border-l px-2 sm:px-3">
+      <div className="theme-border flex shrink-0 items-center gap-2 border-l px-2 sm:gap-3 sm:px-3">
+        <ChatbotToggleButton />
         {prefs.ready ? (
           <SiteMenu
             theme={prefs.theme}

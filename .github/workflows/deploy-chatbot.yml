@@ -1,0 +1,99 @@
+name: Deploy Chatbot to EC2
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'chatbot/**'
+      - 'deploy/systemd/eduardoos-chatbot.service'
+      - '.github/workflows/deploy-chatbot.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy-chatbot:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./chatbot
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache-dependency-path: chatbot/go.sum
+
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+          HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          echo "SSH_OPTS=-i ~/.ssh/id_rsa -o StrictHostKeyChecking=yes" >> "$GITHUB_ENV"
+          echo "EC2_HOST=$HOST" >> "$GITHUB_ENV"
+          echo "EC2_USER=${{ secrets.EC2_USER }}" >> "$GITHUB_ENV"
+
+      - name: Detect EC2 CPU architecture
+        id: ec2_arch
+        run: |
+          MACHINE=$(ssh $SSH_OPTS "$EC2_USER@$EC2_HOST" "uname -m")
+          echo "EC2 uname -m: $MACHINE"
+          case "$MACHINE" in
+            x86_64|amd64)
+              echo "goarch=amd64" >> "$GITHUB_OUTPUT"
+              ;;
+            aarch64|arm64)
+              echo "goarch=arm64" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo "Unsupported EC2 architecture: $MACHINE"
+              exit 1
+              ;;
+          esac
+
+      - name: Build Linux binary for EC2
+        run: |
+          CGO_ENABLED=0 GOOS=linux GOARCH=${{ steps.ec2_arch.outputs.goarch }} \
+            go build -ldflags="-s -w" -o chatbot ./cmd/server
+          file chatbot
+
+      - name: Sync and Restart Service on EC2
+        run: |
+          REMOTE_DIR="/home/$EC2_USER/chatbot"
+
+          ssh $SSH_OPTS "$EC2_USER@$EC2_HOST" "mkdir -p $REMOTE_DIR"
+
+          rsync -avz -e "ssh $SSH_OPTS" \
+            ./chatbot \
+            "$EC2_USER@$EC2_HOST:$REMOTE_DIR/chatbot"
+
+          rsync -avz -e "ssh $SSH_OPTS" \
+            ../deploy/systemd/eduardoos-chatbot.service \
+            "$EC2_USER@$EC2_HOST:/tmp/eduardoos-chatbot.service"
+
+          ssh $SSH_OPTS "$EC2_USER@$EC2_HOST" bash -s <<EOF
+            set -euo pipefail
+            BIN="/home/$EC2_USER/chatbot/chatbot"
+            chmod +x "\$BIN"
+            file "\$BIN"
+            if [ ! -f "/home/$EC2_USER/chatbot/.env" ]; then
+              echo "WARN: /home/$EC2_USER/chatbot/.env missing — copy from chatbot/.env.example"
+            fi
+            sudo cp /tmp/eduardoos-chatbot.service /etc/systemd/system/eduardoos-chatbot.service
+            sudo systemctl daemon-reload
+            sudo systemctl enable eduardoos-chatbot
+            sudo systemctl restart eduardoos-chatbot
+            sleep 2
+            systemctl is-active --quiet eduardoos-chatbot \
+              || { journalctl -u eduardoos-chatbot -n 30 --no-pager; exit 1; }
+            curl -sf "http://127.0.0.1:8110/health" >/dev/null \
+              || { echo "ERROR: chatbot /health check failed"; exit 1; }
+            echo "Chatbot deploy OK"
+          EOF

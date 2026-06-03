@@ -35,6 +35,9 @@ func EvaluateIssues(
 	if !services.Documenter.Active {
 		issues = append(issues, fmt.Sprintf("systemd unit %s is not active", services.Documenter.Unit))
 	}
+	if !services.Chatbot.Active {
+		issues = append(issues, fmt.Sprintf("systemd unit %s is not active", services.Chatbot.Unit))
+	}
 
 	if cfg.LogMode != "docker" {
 		if !deploy.BackendDist.Exists {
@@ -71,6 +74,7 @@ func EvaluateIssues(
 
 	checkPort("backend", ports.Backend, []string{"node"})
 	checkPort("documenter", ports.Documenter, []string{"node"})
+	checkPort("chatbot", ports.Chatbot, []string{"chatbot"})
 	checkPort("telemetry", ports.Telemetry, []string{"telemetry", "node"})
 
 	if !probes.BackendCatalog.OK {
@@ -89,6 +93,16 @@ func EvaluateIssues(
 			msg = fmt.Sprintf("%s: %s", msg, *probes.DocumenterHealth.Error)
 		} else if probes.DocumenterHealth.Status > 0 {
 			msg = fmt.Sprintf("%s: HTTP %d", msg, probes.DocumenterHealth.Status)
+		}
+		issues = append(issues, msg)
+	}
+
+	if !probes.ChatbotHealth.OK {
+		msg := "chatbot health probe failed"
+		if probes.ChatbotHealth.Error != nil {
+			msg = fmt.Sprintf("%s: %s", msg, *probes.ChatbotHealth.Error)
+		} else if probes.ChatbotHealth.Status > 0 {
+			msg = fmt.Sprintf("%s: HTTP %d", msg, probes.ChatbotHealth.Status)
 		}
 		issues = append(issues, msg)
 	}

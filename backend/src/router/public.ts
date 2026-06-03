@@ -1,5 +1,9 @@
 import { Router } from 'express';
 import multer from 'multer';
+import {
+  chatbotPublicAuth,
+  proxyChatbot,
+} from '../handlers/chatbotHandlers.js';
 import { downloadArticlePdf } from '../handlers/documentHandlers.js';
 import {
   savePostEditorArticle,
@@ -30,5 +34,6 @@ publicRouter.get('/series/article', getSeriesArticle);
 publicRouter.post('/auth/post/editor/', validatePostEditorPassword);
 publicRouter.post('/post/editor/', upload.any(), savePostEditorArticle);
 publicRouter.post('/documents/article-pdf', downloadArticlePdf);
+publicRouter.post('/chatbot', chatbotPublicAuth, proxyChatbot);
 publicRouter.get('/pdf/capabilities', getPdfCapabilities);
 publicRouter.post('/pdf/generate', generatePdf);

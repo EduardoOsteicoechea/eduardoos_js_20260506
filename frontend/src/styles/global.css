@@ -22,9 +22,37 @@
     scrollbar-width: none;
     @apply min-h-screen bg-white text-black dark:bg-black dark:text-white;
   }
+
+  body.has-page-background {
+    @apply bg-transparent;
+  }
+
 }
 
 @layer components {
+  .home-main {
+    @apply mx-auto w-full max-w-3xl;
+  }
+
+  @media (min-width: 1024px) {
+    html.has-page-background .home-main {
+      margin-left: min(36vw, 34rem);
+      margin-right: auto;
+      max-width: 36rem;
+    }
+  }
+
+  .chatbot-tray {
+    bottom: 45px;
+    height: calc(100dvh - 45px);
+    max-height: calc(100dvh - 45px);
+    pointer-events: auto;
+  }
+
+  .chatbot-panel {
+    height: 100%;
+  }
+
   .theme-border {
     @apply border-black/15 dark:border-white/15;
   }

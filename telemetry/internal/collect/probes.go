@@ -21,12 +21,14 @@ type HTTPProbe struct {
 type ProbesBlock struct {
 	BackendCatalog   HTTPProbe `json:"backend_catalog"`
 	DocumenterHealth HTTPProbe `json:"documenter_health"`
+	ChatbotHealth    HTTPProbe `json:"chatbot_health"`
 }
 
 func Probes(cfg config.Config) ProbesBlock {
 	return ProbesBlock{
 		BackendCatalog:   httpProbe(cfg.BackendHealthURL),
 		DocumenterHealth: httpProbe(cfg.DocumenterHealthURL),
+		ChatbotHealth:    httpProbe(cfg.ChatbotHealthURL),
 	}
 }
 

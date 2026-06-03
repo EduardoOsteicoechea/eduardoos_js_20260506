@@ -14,6 +14,17 @@ export const DOCUMENTER_URL = getEnvOrDefault(
   'DOCUMENTER_URL',
   'http://localhost:8090',
 );
+export const CHATBOT_URL = getEnvOrDefault(
+  'CHATBOT_URL',
+  'http://127.0.0.1:8110',
+);
+export const CHATBOT_INTERNAL_TOKEN = getEnvOrDefault(
+  'CHATBOT_INTERNAL_TOKEN',
+  'dev-internal-chatbot-token',
+);
+export const CHATBOT_PUBLIC_AUTH_ENABLED =
+  getEnvOrDefault('CHATBOT_PUBLIC_AUTH_ENABLED', 'false').toLowerCase() ===
+  'true';
 
 export const CORS_ORIGINS = [
   'http://localhost:3000',

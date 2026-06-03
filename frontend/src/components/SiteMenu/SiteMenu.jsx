@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { ChatbotToggleButton } from '../Chatbot';
 import { PUBLIC_NAV_LINKS } from '../../lib/siteNav';
 import MenuSettingsPanel from './MenuSettingsPanel';
 import { HamburgerIcon, LoginIcon, ProfileIcon, SettingsIcon } from './MenuIcons';
@@ -85,6 +86,8 @@ export default function SiteMenu({
         >
           <aside className="theme-border theme-surface site-menu-tray relative flex h-full min-h-0 flex-1 flex-col overflow-hidden border-l shadow-xl">
             <header className="theme-border flex shrink-0 items-center justify-around border-b px-3 py-3">
+              <ChatbotToggleButton />
+
               <button
                 type="button"
                 disabled
