@@ -2,7 +2,7 @@ export const CHAT_LANGUAGE_STORAGE_KEY = 'eduardoos-chatbot-language';
 
 /** @typedef {'en' | 'es'} ChatLanguageId */
 
-/** @type {{ id: ChatLanguageId, label: string, replyLanguageInstruction: string, inputPlaceholder: string }[]} */
+/** @type {{ id: ChatLanguageId, label: string, replyLanguageInstruction: string, inputPlaceholder: string, sendLabel: string }[]} */
 export const CHAT_LANGUAGES = [
   {
     id: 'en',
@@ -10,6 +10,7 @@ export const CHAT_LANGUAGES = [
     replyLanguageInstruction:
       'You MUST write every reply in English only, even if the user writes in Spanish or mixes languages.',
     inputPlaceholder: 'Write your message…',
+    sendLabel: 'Send',
   },
   {
     id: 'es',
@@ -17,6 +18,7 @@ export const CHAT_LANGUAGES = [
     replyLanguageInstruction:
       'Debes escribir todas las respuestas solo en español, aunque el usuario escriba en inglés o mezcle idiomas.',
     inputPlaceholder: 'Escribe tu mensaje…',
+    sendLabel: 'Enviar',
   },
 ];
 

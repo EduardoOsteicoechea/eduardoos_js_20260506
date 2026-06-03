@@ -16,6 +16,7 @@ import {
  *   languageLabel: string,
  *   languageCode: string,
  *   inputPlaceholder: string,
+ *   sendLabel: string,
  *   disabled?: boolean,
  * }} props
  */
@@ -29,6 +30,7 @@ export default function ChatbotInput({
   languageLabel,
   languageCode,
   inputPlaceholder,
+  sendLabel,
   disabled,
 }) {
   const iconBtn =
@@ -52,54 +54,57 @@ export default function ChatbotInput({
         aria-label="Message for assistant"
       />
 
-      <div className="mt-2 flex items-center justify-end gap-1.5">
-        <button
-          type="button"
-          onClick={onCycleLanguage}
-          disabled={disabled}
-          className={iconBtn}
-          title={`Language: ${languageLabel} (click to switch)`}
-          aria-label={`Reply language: ${languageLabel}. Click to switch.`}
-        >
-          <span className="relative inline-flex">
-            <LanguageIcon />
-            <span className="absolute -bottom-1 -right-1 rounded bg-black px-0.5 text-[8px] font-bold leading-none text-white dark:bg-white dark:text-black">
-              {languageCode}
+      <div className="mt-2 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={onCycleLanguage}
+            disabled={disabled}
+            className={iconBtn}
+            title={`Language: ${languageLabel} (click to switch)`}
+            aria-label={`Reply language: ${languageLabel}. Click to switch.`}
+          >
+            <span className="relative inline-flex">
+              <LanguageIcon />
+              <span className="absolute -bottom-1 -right-1 rounded bg-black px-0.5 text-[8px] font-bold leading-none text-white dark:bg-white dark:text-black">
+                {languageCode}
+              </span>
             </span>
-          </span>
-        </button>
+          </button>
 
-        <button
-          type="button"
-          onClick={onSuggest}
-          disabled={disabled}
-          className={iconBtn}
-          title="Suggest question"
-          aria-label="Suggest question"
-        >
-          <SuggestIcon />
-        </button>
+          <button
+            type="button"
+            onClick={onSuggest}
+            disabled={disabled}
+            className={iconBtn}
+            title="Suggest question"
+            aria-label="Suggest question"
+          >
+            <SuggestIcon />
+          </button>
 
-        <button
-          type="button"
-          onClick={onNewChat}
-          disabled={disabled}
-          className={iconBtn}
-          title="New chat"
-          aria-label="New chat"
-        >
-          <NewChatIcon />
-        </button>
+          <button
+            type="button"
+            onClick={onNewChat}
+            disabled={disabled}
+            className={iconBtn}
+            title="New chat"
+            aria-label="New chat"
+          >
+            <NewChatIcon />
+          </button>
+        </div>
 
         <button
           type="button"
           onClick={onSend}
           disabled={disabled || !value.trim()}
-          className={`${iconBtn} border-green-500/60 bg-green-500/15 text-green-700 hover:bg-green-500/25 dark:text-green-300`}
-          title="Send"
-          aria-label="Send message"
+          className="theme-toolbar-btn flex h-8 shrink-0 items-center gap-1.5 border-green-500/60 bg-green-500/15 px-2.5 text-xs font-semibold text-green-700 hover:bg-green-500/25 disabled:cursor-not-allowed disabled:opacity-50 dark:text-green-300"
+          title={sendLabel}
+          aria-label={sendLabel}
         >
           <SendIcon />
+          <span>{sendLabel}</span>
         </button>
       </div>
     </div>

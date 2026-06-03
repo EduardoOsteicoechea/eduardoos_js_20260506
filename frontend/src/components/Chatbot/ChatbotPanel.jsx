@@ -143,6 +143,7 @@ export default function ChatbotPanel() {
         languageLabel={languageConfig.label}
         languageCode={languageConfig.id.toUpperCase()}
         inputPlaceholder={languageConfig.inputPlaceholder}
+        sendLabel={languageConfig.sendLabel}
         disabled={busy}
       />
     </div>

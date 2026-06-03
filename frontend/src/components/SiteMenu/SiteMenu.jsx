@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ChatbotToggleButton } from '../Chatbot';
 import { PUBLIC_NAV_LINKS } from '../../lib/siteNav';
 import MenuSettingsPanel from './MenuSettingsPanel';
-import { HamburgerIcon, LoginIcon, ProfileIcon, SettingsIcon } from './MenuIcons';
+import { HamburgerIcon } from './MenuIcons';
 
 function lockBodyScroll() {
   document.documentElement.style.overflow = 'hidden';
@@ -85,53 +84,6 @@ export default function SiteMenu({
           aria-label="Menú del sitio"
         >
           <aside className="theme-border theme-surface site-menu-tray relative flex h-full min-h-0 flex-1 flex-col overflow-hidden border-l shadow-xl">
-            <header className="theme-border flex shrink-0 items-center justify-around border-b px-3 py-3">
-              <ChatbotToggleButton />
-
-              <button
-                type="button"
-                disabled
-                className="theme-toolbar-btn h-8 w-8 p-0 opacity-40"
-                aria-label="Perfil (próximamente)"
-                title="Perfil (próximamente)"
-              >
-                <ProfileIcon />
-              </button>
-
-              <button
-                type="button"
-                disabled
-                className="theme-toolbar-btn h-8 w-8 p-0 opacity-40"
-                aria-label="Iniciar sesión (próximamente)"
-                title="Iniciar sesión (próximamente)"
-              >
-                <LoginIcon />
-              </button>
-
-              <button
-                type="button"
-                onClick={toggleSettings}
-                className={`theme-toolbar-btn h-8 w-8 p-0 ${
-                  settingsOpen ? 'ring-2 ring-black dark:ring-white' : ''
-                }`}
-                aria-label="Ajustes de lectura"
-                aria-expanded={settingsOpen}
-                title="Ajustes"
-              >
-                <SettingsIcon />
-              </button>
-
-              <button
-                type="button"
-                onClick={closeMenu}
-                className="theme-toolbar-btn h-8 w-8 border-red-500/60 bg-red-500/10 p-0 text-2xl font-bold leading-none text-red-600 hover:bg-red-500/20 dark:text-red-400"
-                aria-label="Cerrar menú"
-                title="Cerrar menú"
-              >
-                ×
-              </button>
-            </header>
-
             <nav className="min-h-0 flex-1 overflow-y-auto px-4 py-4" aria-label="Navegación">
               <ul className="space-y-1">
                 {PUBLIC_NAV_LINKS.map((link) => (
@@ -145,6 +97,19 @@ export default function SiteMenu({
                     </a>
                   </li>
                 ))}
+                <li>
+                  <button
+                    type="button"
+                    onClick={toggleSettings}
+                    className={`theme-border w-full rounded-lg border px-4 py-3 text-left font-medium transition hover:bg-black/5 dark:hover:bg-white/10 ${
+                      settingsOpen ? 'ring-2 ring-black dark:ring-white' : ''
+                    }`}
+                    aria-label="Ajustes de lectura"
+                    aria-expanded={settingsOpen}
+                  >
+                    Ajustes
+                  </button>
+                </li>
               </ul>
             </nav>
           </aside>
