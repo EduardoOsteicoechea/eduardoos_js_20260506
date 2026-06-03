@@ -4,7 +4,7 @@ import { useSiteLanguage } from '../../hooks/useSiteLanguage';
 import { PUBLIC_NAV_LINKS } from '../../lib/siteNav';
 import { getSiteLabel } from '../../lib/siteLanguage';
 import MenuSettingsPanel from './MenuSettingsPanel';
-import { HamburgerIcon } from './MenuIcons';
+import { HamburgerIcon, SettingsIcon } from './MenuIcons';
 
 function lockBodyScroll() {
   document.documentElement.style.overflow = 'hidden';
@@ -49,6 +49,13 @@ export default function SiteMenu({
     setSettingsOpen((open) => !open);
   }, []);
 
+  const toggleMenu = useCallback(() => {
+    setMenuOpen((open) => {
+      if (open) setSettingsOpen(false);
+      return !open;
+    });
+  }, []);
+
   useEffect(() => {
     if (!menuOpen) return undefined;
 
@@ -81,6 +88,7 @@ export default function SiteMenu({
         />
 
         <div
+          id="site-menu-drawer"
           className="site-menu-drawer fixed top-0 right-0 bottom-[45px] z-[210] flex w-[min(100vw,20rem)] flex-col"
           role="dialog"
           aria-modal="true"
@@ -91,15 +99,29 @@ export default function SiteMenu({
               <h2 className="text-sm font-bold tracking-wide">
                 {getSiteLabel('menu', lang)}
               </h2>
-              <button
-                type="button"
-                onClick={closeMenu}
-                className="theme-toolbar-btn h-8 w-8 border-red-500/60 bg-red-500/10 p-0 text-2xl font-bold leading-none text-red-600 hover:bg-red-500/20 dark:text-red-400"
-                aria-label={getSiteLabel('closeMenu', lang)}
-                title={getSiteLabel('closeMenu', lang)}
-              >
-                ×
-              </button>
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={toggleSettings}
+                  className={`theme-toolbar-btn h-8 w-8 p-0 ${
+                    settingsOpen ? 'ring-2 ring-black dark:ring-white' : ''
+                  }`}
+                  aria-label={getSiteLabel('settings', lang)}
+                  aria-expanded={settingsOpen}
+                  title={getSiteLabel('settings', lang)}
+                >
+                  <SettingsIcon />
+                </button>
+                <button
+                  type="button"
+                  onClick={closeMenu}
+                  className="theme-toolbar-btn h-8 w-8 border-red-500/60 bg-red-500/10 p-0 text-2xl font-bold leading-none text-red-600 hover:bg-red-500/20 dark:text-red-400"
+                  aria-label={getSiteLabel('closeMenu', lang)}
+                  title={getSiteLabel('closeMenu', lang)}
+                >
+                  ×
+                </button>
+              </div>
             </header>
 
             <nav className="min-h-0 flex-1 overflow-y-auto px-4 py-4" aria-label="Navigation">
@@ -115,19 +137,6 @@ export default function SiteMenu({
                     </a>
                   </li>
                 ))}
-                <li>
-                  <button
-                    type="button"
-                    onClick={toggleSettings}
-                    className={`theme-border w-full rounded-lg border px-4 py-3 text-left font-medium transition hover:bg-black/5 dark:hover:bg-white/10 ${
-                      settingsOpen ? 'ring-2 ring-black dark:ring-white' : ''
-                    }`}
-                    aria-label={getSiteLabel('settings', lang)}
-                    aria-expanded={settingsOpen}
-                  >
-                    {getSiteLabel('settings', lang)}
-                  </button>
-                </li>
               </ul>
             </nav>
           </aside>
@@ -162,10 +171,15 @@ export default function SiteMenu({
     <>
       <button
         type="button"
-        onClick={() => setMenuOpen(true)}
-        className="theme-toolbar-btn h-8 w-8 shrink-0 p-0"
-        aria-label={getSiteLabel('openMenu', lang)}
+        onClick={toggleMenu}
+        className={`site-menu-toggle theme-toolbar-btn relative z-[230] h-8 w-8 shrink-0 p-0 ${
+          menuOpen ? 'ring-2 ring-black dark:ring-white' : ''
+        }`}
+        aria-label={
+          menuOpen ? getSiteLabel('closeMenu', lang) : getSiteLabel('openMenu', lang)
+        }
         aria-expanded={menuOpen}
+        aria-controls="site-menu-drawer"
         aria-haspopup="dialog"
         title={getSiteLabel('menu', lang)}
       >
