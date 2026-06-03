@@ -5,8 +5,8 @@ import { toggleSitePageLanguage } from '../../lib/sitePageLanguage';
 function GlobeIcon() {
   return (
     <svg
-      width="16"
-      height="16"
+      width="14"
+      height="14"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -25,9 +25,8 @@ export default function SiteLanguageButton() {
   return (
     <SiteControlButton
       size="bar"
-      label={lang.toUpperCase()}
       icon={<GlobeIcon />}
-      className="ui-control--icon-label tracking-wide"
+      iconClassName="ui-control__icon--compact"
       onClick={() => toggleSitePageLanguage()}
       title={
         lang === 'en'

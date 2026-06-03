@@ -2,7 +2,6 @@ import { useSyncExternalStore } from 'react';
 import { getChatLanguageConfig } from '../../lib/chatbot/chatLanguage';
 import {
   closeChatbotTray,
-  cycleChatbotLanguage,
   getChatbotGlobalContext,
   getChatbotPageContext,
   getChatbotPathname,
@@ -27,7 +26,6 @@ export function useChatbot() {
     globalContext: getChatbotGlobalContext(),
     preferredLanguage: getChatbotPreferredLanguage(),
     languageConfig: getChatLanguageConfig(getChatbotPreferredLanguage()),
-    cycleLanguage: cycleChatbotLanguage,
     refreshPageContext: refreshChatbotPageContext,
     pathname: getChatbotPathname(),
   };

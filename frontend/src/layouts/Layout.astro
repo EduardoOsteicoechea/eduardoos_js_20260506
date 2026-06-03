@@ -123,6 +123,10 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
           if (window.visualViewport) {
             var vv = window.visualViewport;
             var syncVv = function () {
+              var bottomInset = Math.max(
+                0,
+                window.innerHeight - vv.height - vv.offsetTop,
+              );
               document.documentElement.style.setProperty(
                 "--vv-height",
                 vv.height + "px",
@@ -138,6 +142,10 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
               document.documentElement.style.setProperty(
                 "--vv-width",
                 vv.width + "px",
+              );
+              document.documentElement.style.setProperty(
+                "--vv-bottom-inset",
+                bottomInset + "px",
               );
             };
             syncVv();

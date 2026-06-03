@@ -87,7 +87,7 @@ export default function SiteMenu({
           style={{
             top: 'var(--vv-offset-top, 0)',
             bottom:
-              'calc(var(--activity-bar-height) + env(safe-area-inset-bottom, 0px))',
+              'calc(var(--activity-bar-height) + env(safe-area-inset-bottom, 0px) + var(--vv-bottom-inset, 0px))',
           }}
           aria-label={getSiteLabel('closeMenu', lang)}
           onClick={closeMenu}
@@ -99,7 +99,7 @@ export default function SiteMenu({
           style={{
             top: 'var(--vv-offset-top, 0)',
             height:
-              'calc(var(--vv-height, 100dvh) - var(--activity-bar-height) - env(safe-area-inset-bottom, 0px))',
+              'calc(var(--vv-height, 100dvh) - var(--activity-bar-height) - env(safe-area-inset-bottom, 0px) - var(--vv-bottom-inset, 0px))',
           }}
           role="dialog"
           aria-modal="true"

@@ -74,6 +74,7 @@ export default function ActivityBar({
       data-activity-bar-variant={layout.variant}
     >
       <div className="activity-bar__primary flex min-w-0 flex-1 items-center gap-2 overflow-x-auto overflow-y-hidden px-3 sm:gap-3 sm:px-4">
+        <ActivityBarControl controlId="site-language" menuPrefs={menuPrefs} />
         {showEditorLeft
           ? dynamicLeftActions.map((action) => (
               <ActivityBarControl

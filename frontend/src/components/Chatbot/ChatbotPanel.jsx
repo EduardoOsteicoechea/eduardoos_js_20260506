@@ -46,7 +46,6 @@ export default function ChatbotPanel() {
     globalContext,
     closeTray,
     languageConfig,
-    cycleLanguage,
   } = useChatbot();
   const [draft, setDraft] = useState('');
   const [messages, setMessages] = useState(
@@ -159,11 +158,8 @@ export default function ChatbotPanel() {
         onSend={sendMessage}
         onNewChat={handleNewChat}
         onSuggest={handleSuggest}
-        onCycleLanguage={cycleLanguage}
         onCloseTray={closeTray}
         closeTrayLabel={getSiteLabel('closePanel', languageConfig.id)}
-        languageLabel={languageConfig.label}
-        languageCode={languageConfig.id.toUpperCase()}
         inputPlaceholder={languageConfig.inputPlaceholder}
         sendLabel={languageConfig.sendLabel}
         disabled={busy}

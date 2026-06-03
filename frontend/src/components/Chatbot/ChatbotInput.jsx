@@ -1,11 +1,6 @@
 import { UI_FIELD_CLASS } from '../../lib/uiClasses';
 import { SiteControlButton } from '../ui';
-import {
-  LanguageIcon,
-  NewChatIcon,
-  SendIcon,
-  SuggestIcon,
-} from './ChatbotActionIcons';
+import { NewChatIcon, SendIcon, SuggestIcon } from './ChatbotActionIcons';
 
 /**
  * @param {{
@@ -14,9 +9,6 @@ import {
  *   onSend: () => void,
  *   onNewChat: () => void,
  *   onSuggest: () => void,
- *   onCycleLanguage: () => void,
- *   languageLabel: string,
- *   languageCode: string,
  *   inputPlaceholder: string,
  *   sendLabel: string,
  *   onCloseTray: () => void,
@@ -30,9 +22,6 @@ export default function ChatbotInput({
   onSend,
   onNewChat,
   onSuggest,
-  onCycleLanguage,
-  languageLabel,
-  languageCode,
   inputPlaceholder,
   sendLabel,
   onCloseTray,
@@ -59,22 +48,6 @@ export default function ChatbotInput({
 
       <div className="mt-2 flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5">
-          <SiteControlButton
-            size="md"
-            disabled={disabled}
-            onClick={onCycleLanguage}
-            title={`Language: ${languageLabel} (click to switch)`}
-            aria-label={`Reply language: ${languageLabel}. Click to switch.`}
-            icon={
-              <span className="relative inline-flex">
-                <LanguageIcon />
-                <span className="absolute -bottom-1 -right-1 rounded bg-black px-0.5 text-[8px] font-bold leading-none text-white dark:bg-white dark:text-black">
-                  {languageCode}
-                </span>
-              </span>
-            }
-          />
-
           <SiteControlButton
             size="md"
             disabled={disabled}
