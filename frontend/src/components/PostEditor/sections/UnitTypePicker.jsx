@@ -1,4 +1,4 @@
-import { UNIT_TYPES } from './unitTypes';
+import { getEditorAddableUnitTypes } from './unitTypes';
 
 export default function UnitTypePicker({ open, onSelect, onClose }) {
   if (!open) return null;
@@ -24,7 +24,7 @@ export default function UnitTypePicker({ open, onSelect, onClose }) {
         </p>
 
         <ul className="max-h-[60vh] space-y-2 overflow-y-auto">
-          {UNIT_TYPES.map((entry) => (
+          {getEditorAddableUnitTypes().map((entry) => (
             <li key={entry.id}>
               <button
                 type="button"

@@ -26,11 +26,19 @@ export function clampFontSize(px, fallback = 18) {
   return Math.min(MAX_FONT_PX, Math.max(MIN_FONT_PX, Math.round(value)));
 }
 
-export function getStoredTheme() {
-  if (typeof localStorage === 'undefined') return THEMES.light;
-  return localStorage.getItem(STORAGE_KEYS.theme) === THEMES.dark
+export function getSystemTheme() {
+  if (typeof window === 'undefined') return THEMES.light;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
     ? THEMES.dark
     : THEMES.light;
+}
+
+export function getStoredTheme() {
+  if (typeof localStorage === 'undefined') return THEMES.light;
+  const stored = localStorage.getItem(STORAGE_KEYS.theme);
+  if (stored === THEMES.dark) return THEMES.dark;
+  if (stored === THEMES.light) return THEMES.light;
+  return getSystemTheme();
 }
 
 export function getStoredFontSize(fallback = 18) {

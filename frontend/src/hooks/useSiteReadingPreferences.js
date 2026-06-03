@@ -8,6 +8,7 @@ import {
   getStoredFontFamily,
   getStoredFontSize,
   getStoredTheme,
+  getSystemTheme,
   persistFontFamily,
   persistFontSize,
   persistTheme,
@@ -39,6 +40,17 @@ export function useSiteReadingPreferences() {
     applyFontFamilyToDocument(storedFontFamily);
     applyFontSizeToDocument(storedFontSize);
     setReady(true);
+
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const onSystemThemeChange = () => {
+      if (localStorage.getItem('eduardoos-theme')) return;
+      const next = getSystemTheme();
+      setTheme(next);
+      applyThemeToDocument(next);
+    };
+
+    media.addEventListener('change', onSystemThemeChange);
+    return () => media.removeEventListener('change', onSystemThemeChange);
   }, []);
 
   const onToggleTheme = useCallback(() => {

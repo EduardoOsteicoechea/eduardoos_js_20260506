@@ -47,6 +47,7 @@ export default function ActivityBarControl({ controlId, menuPrefs, editorAction 
               ? undefined
               : renderEditorActionIcon(editorAction.label)
         }
+        iconClassName={hasIconKey ? 'ui-control__icon--compact' : ''}
       />
     );
   }

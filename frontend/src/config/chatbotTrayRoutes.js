@@ -7,7 +7,7 @@ import {
 /** Routes where the AI chatbot tray is open by default (first match wins). */
 export const CHATBOT_OPEN_BY_DEFAULT_ROUTES = ['/', '/profile', '/profile/*'];
 
-export const CHATBOT_TRAY_WIDTH = 'min(28rem, 32vw)';
+export const CHATBOT_TRAY_WIDTH = 'min(22rem, 44vw)';
 
 /**
  * @param {string} pathname

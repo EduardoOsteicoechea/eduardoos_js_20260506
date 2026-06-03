@@ -73,7 +73,14 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
       <title>{title}</title>
       <script is:inline>
         try {
-          if (localStorage.getItem("eduardoos-theme") === "dark") {
+          var storedTheme = localStorage.getItem("eduardoos-theme");
+          var prefersDark =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches;
+          if (
+            storedTheme === "dark" ||
+            (storedTheme !== "light" && prefersDark)
+          ) {
             document.documentElement.classList.add("dark");
           }
           var fontId = localStorage.getItem("eduardoos-font-family");

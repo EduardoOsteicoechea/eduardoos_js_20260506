@@ -66,7 +66,9 @@ export default function ArticleGenerator({
         {article.title}
       </MainHeading>
 
-      <SermonPlayer sermonPath={sermonPath} audioRef={sermonAudioRef} />
+      {sermonPath ? (
+        <SermonPlayer sermonPath={sermonPath} audioRef={sermonAudioRef} />
+      ) : null}
 
       <ArticleSummaryIndex sections={article.sections} />
 

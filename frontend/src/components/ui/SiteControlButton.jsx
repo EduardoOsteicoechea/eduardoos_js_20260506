@@ -23,6 +23,7 @@ const SIZE_CLASS = {
  *   label?: string,
  *   icon?: import('react').ReactNode,
  *   active?: boolean,
+ *   iconClassName?: string,
  *   className?: string,
  *   children?: import('react').ReactNode,
  *   type?: 'button' | 'submit' | 'reset',
@@ -38,6 +39,7 @@ export default function SiteControlButton({
   label,
   icon,
   active = false,
+  iconClassName = '',
   className = '',
   children,
   type = 'button',
@@ -49,7 +51,11 @@ export default function SiteControlButton({
     children ??
     (hasIcon || hasLabel ? (
       <>
-        {hasIcon ? <span className="ui-control__icon">{icon}</span> : null}
+        {hasIcon ? (
+          <span className={['ui-control__icon', iconClassName].filter(Boolean).join(' ')}>
+            {icon}
+          </span>
+        ) : null}
         {hasLabel ? <span className="ui-control__label">{label}</span> : null}
       </>
     ) : null);

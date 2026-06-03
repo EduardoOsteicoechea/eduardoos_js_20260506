@@ -176,6 +176,7 @@ export default function SiteMenu({
         active={menuOpen}
         onClick={toggleMenu}
         icon={<HamburgerIcon />}
+        iconClassName="ui-control__icon--compact"
         className="site-menu-toggle relative z-[230]"
         aria-label={
           menuOpen ? getSiteLabel('closeMenu', lang) : getSiteLabel('openMenu', lang)
