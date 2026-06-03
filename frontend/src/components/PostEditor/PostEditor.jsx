@@ -993,7 +993,7 @@ export default function PostEditor() {
               </span>
             </div>
             {titleIsCustom ? (
-              <div className="mt-2 flex items-stretch gap-2">
+              <div className="post-editor-title-row mt-2 flex items-stretch gap-2">
                 <input
                   id="post-title-custom"
                   type="text"
@@ -1005,7 +1005,7 @@ export default function PostEditor() {
                       commitNewTitle();
                     }
                   }}
-                  className={`${inputClassName} min-w-0 flex-1`}
+                  className={`${inputClassName} min-h-11 min-w-0 flex-1 sm:min-h-0`}
                   placeholder="Escribe el nuevo título"
                   required
                 />
@@ -1013,7 +1013,7 @@ export default function PostEditor() {
                   type="button"
                   onClick={commitNewTitle}
                   disabled={!form.title.trim()}
-                  className="theme-toolbar-btn shrink-0 px-3 text-sm font-semibold whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50"
+                  className={`${inputClassName} shrink-0 px-3 text-sm font-semibold whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50 sm:px-4`}
                 >
                   Añadir título
                 </button>
@@ -1051,7 +1051,7 @@ export default function PostEditor() {
         />
       ) : null}
 
-      <section className="space-y-4 px-5">
+      <section className="post-editor-sections space-y-3 px-3 sm:px-5">
         <div className="flex items-center justify-between gap-3">
           <EditorActionButton variant="primary" onClick={addSection}>
             + Sección
@@ -1059,8 +1059,8 @@ export default function PostEditor() {
         </div>
 
         {form.sections.map((section, index) => (
-          <div key={section.id} className="space-y-3">
-            <div className="theme-border space-y-3 rounded-xl border p-5">
+          <div key={section.id} className="space-y-2">
+            <div className="theme-border space-y-2 rounded-xl border p-3 sm:p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex min-w-0 flex-1 items-baseline gap-2">
                   <span className="text-[1.35em] font-semibold leading-snug">

@@ -162,6 +162,16 @@
     @apply pt-0;
   }
 
+  .post-editor-title-row button {
+    min-height: 2.75rem;
+  }
+
+  @media (min-width: 640px) {
+    .post-editor-title-row button {
+      min-height: 0;
+    }
+  }
+
   .post-editor-metadata__cell--full {
     @apply border-t border-black/10 p-3 sm:p-4 dark:border-white/10;
   }
