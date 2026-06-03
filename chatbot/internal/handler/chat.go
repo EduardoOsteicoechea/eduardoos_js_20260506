@@ -9,6 +9,7 @@ import (
 
 	"github.com/eduardoos/chatbot/internal/config"
 	"github.com/eduardoos/chatbot/internal/guidelines"
+	"github.com/eduardoos/chatbot/internal/language"
 	"github.com/eduardoos/chatbot/internal/llm"
 	"github.com/eduardoos/chatbot/internal/navigation"
 )
@@ -76,14 +77,16 @@ func Chat(cfg config.Config, guide guidelines.Bundle) http.HandlerFunc {
 
 		pageType := pageTypeFromContext(req.PageContext)
 		siteNav := navigation.ExtractSiteNavigation(req.GlobalContext)
-		systemPrompt := navigation.AppendToSystemPrompt(
-			guidelines.BuildSystemPrompt(
-				guide,
-				cfg.LLMModel,
-				req.PageContext,
-				req.GlobalContext,
-			),
+		systemPrompt := guidelines.BuildSystemPrompt(
+			guide,
+			cfg.LLMModel,
+			req.PageContext,
+			req.GlobalContext,
 		)
+		if langRule := language.Instruction(req.GlobalContext); langRule != "" {
+			systemPrompt = systemPrompt + "\n\n" + langRule
+		}
+		systemPrompt = navigation.AppendToSystemPrompt(systemPrompt)
 
 		var userPrompt strings.Builder
 		for _, item := range req.History {

@@ -23,6 +23,12 @@ export default function ChatbotContextBar() {
             ? globalContext.userDisplayName ?? 'Session active'
             : globalContext.statusMessage}
         </p>
+        <p className="theme-muted mt-1 leading-snug">
+          Reply language:{' '}
+          <span className="font-medium text-inherit">
+            {globalContext.replyLanguage}
+          </span>
+        </p>
       </div>
     </div>
   );

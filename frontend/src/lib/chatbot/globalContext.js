@@ -1,3 +1,4 @@
+import { getChatLanguageConfig, getStoredChatLanguage } from './chatLanguage';
 import { getSiteNavigationContext } from './siteRoutes';
 
 export const GLOBAL_CONTEXT_SCHEMA_VERSION = 1;
@@ -14,13 +15,22 @@ export const GLOBAL_CONTEXT_SCHEMA_VERSION = 1;
  * @property {string | null} userDisplayName
  * @property {string} statusMessage
  * @property {ReturnType<typeof getSiteNavigationContext>} siteNavigation
+ * @property {import('./chatLanguage').ChatLanguageId} preferredLanguage
+ * @property {string} replyLanguage
+ * @property {string} replyLanguageInstruction
  */
 
 /**
  * @param {string} [pathname]
+ * @param {import('./chatLanguage').ChatLanguageId} [preferredLanguage]
  * @returns {GlobalChatContext}
  */
-export function getGlobalChatContext(pathname = '/') {
+export function getGlobalChatContext(
+  pathname = '/',
+  preferredLanguage = getStoredChatLanguage(),
+) {
+  const lang = getChatLanguageConfig(preferredLanguage);
+
   return {
     schemaVersion: GLOBAL_CONTEXT_SCHEMA_VERSION,
     implemented: false,
@@ -28,7 +38,10 @@ export function getGlobalChatContext(pathname = '/') {
     permissions: [],
     userDisplayName: null,
     statusMessage:
-      'Global session context is not available yet. Page context and site navigation are active.',
+      'Page context, site navigation, and reply language preference are active.',
     siteNavigation: getSiteNavigationContext(pathname),
+    preferredLanguage: lang.id,
+    replyLanguage: lang.label,
+    replyLanguageInstruction: lang.replyLanguageInstruction,
   };
 }

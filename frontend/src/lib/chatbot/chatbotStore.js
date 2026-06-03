@@ -1,4 +1,9 @@
 import { isChatbotOpenByDefault } from '../../config/chatbotTrayRoutes';
+import {
+  cycleChatLanguage,
+  getStoredChatLanguage,
+  setStoredChatLanguage,
+} from './chatLanguage';
 import { extractPageContext } from './extractPageContext';
 import { getGlobalChatContext } from './globalContext';
 
@@ -8,6 +13,9 @@ const listeners = new Set();
 let revision = 0;
 let trayOpen = false;
 let pathname = '/';
+
+/** @type {import('./chatLanguage').ChatLanguageId} */
+let preferredLanguage = getStoredChatLanguage();
 
 /** @type {import('./pageContextSchema').PageContextPayload | null} */
 let pageContext = null;
@@ -72,8 +80,24 @@ export function getChatbotPageContext() {
   return pageContext;
 }
 
+export function getChatbotPreferredLanguage() {
+  return preferredLanguage;
+}
+
 export function getChatbotGlobalContext() {
-  return getGlobalChatContext(pathname);
+  return getGlobalChatContext(pathname, preferredLanguage);
+}
+
+/** @param {import('./chatLanguage').ChatLanguageId} languageId */
+export function setChatbotLanguage(languageId) {
+  if (languageId === preferredLanguage) return;
+  preferredLanguage = languageId;
+  setStoredChatLanguage(languageId);
+  emit();
+}
+
+export function cycleChatbotLanguage() {
+  setChatbotLanguage(cycleChatLanguage(preferredLanguage));
 }
 
 export function openChatbotTray() {

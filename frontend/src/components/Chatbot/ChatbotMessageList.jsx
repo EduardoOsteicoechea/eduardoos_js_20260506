@@ -6,14 +6,17 @@ import { navigateTo } from '../../lib/chatbot/navigate';
  */
 
 /**
- * @param {{ messages: ChatMessage[] }} props
+ * @param {{ messages: ChatMessage[], preferredLanguage?: 'en' | 'es' }} props
  */
-export default function ChatbotMessageList({ messages }) {
+export default function ChatbotMessageList({ messages, preferredLanguage = 'en' }) {
   if (!messages.length) {
+    const hint =
+      preferredLanguage === 'es'
+        ? 'Pregunta sobre esta página o el sitio. El idioma de respuesta lo eliges con el botón del globo.'
+        : 'Ask about this page or the site. Pick reply language with the globe button.';
     return (
       <div className="theme-muted flex flex-1 items-center justify-center px-4 text-center text-sm">
-        Pregunta sobre esta página o el sitio. El contexto de la página se envía
-        automáticamente; el contexto global llegará cuando la sesión esté activa.
+        {hint}
       </div>
     );
   }

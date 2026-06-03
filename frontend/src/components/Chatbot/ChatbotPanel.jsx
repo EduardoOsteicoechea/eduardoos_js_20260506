@@ -10,18 +10,33 @@ function buildStubReply(pageType, userText) {
   return `Recibí tu mensaje sobre "${userText.slice(0, 80)}${userText.length > 80 ? '…' : ''}". El servicio chatbot respondió en modo local. Contexto de página: ${pageType}.`;
 }
 
-function buildSuggestion(pageContext) {
-  if (pageContext.pageType === 'home' && pageContext.skillLabels?.length) {
-    return `¿Cómo encajan habilidades como ${pageContext.skillLabels.slice(0, 3).join(', ')} en tu perfil profesional?`;
+/** @param {import('../../lib/chatbot/pageContextSchema').PageContextPayload} pageContext */
+/** @param {import('../../lib/chatbot/chatLanguage').ChatLanguageId} lang */
+function buildSuggestion(pageContext, lang) {
+  const skills = pageContext.skillLabels?.slice(0, 3).join(', ');
+  if (pageContext.pageType === 'home' && skills) {
+    return lang === 'es'
+      ? `¿Cómo encajan habilidades como ${skills} en tu perfil profesional?`
+      : `How do skills like ${skills} fit into your professional profile?`;
   }
   if (pageContext.heading) {
-    return `Resume los puntos clave de "${pageContext.heading}" en este sitio.`;
+    return lang === 'es'
+      ? `Resume los puntos clave de "${pageContext.heading}" en este sitio.`
+      : `Summarize the key points of "${pageContext.heading}" on this site.`;
   }
-  return '¿Qué servicios ofreces y cómo puedo contactarte para un proyecto BIM?';
+  return lang === 'es'
+    ? '¿Qué servicios ofreces y cómo puedo contactarte para un proyecto BIM?'
+    : 'What services do you offer and how can I contact you for a BIM project?';
 }
 
 export default function ChatbotPanel() {
-  const { pageContext, globalContext, closeTray } = useChatbot();
+  const {
+    pageContext,
+    globalContext,
+    closeTray,
+    languageConfig,
+    cycleLanguage,
+  } = useChatbot();
   const [draft, setDraft] = useState('');
   const [messages, setMessages] = useState(
     /** @type {import('./ChatbotMessageList').ChatMessage[]} */ ([]),
@@ -92,8 +107,8 @@ export default function ChatbotPanel() {
   }, []);
 
   const handleSuggest = useCallback(() => {
-    setDraft(buildSuggestion(pageContext));
-  }, [pageContext]);
+    setDraft(buildSuggestion(pageContext, languageConfig.id));
+  }, [languageConfig.id, pageContext]);
 
   return (
     <div className="chatbot-panel theme-surface flex h-full min-h-0 flex-col">
@@ -114,13 +129,20 @@ export default function ChatbotPanel() {
       </header>
 
       <ChatbotContextBar />
-      <ChatbotMessageList messages={messages} />
+      <ChatbotMessageList
+        messages={messages}
+        preferredLanguage={languageConfig.id}
+      />
       <ChatbotInput
         value={draft}
         onChange={setDraft}
         onSend={sendMessage}
         onNewChat={handleNewChat}
         onSuggest={handleSuggest}
+        onCycleLanguage={cycleLanguage}
+        languageLabel={languageConfig.label}
+        languageCode={languageConfig.id.toUpperCase()}
+        inputPlaceholder={languageConfig.inputPlaceholder}
         disabled={busy}
       />
     </div>
