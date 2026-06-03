@@ -16,7 +16,7 @@ if (!config.show) {
   return;
 }
 
-const { overlay, blurPx, position } = config;
+const { blurPx, position } = config;
 const mobileVars = imagePositionStyleVars(position.mobile, '');
 const tabletVars = imagePositionStyleVars(position.tablet, 'tablet');
 const desktopVars = imagePositionStyleVars(position.desktop, 'desktop');
@@ -38,7 +38,6 @@ const wrapStyle = { ...mobileVars, ...tabletVars, ...desktopVars };
   <div
     class="page-background__overlay"
     style={{
-      backgroundColor: overlay,
       backdropFilter: blurPx > 0 ? `blur(${blurPx}px)` : 'none',
       WebkitBackdropFilter: blurPx > 0 ? `blur(${blurPx}px)` : 'none',
     }}
@@ -56,12 +55,14 @@ const wrapStyle = { ...mobileVars, ...tabletVars, ...desktopVars };
     width: 100%;
     pointer-events: none;
     overflow: hidden;
+    background-color: #000;
   }
 
   .page-background__frame {
     position: absolute;
     inset: 0;
     overflow: hidden;
+    background-color: #000;
   }
 
   /* Portrait slot: full viewport height, image fits inside vertically */
@@ -134,5 +135,10 @@ const wrapStyle = { ...mobileVars, ...tabletVars, ...desktopVars };
   .page-background__overlay {
     position: absolute;
     inset: 0;
+    background-color: rgba(255, 255, 255, 0.06);
+  }
+
+  :global(.dark) .page-background__overlay {
+    background-color: rgba(0, 0, 0, 0.4);
   }
 </style>

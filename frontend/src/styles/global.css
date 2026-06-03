@@ -6,9 +6,17 @@
   html {
     --font-family: "Montserrat", sans-serif;
     --activity-bar-height: 45px;
+    --activity-bar-control-size: 2rem;
     scrollbar-gutter: auto;
     scrollbar-width: none;
     @apply antialiased;
+  }
+
+  @media (max-width: 767px) {
+    html {
+      --activity-bar-height: 56px;
+      --activity-bar-control-size: 2.75rem;
+    }
   }
 
   html::-webkit-scrollbar,
@@ -35,31 +43,39 @@
     @apply mx-auto w-full max-w-3xl;
   }
 
+  .page-background {
+    @apply bg-black;
+  }
+
+  .page-background__overlay {
+    @apply bg-white/[0.06] transition-colors duration-200 dark:bg-black/40;
+  }
+
   @media (max-width: 767px) {
     html.page-home .page-background__image-wrap {
-      left: -20vh !important;
+      left: 50% !important;
       top: 0 !important;
       height: 100dvh !important;
       max-height: 100dvh !important;
-      max-width: none;
-      width: auto;
-      transform: scale(var(--bg-scale, 1)) !important;
-      transform-origin: left center;
+      width: min(92vw, 26rem) !important;
+      max-width: 92vw;
+      transform: translateX(-32%) scale(var(--bg-scale, 1)) !important;
+      transform-origin: center center;
       opacity: 1;
     }
 
     html.page-home .page-background__image {
       display: block;
       height: 100%;
-      width: auto;
+      width: 100%;
       min-height: 100%;
       max-height: 100%;
       object-fit: contain;
-      object-position: left center;
+      object-position: center bottom;
     }
 
     html.has-page-background.page-home .home-main {
-      @apply relative z-[2] mx-3 max-w-none rounded-xl border border-black/10 bg-white/90 p-4 shadow-sm backdrop-blur-sm dark:border-white/10 dark:bg-black/88 sm:mx-4 sm:p-5;
+      @apply relative z-[2] mx-3 max-w-none rounded-xl border border-black/15 bg-white/92 p-4 shadow-sm backdrop-blur-sm dark:border-white/15 dark:bg-black/90 sm:mx-4 sm:p-5;
     }
   }
 
@@ -150,12 +166,31 @@
     @apply border-t border-black/10 p-3 sm:p-4 dark:border-white/10;
   }
 
+  .global-activity-bar .activity-bar-control {
+    height: var(--activity-bar-control-size);
+    width: var(--activity-bar-control-size);
+    min-height: var(--activity-bar-control-size);
+    min-width: var(--activity-bar-control-size);
+  }
+
   .global-activity-bar .activity-bar-social-btn {
-    @apply h-8 w-8 min-h-8 min-w-8 p-0;
+    @apply p-0;
   }
 
   .global-activity-bar .activity-bar-social-btn svg {
-    @apply h-7 w-7;
+    height: calc(var(--activity-bar-control-size) - 0.5rem);
+    width: calc(var(--activity-bar-control-size) - 0.5rem);
+  }
+
+  @media (max-width: 767px) {
+    .global-activity-bar .activity-bar-control {
+      @apply text-sm;
+    }
+
+    .global-activity-bar .activity-bar-social-btn svg {
+      height: calc(var(--activity-bar-control-size) - 0.35rem);
+      width: calc(var(--activity-bar-control-size) - 0.35rem);
+    }
   }
 
   .chatbot-panel {

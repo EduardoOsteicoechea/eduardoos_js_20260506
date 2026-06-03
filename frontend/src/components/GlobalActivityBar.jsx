@@ -5,8 +5,10 @@ import { SiteMenu } from './SiteMenu';
 import { useSiteReadingPreferences } from '../hooks/useSiteReadingPreferences';
 import { LINKEDIN_URL, WHATSAPP_URL } from '../lib/contactLinks';
 
-const socialBtn =
-  'theme-toolbar-btn activity-bar-social-btn h-8 w-8 shrink-0 p-0';
+const controlBtn =
+  'theme-toolbar-btn activity-bar-control shrink-0 p-0';
+
+const socialBtn = `${controlBtn} activity-bar-social-btn`;
 
 export default function GlobalActivityBar() {
   const prefs = useSiteReadingPreferences();
@@ -20,7 +22,7 @@ export default function GlobalActivityBar() {
       <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto overflow-y-hidden px-3 sm:gap-3 sm:px-4">
         <EditorActionButton
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="flex h-8 w-8 shrink-0 items-center justify-center p-0"
+          className={`${controlBtn} flex items-center justify-center`}
           title="Ir al inicio"
           aria-label="Ir al inicio"
         >
@@ -34,7 +36,7 @@ export default function GlobalActivityBar() {
               behavior: 'smooth',
             })
           }
-          className="flex h-8 w-8 shrink-0 items-center justify-center p-0"
+          className={`${controlBtn} flex items-center justify-center`}
           title="Ir al final"
           aria-label="Ir al final"
         >
@@ -65,7 +67,7 @@ export default function GlobalActivityBar() {
           <LinkedInIcon />
         </a>
 
-        <ChatbotToggleButton />
+        <ChatbotToggleButton className="activity-bar-control" />
         {prefs.ready ? (
           <SiteMenu
             theme={prefs.theme}
@@ -77,7 +79,10 @@ export default function GlobalActivityBar() {
             onSelectFont={prefs.onSelectFont}
           />
         ) : (
-          <span className="theme-muted inline-block h-8 w-8" aria-hidden="true" />
+          <span
+            className="theme-muted inline-block activity-bar-control"
+            aria-hidden="true"
+          />
         )}
       </div>
     </footer>

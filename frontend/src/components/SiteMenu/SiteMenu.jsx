@@ -172,7 +172,7 @@ export default function SiteMenu({
       <button
         type="button"
         onClick={toggleMenu}
-        className={`site-menu-toggle theme-toolbar-btn relative z-[230] h-8 w-8 shrink-0 p-0 ${
+        className={`site-menu-toggle theme-toolbar-btn activity-bar-control relative z-[230] shrink-0 p-0 ${
           menuOpen ? 'ring-2 ring-black dark:ring-white' : ''
         }`}
         aria-label={
