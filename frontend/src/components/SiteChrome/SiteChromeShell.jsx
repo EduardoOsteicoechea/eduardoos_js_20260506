@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import ChatbotTray from '../Chatbot/ChatbotTray';
-import GlobalActivityBar from '../GlobalActivityBar';
+import { ActivityBar } from '../ActivityBar';
 import {
   initChatbotStore,
   setChatbotPathname,
@@ -43,7 +43,7 @@ export default function SiteChromeShell({
       </div>
       {showActivityBar ? (
         <div className="site-chrome__bar">
-          <GlobalActivityBar />
+          <ActivityBar pathname={pathname} />
         </div>
       ) : null}
     </div>,

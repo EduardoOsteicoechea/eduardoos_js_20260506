@@ -3,7 +3,7 @@ import EditorActionButton from '../EditorActionButton';
 import EditorStatusNotice from '../EditorStatusNotice';
 import SavePasswordModal from './SavePasswordModal';
 import CatalogSelect from './CatalogSelect';
-import PostEditorActivityBar from './PostEditorActivityBar';
+import { ActivityBar } from '../ActivityBar';
 import PostEditorPreviewModal from './PostEditorPreviewModal';
 import {
   canEditChapter,
@@ -1202,7 +1202,7 @@ export default function PostEditor() {
         </div>
       ) : null}
 
-      <PostEditorActivityBar actions={activityActions} />
+      <ActivityBar pathname="/post/editor" leftActions={activityActions} />
     </div>
   );
 }

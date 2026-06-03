@@ -13,7 +13,7 @@
   }
 
   @media (max-width: 767px) {
-    html {
+    html.page-home {
       --activity-bar-height: 56px;
       --activity-bar-control-size: 2.75rem;
     }
@@ -176,28 +176,57 @@
     @apply border-t border-black/10 p-3 sm:p-4 dark:border-white/10;
   }
 
-  .global-activity-bar .activity-bar-control {
+  .activity-bar {
+    pointer-events: auto;
+    --activity-bar-height: 45px;
+    --activity-bar-control-size: 2rem;
+  }
+
+  .activity-bar--home {
+    --activity-bar-height: 45px;
+    --activity-bar-control-size: 2rem;
+  }
+
+  @media (max-width: 767px) {
+    .activity-bar--home {
+      --activity-bar-height: 56px;
+      --activity-bar-control-size: 2.75rem;
+    }
+
+    html.page-home {
+      --activity-bar-height: 56px;
+      --activity-bar-control-size: 2.75rem;
+    }
+  }
+
+  .activity-bar--standard,
+  .activity-bar--editor {
+    --activity-bar-height: 45px;
+    --activity-bar-control-size: 2rem;
+  }
+
+  .activity-bar .activity-bar-control {
     height: var(--activity-bar-control-size);
     width: var(--activity-bar-control-size);
     min-height: var(--activity-bar-control-size);
     min-width: var(--activity-bar-control-size);
   }
 
-  .global-activity-bar .activity-bar-social-btn {
+  .activity-bar .activity-bar-social-btn {
     @apply p-0;
   }
 
-  .global-activity-bar .activity-bar-social-btn svg {
+  .activity-bar .activity-bar-social-btn svg {
     height: calc(var(--activity-bar-control-size) - 0.5rem);
     width: calc(var(--activity-bar-control-size) - 0.5rem);
   }
 
   @media (max-width: 767px) {
-    .global-activity-bar .activity-bar-control {
+    .activity-bar--home .activity-bar-control {
       @apply text-sm;
     }
 
-    .global-activity-bar .activity-bar-social-btn svg {
+    .activity-bar--home .activity-bar-social-btn svg {
       height: calc(var(--activity-bar-control-size) - 0.35rem);
       width: calc(var(--activity-bar-control-size) - 0.35rem);
     }
@@ -280,10 +309,6 @@
   .article-generator audio {
     @apply h-10 w-full;
     color-scheme: light dark;
-  }
-
-  .global-activity-bar {
-    pointer-events: auto;
   }
 
   .site-menu-drawer {
