@@ -11,11 +11,20 @@ import {
   readSeriesArticle,
 } from '../seriesCatalog.js';
 
+function postsDbUnavailable(error: unknown): void {
+  const message = error instanceof Error ? error.message : String(error);
+  console.warn(`[series] posts-db unavailable, using filesystem fallback: ${message}`);
+}
+
 export async function getSeriesCatalog(_req: Request, res: Response) {
   try {
     if (isPostsDbConfigured()) {
-      const catalog = await fetchPostsDbCatalog();
-      return res.json(catalog);
+      try {
+        const catalog = await fetchPostsDbCatalog();
+        return res.json(catalog);
+      } catch (dbError) {
+        postsDbUnavailable(dbError);
+      }
     }
 
     const catalog = await buildSeriesCatalog();
@@ -53,8 +62,12 @@ export async function getSeriesArticles(req: Request, res: Response) {
 
   try {
     if (isPostsDbConfigured()) {
-      const articles = await fetchPostsDbArticles(serie, chapter);
-      return res.json({ articles });
+      try {
+        const articles = await fetchPostsDbArticles(serie, chapter);
+        return res.json({ articles });
+      } catch (dbError) {
+        postsDbUnavailable(dbError);
+      }
     }
 
     const articles = await listSeriesArticles(serie, chapter);

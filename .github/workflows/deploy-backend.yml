@@ -88,6 +88,21 @@ jobs:
             fi
 
             sudo cp /tmp/eduardoos-backend.service /etc/systemd/system/eduardoos-backend.service
+
+            if systemctl cat eduardoos-database.service &>/dev/null; then
+              echo "==> ensure eduardoos-database is running before backend health check"
+              sudo systemctl daemon-reload
+              sudo systemctl enable eduardoos-database 2>/dev/null || true
+              sudo systemctl restart eduardoos-database
+              sleep 2
+              if ! curl -sf "http://127.0.0.1:8120/health" >/dev/null; then
+                echo "WARN: posts-db /health failed — backend will use filesystem fallback until database is up"
+                journalctl -u eduardoos-database -n 20 --no-pager || true
+              fi
+            else
+              echo "WARN: eduardoos-database.service not installed yet (run Deploy Database workflow or set up manually)"
+            fi
+
             chmod +x /tmp/ec2-node-service.sh
             /tmp/ec2-node-service.sh \
               "\$REMOTE_DIR" \
