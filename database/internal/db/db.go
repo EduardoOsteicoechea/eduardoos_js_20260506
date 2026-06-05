@@ -44,15 +44,3 @@ func (s *Store) Close() error {
 	return s.DB.Close()
 }
 
-func (s *Store) migrate() error {
-	for _, stmt := range []string{
-		createSeriesTable,
-		createPostsTable,
-		createPostsSeriesChapterIndex,
-	} {
-		if _, err := s.DB.Exec(stmt); err != nil {
-			return fmt.Errorf("migrate: %w", err)
-		}
-	}
-	return nil
-}

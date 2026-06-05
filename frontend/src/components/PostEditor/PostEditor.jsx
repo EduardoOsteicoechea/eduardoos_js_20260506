@@ -85,38 +85,38 @@ function createUnitFromBlock(block) {
     };
   }
 
-  if (block.image != null || block.fileName != null) {
+  if (block.image != null || block.name != null || block.fileName != null) {
     return {
       id,
       type: 'image',
       data: {
         image: String(block.image ?? ''),
         alt: String(block.alt ?? ''),
-        ...(block.fileName ? { fileName: String(block.fileName) } : {}),
+        name: String(block.name ?? block.fileName ?? ''),
       },
     };
   }
 
-  if (block.video != null || block.caption != null || block.fileName != null) {
+  if (block.video != null || block.caption != null || block.name != null || block.fileName != null) {
     return {
       id,
       type: 'video',
       data: {
         video: String(block.video ?? ''),
         alt: String(block.text ?? block.caption ?? ''),
-        ...(block.fileName ? { fileName: String(block.fileName) } : {}),
+        name: String(block.name ?? block.fileName ?? ''),
       },
     };
   }
 
-  if (block.audio != null || block.label != null || block.fileName != null) {
+  if (block.audio != null || block.label != null || block.name != null || block.fileName != null) {
     return {
       id,
       type: 'audio',
       data: {
         audio: String(block.audio ?? ''),
         text: String(block.text ?? block.label ?? ''),
-        ...(block.fileName ? { fileName: String(block.fileName) } : {}),
+        name: String(block.name ?? block.fileName ?? ''),
       },
     };
   }
@@ -176,7 +176,6 @@ export default function PostEditor() {
   const [loadedArticleId, setLoadedArticleId] = useState('');
   const [titleIsCustom, setTitleIsCustom] = useState(true);
   const [editingSectionId, setEditingSectionId] = useState(null);
-  const [pendingMediaFiles, setPendingMediaFiles] = useState(() => new Map());
   const [previewModalOpen, setPreviewModalOpen] = useState(false);
   const [deleteSectionId, setDeleteSectionId] = useState(null);
   const [deleteSectionInput, setDeleteSectionInput] = useState('');
@@ -728,14 +727,6 @@ export default function PostEditor() {
     const payload = validateEditorForExport();
     if (!payload) return;
 
-    if (pendingMediaFiles.size > 0) {
-      showNotice(
-        'warning',
-        'Hay archivos nuevos sin guardar. Guarda el artículo antes del PDF para incluirlos.',
-      );
-      return;
-    }
-
     setIsGeneratingPdf(true);
     try {
       await downloadArticlePdf(payload);
@@ -749,7 +740,7 @@ export default function PostEditor() {
     } finally {
       setIsGeneratingPdf(false);
     }
-  }, [clearNotice, pendingMediaFiles, showNotice, validateEditorForExport]);
+  }, [clearNotice, showNotice, validateEditorForExport]);
 
   const handleSaveWithPassword = async (password) => {
     setIsSubmitting(true);
@@ -773,8 +764,7 @@ export default function PostEditor() {
         return;
       }
 
-      const files = Array.from(pendingMediaFiles.values());
-      const save = await savePostPayloadWithAssets(payload, files);
+      const save = await savePostPayloadWithAssets(payload);
       console.log('Save /api/post/editor/:', save.response.status, save.data);
 
       if (!save.response.ok) {
@@ -783,7 +773,6 @@ export default function PostEditor() {
       }
 
       setModalOpen(false);
-      setPendingMediaFiles(new Map());
       showNotice('success', 'Artículo guardado correctamente.');
 
       if (!selectedExistingArticle?.articleId && effectiveSerie && effectiveChapter) {
@@ -1131,21 +1120,7 @@ export default function PostEditor() {
       {editingSection ? (
         <SectionEditModal
           section={editingSection}
-          initialPendingFiles={pendingMediaFiles}
-          onSave={(updatedSection, sectionPendingFiles) => {
-            const previousUnitIds = new Set(
-              (editingSection.content ?? []).map((unit) => unit.id),
-            );
-
-            setPendingMediaFiles((previous) => {
-              const next = new Map(previous);
-              for (const unitId of previousUnitIds) next.delete(unitId);
-              for (const [unitId, file] of sectionPendingFiles.entries()) {
-                next.set(unitId, file);
-              }
-              return next;
-            });
-
+          onSave={(updatedSection) => {
             updateSection(updatedSection.id, {
               heading: updatedSection.heading,
               content: updatedSection.content,

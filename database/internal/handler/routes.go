@@ -13,11 +13,17 @@ func Register(mux *http.ServeMux, cfg config.Config, store *db.Store) {
 
 	mux.HandleFunc("GET /health", Health)
 
-	protected := http.NewServeMux()
-	protected.HandleFunc("GET /catalog", api.Catalog)
-	protected.HandleFunc("GET /series", api.ListSeries)
-	protected.HandleFunc("GET /posts", api.ListPosts)
-	protected.HandleFunc("GET /post", api.GetPost)
+	registerProtected := func(pattern string, handler http.HandlerFunc) {
+		mux.Handle(pattern, auth.Middleware(cfg, handler))
+	}
 
-	mux.Handle("/", auth.Middleware(cfg, protected))
+	registerProtected("GET /catalog", api.Catalog)
+	registerProtected("GET /series", api.ListSeries)
+	registerProtected("GET /posts", api.ListPosts)
+	registerProtected("GET /post", api.GetPost)
+	registerProtected("GET /article", api.GetArticle)
+	registerProtected("GET /hub", api.GetHub)
+	registerProtected("GET /discover", api.Discover)
+	registerProtected("GET /posts/next-id", api.NextArticleID)
+	registerProtected("POST /article/save", api.SaveArticle)
 }

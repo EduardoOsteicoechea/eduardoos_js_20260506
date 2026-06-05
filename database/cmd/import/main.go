@@ -12,11 +12,6 @@ import (
 	"github.com/eduardoos/database/internal/db"
 )
 
-type hubPostMeta struct {
-	Name string  `json:"name"`
-	ID   float64 `json:"id"`
-}
-
 func main() {
 	seriesRoot := flag.String("series-root", "../backend/public/data/series", "path to series data root")
 	dbPath := flag.String("db", "posts.db", "sqlite database path")
@@ -28,30 +23,27 @@ func main() {
 	}
 	defer store.Close()
 
-	entries, err := os.ReadDir(*seriesRoot)
+	importedHubs := 0
+	importedArticles := 0
+
+	serieEntries, err := os.ReadDir(*seriesRoot)
 	if err != nil {
 		log.Fatalf("read series root: %v", err)
 	}
 
-	importedSeries := 0
-	importedPosts := 0
-
-	for _, serieEntry := range entries {
+	for _, serieEntry := range serieEntries {
 		if !serieEntry.IsDir() {
 			continue
 		}
 
 		serieSlug := serieEntry.Name()
-		seriesID, err := store.UpsertSeries(serieSlug, serieSlug)
-		if err != nil {
+		if _, err := store.UpsertSeries(serieSlug, serieSlug); err != nil {
 			log.Fatalf("upsert series %s: %v", serieSlug, err)
 		}
-		importedSeries++
 
 		seriePath := filepath.Join(*seriesRoot, serieSlug)
 		chapterEntries, err := os.ReadDir(seriePath)
 		if err != nil {
-			log.Printf("skip chapters for %s: %v", serieSlug, err)
 			continue
 		}
 
@@ -62,8 +54,18 @@ func main() {
 
 			chapterSlug := chapterEntry.Name()
 			chapterPath := filepath.Join(seriePath, chapterSlug)
-			metaIDs := readHubPostIDs(filepath.Join(chapterPath, "data.json"))
+			hubPath := filepath.Join(chapterPath, "data.json")
 
+			if hub, ok := readJSONFile(hubPath); ok && isHubData(hub) {
+				seriesID, _ := store.UpsertSeries(serieSlug, serieSlug)
+				_ = seriesID
+				if err := store.UpsertChapter(seriesID, chapterSlug, hub); err != nil {
+					log.Fatalf("upsert hub %s/%s: %v", serieSlug, chapterSlug, err)
+				}
+				importedHubs++
+			}
+
+			metaIDs := readHubPostIDs(hubPath)
 			postEntries, err := os.ReadDir(chapterPath)
 			if err != nil {
 				continue
@@ -75,64 +77,102 @@ func main() {
 				}
 
 				postSlug := postEntry.Name()
-				dataPath := filepath.Join(chapterPath, postSlug, "data.json")
-				title, author := readArticleMeta(dataPath, postSlug)
-
-				sortOrder := 0
-				if id, ok := metaIDs[postSlug]; ok {
-					sortOrder = id
+				articlePath := filepath.Join(chapterPath, postSlug, "data.json")
+				article, ok := readJSONFile(articlePath)
+				if !ok || !isArticleData(article) {
+					continue
 				}
 
-				if err := store.UpsertPost(seriesID, chapterSlug, postSlug, title, author, sortOrder); err != nil {
-					log.Fatalf("upsert post %s/%s/%s: %v", serieSlug, chapterSlug, postSlug, err)
+				article["serie"] = serieSlug
+				article["series"] = serieSlug
+				article["chapter"] = chapterSlug
+				article["section"] = chapterSlug
+				article["folder_name"] = postSlug
+				article["article_id"] = postSlug
+
+				input, err := db.ParseSaveArticlePayload(article)
+				if err != nil {
+					log.Printf("skip %s/%s/%s: %v", serieSlug, chapterSlug, postSlug, err)
+					continue
 				}
-				importedPosts++
+
+				input.SeriesSlug = serieSlug
+				input.Chapter = chapterSlug
+				input.Slug = postSlug
+				if sortOrder, ok := metaIDs[postSlug]; ok {
+					input.SortOrder = sortOrder
+				}
+				if input.SortOrder <= 0 {
+					next, _ := store.NextArticleSortOrder(serieSlug, chapterSlug)
+					input.SortOrder = next
+				}
+
+				sermonPath := filepath.Join(chapterPath, postSlug, "sermon.mp3")
+				if _, err := os.Stat(sermonPath); err == nil {
+					input.SermonURL = fmt.Sprintf("/data/series/%s/%s/%s/sermon.mp3", serieSlug, chapterSlug, postSlug)
+				}
+
+				if _, _, err := store.SaveArticle(input); err != nil {
+					log.Fatalf("save article %s/%s/%s: %v", serieSlug, chapterSlug, postSlug, err)
+				}
+				importedArticles++
 			}
 		}
 	}
 
-	fmt.Printf("import complete: %d series, %d posts -> %s\n", importedSeries, importedPosts, *dbPath)
+	fmt.Printf("import complete: %d hubs, %d articles -> %s\n", importedHubs, importedArticles, *dbPath)
+}
+
+func readJSONFile(path string) (map[string]any, bool) {
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		return nil, false
+	}
+	var parsed map[string]any
+	if err := json.Unmarshal(raw, &parsed); err != nil {
+		return nil, false
+	}
+	return parsed, true
+}
+
+func isArticleData(data map[string]any) bool {
+	title, _ := data["title"].(string)
+	sections, _ := data["sections"].([]any)
+	return strings.TrimSpace(title) != "" && len(sections) > 0
+}
+
+func isHubData(data map[string]any) bool {
+	posts, _ := data["posts"].([]any)
+	if len(posts) == 0 {
+		return false
+	}
+	_, hasTitle := data["title"].(string)
+	sections, _ := data["sections"].([]any)
+	return !hasTitle || len(sections) == 0
 }
 
 func readHubPostIDs(path string) map[string]int {
-	raw, err := os.ReadFile(path)
-	if err != nil {
+	data, ok := readJSONFile(path)
+	if !ok {
 		return map[string]int{}
 	}
-
-	var parsed struct {
-		Posts []hubPostMeta `json:"posts"`
-	}
-	if err := json.Unmarshal(raw, &parsed); err != nil {
-		return map[string]int{}
-	}
-
-	out := make(map[string]int)
-	for _, post := range parsed.Posts {
-		name := strings.TrimSpace(post.Name)
+	posts, _ := data["posts"].([]any)
+	out := map[string]int{}
+	for _, item := range posts {
+		post, ok := item.(map[string]any)
+		if !ok {
+			continue
+		}
+		name := strings.TrimSpace(fmt.Sprint(post["name"]))
 		if name == "" {
 			continue
 		}
-		out[name] = int(post.ID)
+		switch id := post["id"].(type) {
+		case float64:
+			out[name] = int(id)
+		case int:
+			out[name] = id
+		}
 	}
 	return out
-}
-
-func readArticleMeta(path, fallbackSlug string) (title, author string) {
-	raw, err := os.ReadFile(path)
-	if err != nil {
-		return fallbackSlug, ""
-	}
-
-	var parsed map[string]any
-	if err := json.Unmarshal(raw, &parsed); err != nil {
-		return fallbackSlug, ""
-	}
-
-	title = strings.TrimSpace(fmt.Sprint(parsed["title"]))
-	if title == "" {
-		title = fallbackSlug
-	}
-	author = strings.TrimSpace(fmt.Sprint(parsed["creator"]))
-	return title, author
 }

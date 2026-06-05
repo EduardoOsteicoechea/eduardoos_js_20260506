@@ -86,14 +86,12 @@ export function UnitPreviewBody({ unit }) {
         {src ? (
           <img
             src={src}
-            alt={normalized.label || normalized.fileName || ''}
+            alt={normalized.label || normalized.name || ''}
             className="max-h-32 w-auto rounded"
           />
         ) : (
           <p className={`${previewClassName} italic`}>
-            {normalized.fileName
-              ? `Imagen: ${normalized.fileName}`
-              : 'Imagen sin archivo'}
+            {normalized.name ? `Imagen: ${normalized.name}` : 'Imagen sin URL'}
           </p>
         )}
         {normalized.label ? (
@@ -111,9 +109,7 @@ export function UnitPreviewBody({ unit }) {
           <video src={src} controls className="max-h-32 w-full rounded" />
         ) : (
           <p className={`${previewClassName} italic`}>
-            {normalized.fileName
-              ? `Video: ${normalized.fileName}`
-              : 'Video sin archivo'}
+            {normalized.name ? `Video: ${normalized.name}` : 'Video sin URL'}
           </p>
         )}
         {normalized.label ? (
@@ -130,9 +126,7 @@ export function UnitPreviewBody({ unit }) {
         {src ? <audio src={src} controls className="w-full" /> : null}
         <p className={previewClassName}>
           {normalized.label ||
-            (normalized.fileName
-              ? `Audio: ${normalized.fileName}`
-              : 'Audio sin archivo')}
+            (normalized.name ? `Audio: ${normalized.name}` : 'Audio sin URL')}
         </p>
       </figure>
     );

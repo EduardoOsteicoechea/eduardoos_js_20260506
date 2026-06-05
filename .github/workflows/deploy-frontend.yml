@@ -33,15 +33,33 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Sync series data for static build
+      - name: Sync static media assets for /data/series URLs
         run: |
           mkdir -p public/data/series
           if [ -d ../backend/public/data/series ]; then
             rsync -a ../backend/public/data/series/ public/data/series/
           fi
 
+      - name: Setup Go for posts-db static discover
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache-dependency-path: database/go.sum
+
       - name: Build Astro Site
-        run: npm run build
+        env:
+          POSTS_DB_URL: http://127.0.0.1:8120
+          POSTS_DB_INTERNAL_TOKEN: ci-build-posts-db-token
+        run: |
+          cd ../database
+          CGO_ENABLED=0 go build -o postsdb ./cmd/server
+          export DB_PATH=posts.db
+          export POSTS_DB_INTERNAL_TOKEN=ci-build-posts-db-token
+          ./postsdb > /tmp/postsdb.log 2>&1 &
+          sleep 2
+          curl -sf http://127.0.0.1:8120/health
+          cd ../frontend
+          npm run build
 
       - name: Sync to EC2 Nginx Directory
         env:

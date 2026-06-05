@@ -31,26 +31,26 @@ export function unitIsMediaType(type) {
 export function normalizeMediaUnitData(type, data) {
   const srcKey = type === 'image' ? 'image' : type === 'video' ? 'video' : 'audio';
   return {
-    src: String(data[srcKey] ?? ''),
+    src: String(data[srcKey] ?? data.url ?? ''),
     label: String(data.label ?? data.alt ?? data.text ?? ''),
-    fileName: String(data.fileName ?? ''),
+    name: String(data.name ?? data.fileName ?? ''),
   };
 }
 
 /**
  * @param {'image' | 'video' | 'audio'} type
- * @param {{ src?: string, label?: string, fileName?: string }} fields
+ * @param {{ src?: string, label?: string, name?: string }} fields
  */
 export function commitMediaUnitFields(type, fields) {
   const src = String(fields.src ?? '').trim();
   const label = String(fields.label ?? '').trim();
-  const fileName = String(fields.fileName ?? '').trim();
+  const name = String(fields.name ?? '').trim();
 
   if (type === 'image') {
     return {
       ...(src ? { image: src } : {}),
       ...(label ? { alt: label } : {}),
-      ...(fileName ? { fileName } : {}),
+      ...(name ? { name } : {}),
     };
   }
 
@@ -58,14 +58,14 @@ export function commitMediaUnitFields(type, fields) {
     return {
       ...(src ? { video: src } : {}),
       ...(label ? { alt: label } : {}),
-      ...(fileName ? { fileName } : {}),
+      ...(name ? { name } : {}),
     };
   }
 
   return {
     ...(src ? { audio: src } : {}),
     ...(label ? { text: label } : {}),
-    ...(fileName ? { fileName } : {}),
+    ...(name ? { name } : {}),
   };
 }
 
@@ -281,7 +281,7 @@ export function unitToEditorPreviewBlock(unit) {
     return {
       image: String(data.src ?? data.image ?? ''),
       alt: String(data.label ?? data.alt ?? ''),
-      ...(data.fileName ? { fileName: data.fileName } : {}),
+      ...(data.name ? { name: data.name } : {}),
     };
   }
 
@@ -289,7 +289,7 @@ export function unitToEditorPreviewBlock(unit) {
     return {
       video: String(data.src ?? data.video ?? ''),
       caption: String(data.label ?? data.alt ?? ''),
-      ...(data.fileName ? { fileName: data.fileName } : {}),
+      ...(data.name ? { name: data.name } : {}),
     };
   }
 
@@ -297,7 +297,7 @@ export function unitToEditorPreviewBlock(unit) {
     return {
       audio: String(data.src ?? data.audio ?? ''),
       label: String(data.label ?? data.text ?? ''),
-      ...(data.fileName ? { fileName: data.fileName } : {}),
+      ...(data.name ? { name: data.name } : {}),
     };
   }
 
@@ -360,9 +360,10 @@ export function unitToArticleBlock(unit) {
 
   if (unit.type === 'image') {
     const image = String(data.src ?? data.image ?? '').trim();
-    const fileName = String(data.fileName ?? '').trim();
-    if (!image && !fileName) return null;
-    const block = image ? { image } : { fileName };
+    if (!image) return null;
+    const block = { image };
+    const name = String(data.name ?? data.fileName ?? '').trim();
+    if (name) block.name = name;
     const alt = String(data.label ?? data.alt ?? '').trim();
     if (alt) block.alt = alt;
     return block;
@@ -370,9 +371,10 @@ export function unitToArticleBlock(unit) {
 
   if (unit.type === 'video') {
     const video = String(data.src ?? data.video ?? '').trim();
-    const fileName = String(data.fileName ?? '').trim();
-    if (!video && !fileName) return null;
-    const block = video ? { video } : { fileName };
+    if (!video) return null;
+    const block = { video };
+    const name = String(data.name ?? data.fileName ?? '').trim();
+    if (name) block.name = name;
     const caption = String(data.label ?? data.alt ?? '').trim();
     if (caption) block.text = caption;
     return block;
@@ -380,9 +382,10 @@ export function unitToArticleBlock(unit) {
 
   if (unit.type === 'audio') {
     const audio = String(data.src ?? data.audio ?? '').trim();
-    const fileName = String(data.fileName ?? '').trim();
-    if (!audio && !fileName) return null;
-    const block = audio ? { audio } : { fileName };
+    if (!audio) return null;
+    const block = { audio };
+    const name = String(data.name ?? data.fileName ?? '').trim();
+    if (name) block.name = name;
     const text = String(data.label ?? data.text ?? '').trim();
     if (text) block.text = text;
     return block;

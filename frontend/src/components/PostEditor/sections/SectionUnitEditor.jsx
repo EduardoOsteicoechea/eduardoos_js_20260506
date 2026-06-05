@@ -12,13 +12,7 @@ import {
   unitSupportsTextEmphasis,
 } from './unitContentModel';
 
-export default function SectionUnitEditor({
-  unit,
-  pendingFile,
-  onPendingFileChange,
-  onCommit,
-  onRemove,
-}) {
+export default function SectionUnitEditor({ unit, onCommit, onRemove }) {
   const normalized = normalizeUnitData(unit);
   const [draft, setDraft] = useState(normalized);
 
@@ -50,13 +44,7 @@ export default function SectionUnitEditor({
 
     if (unitIsMediaType(unit.type)) {
       return (
-        <MediaUnitEditor
-          type={unit.type}
-          draft={draft}
-          pendingFile={pendingFile}
-          onPendingFileChange={onPendingFileChange}
-          onChange={setDraft}
-        />
+        <MediaUnitEditor type={unit.type} draft={draft} onChange={setDraft} />
       );
     }
 

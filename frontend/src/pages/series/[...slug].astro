@@ -13,11 +13,7 @@ import SeriesHubPosts from "../../components/series/SeriesHubPosts.astro";
 
 import {
 
-  discoverArticles,
-
-  discoverHubs,
-
-  discoverSeriesSlugs,
+  loadDiscoverSnapshot,
 
   formatSegmentLabel,
 
@@ -87,15 +83,11 @@ type PageProps = ArticleProps | HubProps | IndexProps;
 
 export async function getStaticPaths() {
 
-  const articles = await discoverArticles();
-
-  const hubs = await discoverHubs();
+  const { articles, hubs, slugs } = await loadDiscoverSnapshot();
 
   const hubBySlug = new Map(hubs.map((hub) => [hub.slug, hub]));
 
   const articleBySlug = new Map(articles.map((article) => [article.slug, article]));
-
-  const slugs = await discoverSeriesSlugs();
 
 
 

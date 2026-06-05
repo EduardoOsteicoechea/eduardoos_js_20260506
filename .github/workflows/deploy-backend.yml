@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'backend/**'
+      - 'database/posts.db'
       - 'deploy/systemd/eduardoos-backend.service'
       - 'deploy/scripts/ec2-node-service.sh'
       - '.github/workflows/deploy-backend.yml'

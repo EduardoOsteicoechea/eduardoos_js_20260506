@@ -50,31 +50,6 @@ func (s *Store) BuildCatalog() (Catalog, error) {
 	return catalog, nil
 }
 
-func (s *Store) listChaptersForSeriesID(seriesID int64) ([]string, error) {
-	rows, err := s.DB.Query(`
-SELECT DISTINCT chapter
-FROM posts
-WHERE series_id = ?
-ORDER BY chapter COLLATE NOCASE`, seriesID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var chapters []string
-	for rows.Next() {
-		var chapter string
-		if err := rows.Scan(&chapter); err != nil {
-			return nil, err
-		}
-		chapters = append(chapters, chapter)
-	}
-	if chapters == nil {
-		chapters = []string{}
-	}
-	return chapters, rows.Err()
-}
-
 func (s *Store) ListPosts(seriesSlug, chapter string) ([]ArticleOption, error) {
 	rows, err := s.DB.Query(`
 SELECT p.sort_order, p.slug, p.title

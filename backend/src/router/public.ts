@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import multer from 'multer';
 import {
   chatbotPublicAuth,
   proxyChatbot,
@@ -14,25 +13,21 @@ import {
   getSeriesArticle,
   getSeriesArticles,
   getSeriesCatalog,
+  getSeriesDiscover,
+  getSeriesHub,
   getSeriesNextArticleId,
 } from '../handlers/seriesHandlers.js';
-
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: {
-    fileSize: 25 * 1024 * 1024,
-    files: 32,
-  },
-});
 
 export const publicRouter = Router();
 
 publicRouter.get('/series/catalog', getSeriesCatalog);
+publicRouter.get('/series/discover', getSeriesDiscover);
+publicRouter.get('/series/hub', getSeriesHub);
 publicRouter.get('/series/next-article-id', getSeriesNextArticleId);
 publicRouter.get('/series/articles', getSeriesArticles);
 publicRouter.get('/series/article', getSeriesArticle);
 publicRouter.post('/auth/post/editor/', validatePostEditorPassword);
-publicRouter.post('/post/editor/', upload.any(), savePostEditorArticle);
+publicRouter.post('/post/editor/', savePostEditorArticle);
 publicRouter.post('/documents/article-pdf', downloadArticlePdf);
 publicRouter.post('/chatbot', chatbotPublicAuth, proxyChatbot);
 publicRouter.get('/pdf/capabilities', getPdfCapabilities);

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { unitIsMediaType } from './unitContentModel';
 import { createPortal } from 'react-dom';
 import { addUnitToSection } from './actions/addUnitToSection';
 import SectionEditActivityBar from './SectionEditActivityBar';
@@ -7,16 +6,10 @@ import SectionUnitEditor from './SectionUnitEditor';
 import UnitTypeTray from './UnitTypeTray';
 import { inputClassName } from './editorInputStyles';
 
-export default function SectionEditModal({
-  section,
-  initialPendingFiles = new Map(),
-  onSave,
-  onClose,
-}) {
+export default function SectionEditModal({ section, onSave, onClose }) {
   const [draftSection, setDraftSection] = useState(section);
   const [typeTrayOpen, setTypeTrayOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [pendingMediaFiles, setPendingMediaFiles] = useState(() => new Map());
 
   useEffect(() => {
     setMounted(true);
@@ -25,16 +18,7 @@ export default function SectionEditModal({
   useEffect(() => {
     setDraftSection(section);
     setTypeTrayOpen(false);
-    setPendingMediaFiles(() => {
-      const next = new Map();
-      const unitIds = new Set((section.content ?? []).map((unit) => unit.id));
-
-      for (const [unitId, file] of initialPendingFiles.entries()) {
-        if (unitIds.has(unitId)) next.set(unitId, file);
-      }
-      return next;
-    });
-  }, [section, initialPendingFiles]);
+  }, [section]);
 
   useEffect(() => {
     if (!mounted) return undefined;
@@ -70,17 +54,7 @@ export default function SectionEditModal({
     setTypeTrayOpen(false);
   };
 
-  const setPendingMediaFile = useCallback((unitId, file) => {
-    setPendingMediaFiles((previous) => {
-      const next = new Map(previous);
-      if (file) next.set(unitId, file);
-      else next.delete(unitId);
-      return next;
-    });
-  }, []);
-
   const handleRemoveUnit = (unitId) => {
-    setPendingMediaFile(unitId, null);
     setDraftSection((previous) => ({
       ...previous,
       content: (previous.content ?? []).filter((unit) => unit.id !== unitId),
@@ -88,7 +62,7 @@ export default function SectionEditModal({
   };
 
   const handleDone = () => {
-    onSave(draftSection, pendingMediaFiles);
+    onSave(draftSection);
   };
 
   if (!mounted) return null;
@@ -127,12 +101,6 @@ export default function SectionEditModal({
               <li key={unit.id}>
                 <SectionUnitEditor
                   unit={unit}
-                  pendingFile={
-                    unitIsMediaType(unit.type)
-                      ? pendingMediaFiles.get(unit.id) ?? null
-                      : null
-                  }
-                  onPendingFileChange={(file) => setPendingMediaFile(unit.id, file)}
                   onCommit={updateUnitData}
                   onRemove={handleRemoveUnit}
                 />
