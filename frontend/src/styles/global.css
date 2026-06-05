@@ -339,6 +339,14 @@
     border-color: var(--site-chrome-bar-border);
   }
 
+  .activity-bar .ui-control {
+    @apply border-0;
+  }
+
+  .activity-bar .ui-control--default {
+    @apply bg-transparent hover:bg-black/5 dark:hover:bg-white/10;
+  }
+
   .ui-field {
     min-height: var(--ui-control-min-height);
     box-sizing: border-box;
