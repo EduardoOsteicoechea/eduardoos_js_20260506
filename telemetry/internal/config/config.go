@@ -14,6 +14,7 @@ type Config struct {
 	DocumenterUnit            string
 	TelemetryUnit             string
 	ChatbotUnit               string
+	PostsDbUnit                 string
 	LegacyAPIUnit             string
 	DockerBackendContainer    string
 	DockerDocumenterContainer string
@@ -25,10 +26,12 @@ type Config struct {
 	BackendHealthURL          string
 	DocumenterHealthURL       string
 	ChatbotHealthURL          string
+	PostsDbHealthURL          string
 	BackendPort               int
 	DocumenterPort            int
 	TelemetryPort             int
 	ChatbotPort               int
+	PostsDbPort               int
 }
 
 func Load() Config {
@@ -48,6 +51,7 @@ func Load() Config {
 	documenterPort := envInt("DOCUMENTER_PORT", 8090)
 	telemetryPort := envInt("TELEMETRY_PORT", 8100)
 	chatbotPort := envInt("CHATBOT_PORT", 8110)
+	postsDbPort := envInt("POSTS_DB_PORT", 8120)
 
 	return Config{
 		Port:                      envOr("PORT", "8100"),
@@ -57,6 +61,7 @@ func Load() Config {
 		DocumenterUnit:            envOr("DOCUMENTER_UNIT", "eduardoos-documenter"),
 		TelemetryUnit:             envOr("TELEMETRY_UNIT", "eduardoos-telemetry"),
 		ChatbotUnit:               envOr("CHATBOT_UNIT", "eduardoos-chatbot"),
+		PostsDbUnit:               envOr("POSTS_DB_UNIT", "eduardoos-database"),
 		LegacyAPIUnit:             envOr("LEGACY_API_UNIT", "eduardoos-api"),
 		DockerBackendContainer:    envOr("DOCKER_BACKEND_CONTAINER", "eduardoos-backend"),
 		DockerDocumenterContainer: envOr("DOCKER_DOCUMENTER_CONTAINER", "eduardoos-documenter"),
@@ -83,10 +88,15 @@ func Load() Config {
 			"CHATBOT_HEALTH_URL",
 			"http://127.0.0.1:8110/health",
 		),
+		PostsDbHealthURL: envOr(
+			"POSTS_DB_HEALTH_URL",
+			"http://127.0.0.1:8120/health",
+		),
 		BackendPort:    backendPort,
 		DocumenterPort: documenterPort,
 		TelemetryPort:  telemetryPort,
 		ChatbotPort:    chatbotPort,
+		PostsDbPort:    postsDbPort,
 	}
 }
 

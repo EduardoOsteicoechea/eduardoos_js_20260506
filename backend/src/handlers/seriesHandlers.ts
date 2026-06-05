@@ -1,5 +1,10 @@
 import type { Request, Response } from 'express';
 import {
+  fetchPostsDbArticles,
+  fetchPostsDbCatalog,
+  isPostsDbConfigured,
+} from '../postsDbClient.js';
+import {
   buildSeriesCatalog,
   getNextArticleId,
   listSeriesArticles,
@@ -8,6 +13,11 @@ import {
 
 export async function getSeriesCatalog(_req: Request, res: Response) {
   try {
+    if (isPostsDbConfigured()) {
+      const catalog = await fetchPostsDbCatalog();
+      return res.json(catalog);
+    }
+
     const catalog = await buildSeriesCatalog();
     return res.json(catalog);
   } catch (error) {
@@ -42,6 +52,11 @@ export async function getSeriesArticles(req: Request, res: Response) {
   }
 
   try {
+    if (isPostsDbConfigured()) {
+      const articles = await fetchPostsDbArticles(serie, chapter);
+      return res.json({ articles });
+    }
+
     const articles = await listSeriesArticles(serie, chapter);
     return res.json({ articles });
   } catch (error) {

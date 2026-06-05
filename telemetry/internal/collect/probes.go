@@ -22,6 +22,7 @@ type ProbesBlock struct {
 	BackendCatalog   HTTPProbe `json:"backend_catalog"`
 	DocumenterHealth HTTPProbe `json:"documenter_health"`
 	ChatbotHealth    HTTPProbe `json:"chatbot_health"`
+	PostsDbHealth    HTTPProbe `json:"posts_db_health"`
 }
 
 func Probes(cfg config.Config) ProbesBlock {
@@ -29,6 +30,7 @@ func Probes(cfg config.Config) ProbesBlock {
 		BackendCatalog:   httpProbe(cfg.BackendHealthURL),
 		DocumenterHealth: httpProbe(cfg.DocumenterHealthURL),
 		ChatbotHealth:    httpProbe(cfg.ChatbotHealthURL),
+		PostsDbHealth:    httpProbe(cfg.PostsDbHealthURL),
 	}
 }
 

@@ -1,0 +1,18 @@
+[Unit]
+Description=Eduardoos Posts SQLite API
+After=network.target
+
+[Service]
+Type=simple
+User=ec2-user
+WorkingDirectory=/home/ec2-user/database
+EnvironmentFile=-/home/ec2-user/database/.env
+Environment=PORT=8120
+Environment=BIND_HOST=127.0.0.1
+Environment=DB_PATH=/home/ec2-user/database/posts.db
+ExecStart=/home/ec2-user/database/postsdb
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

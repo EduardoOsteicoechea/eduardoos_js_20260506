@@ -25,6 +25,14 @@ export const CHATBOT_INTERNAL_TOKEN = getEnvOrDefault(
 export const CHATBOT_PUBLIC_AUTH_ENABLED =
   getEnvOrDefault('CHATBOT_PUBLIC_AUTH_ENABLED', 'false').toLowerCase() ===
   'true';
+export const POSTS_DB_URL = getEnvOrDefault(
+  'POSTS_DB_URL',
+  'http://127.0.0.1:8120',
+);
+export const POSTS_DB_INTERNAL_TOKEN = getEnvOrDefault(
+  'POSTS_DB_INTERNAL_TOKEN',
+  'dev-internal-posts-db-token',
+);
 
 export const CORS_ORIGINS = [
   'http://localhost:3000',

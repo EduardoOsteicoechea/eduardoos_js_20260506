@@ -57,3 +57,12 @@ Thumbs.db
 # Local Go build artifacts
 chatbot/chatbot.exe
 chatbot/chatbot
+database/postsdb.exe
+database/postsdb
+database/import.exe
+database/import
+
+# SQLite WAL sidecars (commit posts.db, not these)
+database/*.db-wal
+database/*.db-shm
+database/posts.db-journal

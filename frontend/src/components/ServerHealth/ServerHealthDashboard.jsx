@@ -356,6 +356,23 @@ export default function ServerHealthDashboard() {
           </InfoPanel>
 
           <InfoPanel
+            title="Posts DB"
+            subtitle={services.posts_db?.unit}
+            copyText={formatUnitText(services.posts_db)}
+          >
+            <ul className="space-y-1 text-sm">
+              <li>
+                Activo:{' '}
+                <StatusBadge
+                  ok={services.posts_db?.active}
+                  label={services.posts_db?.active ? 'sí' : 'no'}
+                />
+              </li>
+              <li>Estado: {services.posts_db?.state}</li>
+            </ul>
+          </InfoPanel>
+
+          <InfoPanel
             title="Telemetry"
             subtitle={services.telemetry?.unit}
             copyText={formatUnitText(services.telemetry)}
@@ -376,11 +393,12 @@ export default function ServerHealthDashboard() {
 
       {ports ? (
         <InfoPanel
-          title="Puertos (8080 / 8090 / 8100 / 8110)"
+          title="Puertos (8080 / 8090 / 8100 / 8110 / 8120)"
           copyText={[
             formatPortText(ports.backend),
             formatPortText(ports.documenter),
             formatPortText(ports.chatbot),
+            formatPortText(ports.posts_db),
             formatPortText(ports.telemetry),
           ].join('\n\n')}
         >
@@ -401,6 +419,12 @@ export default function ServerHealthDashboard() {
               <strong>8110 chatbot:</strong>{' '}
               {ports.chatbot?.listening
                 ? `${ports.chatbot.process ?? '?'} (pid ${ports.chatbot.pid ?? '?'})`
+                : 'no escucha'}
+            </li>
+            <li>
+              <strong>8120 posts-db:</strong>{' '}
+              {ports.posts_db?.listening
+                ? `${ports.posts_db.process ?? '?'} (pid ${ports.posts_db.pid ?? '?'})`
                 : 'no escucha'}
             </li>
             <li>
@@ -446,6 +470,7 @@ export default function ServerHealthDashboard() {
             formatProbeText(probes.backend_catalog),
             formatProbeText(probes.documenter_health),
             formatProbeText(probes.chatbot_health),
+            formatProbeText(probes.posts_db_health),
           ].join('\n\n')}
         >
           <ul className="space-y-2 text-sm">
@@ -473,6 +498,15 @@ export default function ServerHealthDashboard() {
                 : ''}
             </li>
             <li className="theme-muted break-all text-xs">{probes.chatbot_health?.url}</li>
+            <li>
+              Posts DB /health:{' '}
+              <StatusBadge ok={probes.posts_db_health?.ok} label={probes.posts_db_health?.ok ? 'OK' : 'falló'} />
+              {probes.posts_db_health?.status ? ` HTTP ${probes.posts_db_health.status}` : ''}
+              {probes.posts_db_health?.latency_ms != null
+                ? ` · ${probes.posts_db_health.latency_ms} ms`
+                : ''}
+            </li>
+            <li className="theme-muted break-all text-xs">{probes.posts_db_health?.url}</li>
           </ul>
         </InfoPanel>
       ) : null}
@@ -515,6 +549,7 @@ export default function ServerHealthDashboard() {
           <LogPanel title="Logs backend" block={data.backend} />
           <LogPanel title="Logs documenter" block={data.documenter} />
           <LogPanel title="Logs chatbot" block={data.chatbot} />
+          <LogPanel title="Logs posts-db" block={data.posts_db} />
         </>
       ) : null}
     </div>

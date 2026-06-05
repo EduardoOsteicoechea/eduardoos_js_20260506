@@ -1,0 +1,107 @@
+name: Deploy Database to EC2
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'database/**'
+      - 'deploy/systemd/eduardoos-database.service'
+      - '.github/workflows/deploy-database.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy-database:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./database
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache-dependency-path: database/go.sum
+
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+          HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          echo "SSH_OPTS=-i ~/.ssh/id_rsa -o StrictHostKeyChecking=yes" >> "$GITHUB_ENV"
+          echo "EC2_HOST=$HOST" >> "$GITHUB_ENV"
+          echo "EC2_USER=${{ secrets.EC2_USER }}" >> "$GITHUB_ENV"
+
+      - name: Detect EC2 CPU architecture
+        id: ec2_arch
+        run: |
+          MACHINE=$(ssh $SSH_OPTS "$EC2_USER@$EC2_HOST" "uname -m")
+          echo "EC2 uname -m: $MACHINE"
+          case "$MACHINE" in
+            x86_64|amd64)
+              echo "goarch=amd64" >> "$GITHUB_OUTPUT"
+              ;;
+            aarch64|arm64)
+              echo "goarch=arm64" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo "Unsupported EC2 architecture: $MACHINE"
+              exit 1
+              ;;
+          esac
+
+      - name: Build Linux binary for EC2
+        run: |
+          CGO_ENABLED=0 GOOS=linux GOARCH=${{ steps.ec2_arch.outputs.goarch }} \
+            go build -ldflags="-s -w" -o postsdb ./cmd/server
+          file postsdb
+
+      - name: Sync and Restart Service on EC2
+        run: |
+          REMOTE_DIR="/home/$EC2_USER/database"
+
+          ssh $SSH_OPTS "$EC2_USER@$EC2_HOST" "mkdir -p $REMOTE_DIR"
+
+          rsync -avz -e "ssh $SSH_OPTS" \
+            ./postsdb \
+            "$EC2_USER@$EC2_HOST:$REMOTE_DIR/postsdb"
+
+          if [ -f "./posts.db" ]; then
+            rsync -avz -e "ssh $SSH_OPTS" \
+              ./posts.db \
+              "$EC2_USER@$EC2_HOST:$REMOTE_DIR/posts.db"
+          else
+            echo "WARN: database/posts.db not in repo — service will start with empty schema"
+          fi
+
+          rsync -avz -e "ssh $SSH_OPTS" \
+            ../deploy/systemd/eduardoos-database.service \
+            "$EC2_USER@$EC2_HOST:/tmp/eduardoos-database.service"
+
+          ssh $SSH_OPTS "$EC2_USER@$EC2_HOST" bash -s <<EOF
+            set -euo pipefail
+            BIN="/home/$EC2_USER/database/postsdb"
+            chmod +x "\$BIN"
+            file "\$BIN"
+            if [ ! -f "/home/$EC2_USER/database/.env" ]; then
+              echo "WARN: /home/$EC2_USER/database/.env missing — copy from database/.env.example"
+            fi
+            sudo cp /tmp/eduardoos-database.service /etc/systemd/system/eduardoos-database.service
+            sudo systemctl daemon-reload
+            sudo systemctl enable eduardoos-database
+            sudo systemctl restart eduardoos-database
+            sleep 2
+            systemctl is-active --quiet eduardoos-database \
+              || { journalctl -u eduardoos-database -n 30 --no-pager; exit 1; }
+            curl -sf "http://127.0.0.1:8120/health" >/dev/null \
+              || { echo "ERROR: posts-db /health check failed"; exit 1; }
+            echo "Database deploy OK"
+          EOF

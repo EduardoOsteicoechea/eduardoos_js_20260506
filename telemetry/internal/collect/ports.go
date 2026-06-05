@@ -22,6 +22,7 @@ type PortsBlock struct {
 	Backend    PortListener `json:"backend"`
 	Documenter PortListener `json:"documenter"`
 	Chatbot    PortListener `json:"chatbot"`
+	PostsDb    PortListener `json:"posts_db"`
 	Telemetry  PortListener `json:"telemetry"`
 }
 
@@ -41,6 +42,7 @@ func PortsStatus(cfg config.Config) PortsBlock {
 		Backend:    portOrEmpty(listeners, cfg.BackendPort),
 		Documenter: portOrEmpty(listeners, cfg.DocumenterPort),
 		Chatbot:    portOrEmpty(listeners, cfg.ChatbotPort),
+		PostsDb:    portOrEmpty(listeners, cfg.PostsDbPort),
 		Telemetry:  portOrEmpty(listeners, cfg.TelemetryPort),
 	}
 }
@@ -71,7 +73,7 @@ func parseSSLine(line string) (PortListener, bool) {
 	match := ssLinePattern.FindStringSubmatch(line)
 	if len(match) < 5 {
 		// Fallback: match port only
-		if strings.Contains(line, ":8080") || strings.Contains(line, ":8090") || strings.Contains(line, ":8100") || strings.Contains(line, ":8110") {
+		if strings.Contains(line, ":8080") || strings.Contains(line, ":8090") || strings.Contains(line, ":8100") || strings.Contains(line, ":8110") || strings.Contains(line, ":8120") {
 			return PortListener{Listening: true, Raw: strings.TrimSpace(line)}, true
 		}
 		return PortListener{}, false
@@ -123,12 +125,12 @@ func parseSSLineBroad(line string, ports []int) map[int]PortListener {
 func PortsStatusWithFallback(cfg config.Config) PortsBlock {
 	block := PortsStatus(cfg)
 
-	needsFallback := !block.Backend.Listening && !block.Documenter.Listening && !block.Chatbot.Listening && !block.Telemetry.Listening
+	needsFallback := !block.Backend.Listening && !block.Documenter.Listening && !block.Chatbot.Listening && !block.PostsDb.Listening && !block.Telemetry.Listening
 	if !needsFallback {
 		return block
 	}
 
-	ports := []int{cfg.BackendPort, cfg.DocumenterPort, cfg.ChatbotPort, cfg.TelemetryPort}
+	ports := []int{cfg.BackendPort, cfg.DocumenterPort, cfg.ChatbotPort, cfg.PostsDbPort, cfg.TelemetryPort}
 	merged := map[int]PortListener{}
 	for _, line := range ssListenLines() {
 		for port, entry := range parseSSLineBroad(line, ports) {
@@ -144,6 +146,7 @@ func PortsStatusWithFallback(cfg config.Config) PortsBlock {
 		Backend:    pickListener(merged, cfg.BackendPort, block.Backend),
 		Documenter: pickListener(merged, cfg.DocumenterPort, block.Documenter),
 		Chatbot:    pickListener(merged, cfg.ChatbotPort, block.Chatbot),
+		PostsDb:    pickListener(merged, cfg.PostsDbPort, block.PostsDb),
 		Telemetry:  pickListener(merged, cfg.TelemetryPort, block.Telemetry),
 	}
 }

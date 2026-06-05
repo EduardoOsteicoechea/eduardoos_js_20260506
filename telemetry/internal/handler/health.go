@@ -21,6 +21,7 @@ type healthResponse struct {
 	Backend    collect.ServiceLogs    `json:"backend"`
 	Documenter collect.ServiceLogs    `json:"documenter"`
 	Chatbot    collect.ServiceLogs    `json:"chatbot"`
+	PostsDb    collect.ServiceLogs    `json:"posts_db"`
 	System     collect.SystemBlock    `json:"system"`
 }
 
@@ -47,11 +48,13 @@ func Health(cfg config.Config) http.HandlerFunc {
 		chatbotLogs := collect.ServiceLogsFor(
 			cfg, cfg.ChatbotUnit, cfg.DockerChatbotContainer,
 		)
+		postsDbLogs := collect.ServiceLogsFor(cfg, cfg.PostsDbUnit, "")
 
 		warnings := []string{}
 		warnings = append(warnings, collect.RecentLogWarnings(backendLogs, services.Backend.Active)...)
 		warnings = append(warnings, collect.RecentLogWarnings(documenterLogs, services.Documenter.Active)...)
 		warnings = append(warnings, collect.RecentLogWarnings(chatbotLogs, services.Chatbot.Active)...)
+		warnings = append(warnings, collect.RecentLogWarnings(postsDbLogs, services.PostsDb.Active)...)
 
 		if issues == nil {
 			issues = []string{}
@@ -72,6 +75,7 @@ func Health(cfg config.Config) http.HandlerFunc {
 			Backend:    backendLogs,
 			Documenter: documenterLogs,
 			Chatbot:    chatbotLogs,
+			PostsDb:    postsDbLogs,
 			System: collect.SystemStats(cfg),
 		}
 

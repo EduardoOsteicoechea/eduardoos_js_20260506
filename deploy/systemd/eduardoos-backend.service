@@ -1,6 +1,6 @@
 [Unit]
 Description=Eduardoos Backend API
-After=network.target eduardoos-chatbot.service
+After=network.target eduardoos-chatbot.service eduardoos-database.service
 
 [Service]
 Type=simple

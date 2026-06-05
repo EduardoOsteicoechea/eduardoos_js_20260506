@@ -1,6 +1,6 @@
 [Unit]
 Description=Eduardoos Telemetry API
-After=network.target eduardoos-backend.service eduardoos-documenter.service eduardoos-chatbot.service
+After=network.target eduardoos-backend.service eduardoos-documenter.service eduardoos-chatbot.service eduardoos-database.service
 
 [Service]
 Type=simple
@@ -21,6 +21,9 @@ Environment=DOCUMENTER_HEALTH_URL=http://127.0.0.1:8090/health
 Environment=CHATBOT_HEALTH_URL=http://127.0.0.1:8110/health
 Environment=CHATBOT_UNIT=eduardoos-chatbot
 Environment=CHATBOT_PORT=8110
+Environment=POSTS_DB_HEALTH_URL=http://127.0.0.1:8120/health
+Environment=POSTS_DB_UNIT=eduardoos-database
+Environment=POSTS_DB_PORT=8120
 Environment=LEGACY_API_UNIT=eduardoos-api
 ExecStart=/home/ec2-user/telemetry/telemetry
 Restart=always
