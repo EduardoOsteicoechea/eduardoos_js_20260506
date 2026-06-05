@@ -6,16 +6,18 @@ export default function SeriesIndexPage() {
   const lang = useSiteLanguage();
 
   return (
-    <main className="mx-auto max-w-4xl px-5 py-10">
-      <header className="mb-10">
-        <h1 className="text-3xl font-bold">{getSiteLabel('seriesIndexTitle', lang)}</h1>
-        <p className="theme-muted mt-3 text-lg">
+    <main className="series-page series-page--wide">
+      <header className="series-page__header">
+        <h1 className="series-page__title series-page__title--solo">
+          {getSiteLabel('seriesIndexTitle', lang)}
+        </h1>
+        <p className="series-page__description theme-muted">
           {getSiteLabel('seriesIndexSubtitle', lang)}
         </p>
       </header>
 
       <section>
-        <h2 className="mb-4 text-xl font-semibold">
+        <h2 className="series-posts-heading">
           {getSiteLabel('seriesSection', lang)}
         </h2>
         <SeriesCatalogIndex />

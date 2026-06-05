@@ -28,38 +28,35 @@ function summarizeUnit(unit) {
 export default function SectionContentList({ units = [], onRemoveUnit }) {
   if (!units.length) {
     return (
-      <p className="theme-muted rounded-lg border border-dashed px-3 py-4 text-sm">
+      <p className="section-content-list__empty theme-muted">
         Aún no hay unidades en esta sección. Usa «Añadir unidad» para empezar.
       </p>
     );
   }
 
   return (
-    <ul className="space-y-2">
+    <ul className="section-content-list__items">
       {units.map((unit, index) => (
-        <li
-          key={unit.id}
-          className="theme-border rounded-lg border px-3 py-3"
-        >
-          <div className="flex items-start justify-between gap-2">
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold uppercase tracking-wide opacity-70">
+        <li key={unit.id} className="section-content-list__item theme-border">
+          <div className="section-content-list__item-header">
+            <div className="section-content-list__item-body">
+              <p className="section-content-list__item-type">
                 {index + 1}. {getUnitTypeLabel(unit.type)}
               </p>
-              <p className="theme-muted mt-1 truncate text-sm">
+              <p className="section-content-list__item-summary theme-muted">
                 {summarizeUnit(unit)}
               </p>
             </div>
             <button
               type="button"
               onClick={() => onRemoveUnit(unit.id)}
-              className="theme-toolbar-btn shrink-0 text-xs"
+              className="theme-toolbar-btn section-content-list__item-remove"
               aria-label={`Quitar unidad ${index + 1}`}
             >
               Quitar
             </button>
           </div>
-          <pre className="theme-muted mt-2 overflow-x-auto text-[10px] leading-relaxed opacity-80">
+          <pre className="section-content-list__item-json theme-muted">
             {JSON.stringify(unitToPreviewBlock(unit), null, 2)}
           </pre>
         </li>

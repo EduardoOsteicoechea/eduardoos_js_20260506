@@ -2,8 +2,8 @@ export default function SermonPlayer({ sermonPath, audioRef }) {
   if (!sermonPath) return null;
 
   return (
-    <section className="mb-10" aria-label="Reproductor del sermón">
-      <h2 className="mb-3 text-[1.1em] font-semibold uppercase tracking-wide opacity-70">
+    <section className="sermon-player" aria-label="Reproductor del sermón">
+      <h2 className="sermon-player__label">
         Sermón
       </h2>
 
@@ -12,7 +12,7 @@ export default function SermonPlayer({ sermonPath, audioRef }) {
         src={sermonPath}
         controls
         preload="metadata"
-        className="w-full"
+        className="sermon-player__audio"
       />
     </section>
   );

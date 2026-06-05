@@ -5,6 +5,7 @@ const VARIANT_CLASS = {
   danger: 'ui-control--danger',
   ghost: 'ui-control--ghost',
   close: 'ui-control--close',
+  framed: 'ui-control--framed',
 };
 
 const SIZE_CLASS = {

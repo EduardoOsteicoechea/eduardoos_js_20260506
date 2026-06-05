@@ -10,7 +10,7 @@ const iconProps = {
 
 /** @param {{ id: string, className?: string }} props */
 export default function SkillIcon({ id, className = '' }) {
-  const svgClass = `h-full w-full ${className}`.trim();
+  const svgClass = ['home-skills__icon', className].filter(Boolean).join(' ');
 
   switch (id) {
     case 'problem-solving':

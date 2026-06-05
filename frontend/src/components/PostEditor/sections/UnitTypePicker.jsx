@@ -7,32 +7,34 @@ export default function UnitTypePicker({ open, onSelect, onClose }) {
     <>
       <button
         type="button"
-        className="fixed inset-0 z-[200] bg-black/30"
+        className="unit-type-picker-overlay"
         aria-label="Cerrar selector de unidad"
         onClick={onClose}
       />
 
       <div
-        className="theme-border theme-surface fixed left-1/2 top-1/2 z-[210] w-[min(100vw-2rem,24rem)] -translate-x-1/2 -translate-y-1/2 rounded-xl border p-4 shadow-xl"
+        className="unit-type-picker-dialog theme-border theme-surface"
         role="dialog"
         aria-modal="true"
         aria-label="Elegir tipo de unidad"
       >
-        <h3 className="mb-1 text-base font-semibold">Tipo de unidad</h3>
-        <p className="theme-muted mb-4 text-sm">
+        <h3 className="unit-type-picker-dialog__title">Tipo de unidad</h3>
+        <p className="unit-type-picker-dialog__intro theme-muted">
           Elige qué añadir al contenido de la sección.
         </p>
 
-        <ul className="max-h-[60vh] space-y-2 overflow-y-auto">
+        <ul className="unit-type-picker-dialog__list">
           {getEditorAddableUnitTypes().map((entry) => (
             <li key={entry.id}>
               <button
                 type="button"
                 onClick={() => onSelect(entry.id)}
-                className="theme-border w-full rounded-lg border px-3 py-2.5 text-left transition hover:bg-black/5 dark:hover:bg-white/10"
+                className="unit-type-picker-dialog__option theme-border"
               >
-                <span className="block font-medium">{entry.label}</span>
-                <span className="theme-muted mt-0.5 block text-xs">
+                <span className="unit-type-picker-dialog__option-label">
+                  {entry.label}
+                </span>
+                <span className="unit-type-picker-dialog__option-desc theme-muted">
                   {entry.description}
                 </span>
               </button>

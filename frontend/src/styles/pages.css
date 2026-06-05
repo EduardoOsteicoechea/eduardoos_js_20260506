@@ -1,0 +1,44 @@
+/* ── Shared page layouts ───────────────────────────────────────── */
+
+.page-main {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2.5rem 1.25rem;
+}
+
+.page-main--narrow {
+  max-width: 48rem;
+}
+
+.page-main--medium {
+  max-width: 56rem;
+}
+
+.page-main--wide {
+  max-width: 64rem;
+}
+
+.page-main--with-bar {
+  padding-bottom: calc(var(--activity-bar-height) + 1.25rem);
+}
+
+.page-main--creator {
+  max-width: 48rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2rem;
+}
+
+.page-creator__header {
+  margin-bottom: 2rem;
+}
+
+.page-creator__title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.page-creator__subtitle {
+  color: #475569;
+}

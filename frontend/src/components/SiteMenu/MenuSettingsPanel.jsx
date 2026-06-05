@@ -15,19 +15,19 @@ export default function MenuSettingsPanel({
 
   return (
     <div
-      className="theme-border theme-surface site-menu-settings flex h-full min-h-0 flex-col overflow-y-auto border-l px-4 py-4"
+      className="theme-border theme-surface site-menu-settings"
       role="region"
       aria-label="Ajustes de lectura"
     >
-      <div className="mb-4 flex items-center justify-between gap-2">
-        <h2 className="text-sm font-semibold uppercase tracking-wide opacity-70">
+      <div className="site-menu-settings__header">
+        <h2 className="site-menu-settings__title">
           Ajustes
         </h2>
         {onClose ? (
           <button
             type="button"
             onClick={onClose}
-            className="theme-toolbar-btn h-8 w-8 shrink-0 border-red-500/60 bg-red-500/10 p-0 text-2xl font-bold leading-none text-red-600 hover:bg-red-500/20 dark:text-red-400"
+            className="theme-toolbar-btn site-menu-settings__close"
             aria-label="Cerrar ajustes"
             title="Cerrar ajustes"
           >
@@ -36,15 +36,15 @@ export default function MenuSettingsPanel({
         ) : null}
       </div>
 
-      <div className="space-y-5">
+      <div className="site-menu-settings__sections">
         <div>
-          <p className="theme-muted mb-2 text-xs font-medium uppercase tracking-wide">
+          <p className="site-menu-settings__section-label theme-muted">
             Tema
           </p>
           <button
             type="button"
             onClick={onToggleTheme}
-            className="theme-toolbar-btn w-full justify-center gap-2"
+            className="theme-toolbar-btn site-menu-settings__theme-btn"
             aria-label={isDark ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'}
           >
             <span aria-hidden="true">{isDark ? '☀' : '☽'}</span>
@@ -53,25 +53,25 @@ export default function MenuSettingsPanel({
         </div>
 
         <div>
-          <p className="theme-muted mb-2 text-xs font-medium uppercase tracking-wide">
+          <p className="site-menu-settings__section-label theme-muted">
             Tamaño de fuente
           </p>
-          <div className="flex items-center gap-2">
+          <div className="site-menu-settings__font-row">
             <button
               type="button"
               onClick={onDecreaseFont}
-              className="theme-toolbar-btn flex-1"
+              className="theme-toolbar-btn site-menu-settings__font-btn"
               aria-label="Disminuir tamaño de fuente"
             >
               A−
             </button>
-            <span className="theme-muted min-w-[3ch] text-center text-sm tabular-nums">
+            <span className="site-menu-settings__font-value theme-muted">
               {baseFontSize}
             </span>
             <button
               type="button"
               onClick={onIncreaseFont}
-              className="theme-toolbar-btn flex-1"
+              className="theme-toolbar-btn site-menu-settings__font-btn"
               aria-label="Aumentar tamaño de fuente"
             >
               A+
@@ -80,10 +80,10 @@ export default function MenuSettingsPanel({
         </div>
 
         <div>
-          <p className="theme-muted mb-2 text-xs font-medium uppercase tracking-wide">
+          <p className="site-menu-settings__section-label theme-muted">
             Familia tipográfica
           </p>
-          <ul className="space-y-2">
+          <ul className="site-menu-settings__font-list">
             {FONT_FAMILIES.map((font) => {
               const isSelected = font.id === fontFamilyId;
 
@@ -92,10 +92,8 @@ export default function MenuSettingsPanel({
                   <button
                     type="button"
                     onClick={() => onSelectFont(font.id)}
-                    className={`theme-border w-full rounded-lg border px-3 py-2.5 text-left text-sm transition ${
-                      isSelected
-                        ? 'ring-2 ring-black dark:ring-white'
-                        : 'hover:bg-black/5 dark:hover:bg-white/10'
+                    className={`site-menu-settings__font-btn theme-border ${
+                      isSelected ? 'site-menu-settings__font-btn--selected' : ''
                     }`}
                     style={{ fontFamily: font.stack }}
                   >

@@ -1,5 +1,4 @@
-import { SiteControlButton } from '../../ui';
-import { AddUnitIcon, DoneIcon } from './UnitTypeIcons';
+import EditorActionButton from '../../EditorActionButton';
 
 export default function SectionEditActivityBar({
   typeTrayOpen,
@@ -7,30 +6,16 @@ export default function SectionEditActivityBar({
   onClose,
 }) {
   return (
-    <footer
-      className="theme-border theme-surface flex h-[var(--activity-bar-height)] shrink-0 items-center justify-between gap-2 border-t px-3"
-      role="toolbar"
-      aria-label="Controles de la sección"
-    >
-      <SiteControlButton
-        size="bar"
-        variant="primary"
-        active={typeTrayOpen}
+    <div className="section-edit-bar theme-border theme-surface">
+      <EditorActionButton
+        variant={typeTrayOpen ? 'primary' : 'default'}
         onClick={onToggleTypeTray}
-        aria-expanded={typeTrayOpen}
-        title="Añadir unidad"
-        aria-label="Añadir unidad"
-        icon={<AddUnitIcon />}
-      />
-
-      <SiteControlButton
-        size="bar"
-        variant="success"
-        onClick={onClose}
-        title="Listo"
-        aria-label="Listo"
-        icon={<DoneIcon />}
-      />
-    </footer>
+      >
+        Añadir unidad
+      </EditorActionButton>
+      <EditorActionButton variant="success" onClick={onClose}>
+        Listo
+      </EditorActionButton>
+    </div>
   );
 }

@@ -48,16 +48,6 @@ export default function ActivityBar({
   const footerClass = [
     'activity-bar',
     `activity-bar--${layout.variant}`,
-    'theme-border',
-    'theme-surface',
-    'flex',
-    'h-[var(--activity-bar-height)]',
-    'w-full',
-    'shrink-0',
-    'border-t',
-    layout.fixed
-      ? 'fixed bottom-0 left-0 right-0'
-      : 'relative z-[20]',
     className,
   ]
     .filter(Boolean)
@@ -73,7 +63,7 @@ export default function ActivityBar({
       aria-label={layout.ariaLabel}
       data-activity-bar-variant={layout.variant}
     >
-      <div className="activity-bar__primary flex min-w-0 flex-1 items-center gap-2 overflow-x-auto overflow-y-hidden px-3 sm:gap-3 sm:px-4">
+      <div className="activity-bar__primary">
         <ActivityBarControl controlId="site-language" menuPrefs={menuPrefs} />
         {showEditorLeft
           ? dynamicLeftActions.map((action) => (
@@ -92,7 +82,7 @@ export default function ActivityBar({
             ))}
       </div>
 
-      <div className="activity-bar__secondary theme-border flex shrink-0 items-center gap-2 border-l px-2 sm:gap-3 sm:px-3">
+      <div className="activity-bar__secondary">
         {layout.right.map((controlId) => (
           <ActivityBarControl
             key={controlId}

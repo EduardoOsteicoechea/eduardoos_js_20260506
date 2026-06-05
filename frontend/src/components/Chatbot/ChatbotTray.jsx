@@ -1,13 +1,10 @@
-import { createPortal } from 'react-dom';
 import { useEffect, useState } from 'react';
 import ChatbotPanel from './ChatbotPanel';
 import { useChatbot } from './useChatbot';
 import { useChatbotTrayResize } from './useChatbotTrayResize';
 
-/**
- * @param {{ inline?: boolean }} props — inline: render inside SiteChromeShell (recommended)
- */
-export default function ChatbotTray({ inline = false }) {
+/** AI chat tray — always rendered inside SiteChrome. */
+export default function ChatbotTray() {
   const { open } = useChatbot();
   const [mounted, setMounted] = useState(false);
   const { widthPx, resizable, onResizePointerDown } = useChatbotTrayResize();
@@ -18,11 +15,17 @@ export default function ChatbotTray({ inline = false }) {
 
   if (!mounted) return null;
 
-  const tray = (
+  return (
     <aside
-      className={`chatbot-tray theme-border theme-surface absolute right-0 top-0 z-[10] flex flex-col border-l shadow-2xl transition-[transform,visibility,box-shadow] duration-300 ease-out ${
-        open ? 'chatbot-tray--open' : 'chatbot-tray--closed pointer-events-none'
-      } ${resizable ? 'chatbot-tray--resizable' : ''}`}
+      className={[
+        'chatbot-tray',
+        'theme-border',
+        'theme-surface',
+        open ? 'chatbot-tray--open' : 'chatbot-tray--closed',
+        resizable ? 'chatbot-tray--resizable' : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
       style={{ width: resizable ? `${widthPx}px` : undefined }}
       aria-hidden={!open}
       aria-label="Asistente AI"
@@ -39,8 +42,4 @@ export default function ChatbotTray({ inline = false }) {
       <ChatbotPanel />
     </aside>
   );
-
-  if (inline) return tray;
-
-  return createPortal(tray, document.body);
 }

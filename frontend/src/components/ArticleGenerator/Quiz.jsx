@@ -35,7 +35,7 @@ export default function Quiz({ items = [] }) {
 
   return (
     <div className="quiz" key={resetVersion}>
-      <div className="space-y-8">
+      <div className="quiz__questions">
         {items.map((item, index) => (
           <QuizQuestion
             key={`${index}-${item.question}`}
@@ -48,13 +48,13 @@ export default function Quiz({ items = [] }) {
       </div>
 
       {hasAnyAnswer ? (
-        <div className="theme-border mt-8 rounded-lg border px-4 py-4">
+        <div className="quiz__result theme-border">
           {allAnswered ? (
-            <p className="text-base font-semibold">
+            <p className="quiz__result-score">
               Resultado: {correctCount} de {items.length} correctas
             </p>
           ) : (
-            <p className="theme-muted text-sm">
+            <p className="quiz__result-progress theme-muted">
               Respondidas: {answeredCount} de {items.length}
             </p>
           )}
@@ -62,7 +62,7 @@ export default function Quiz({ items = [] }) {
           <button
             type="button"
             onClick={restart}
-            className="theme-toolbar-btn mt-4"
+            className="theme-toolbar-btn quiz__restart"
             aria-label="Reiniciar cuestionario"
           >
             Reiniciar cuestionario
@@ -79,23 +79,20 @@ function QuizQuestion({ item, index, selected, onSelect }) {
   const isCorrect = isAnswered && correctSet.has(selected);
 
   return (
-    <div className="theme-border border-t pt-6 first:border-t-0 first:pt-0">
-      <p className="mb-4 font-medium">
+    <div className="quiz-question theme-border">
+      <p className="quiz-question__prompt">
         {index + 1}. {item.question}
       </p>
-      <ul className="space-y-2">
+      <ul className="quiz-question__options">
         {item.options.map((option) => {
-          let optionClass =
-            'theme-border w-full rounded-lg border px-4 py-3 text-left transition-colors';
+          let optionClass = 'quiz-question__option theme-border';
 
           if (isAnswered && correctSet.has(option)) {
-            optionClass += ' font-semibold ring-2 ring-black dark:ring-white';
+            optionClass += ' quiz-question__option--correct';
           } else if (isAnswered && selected === option && !correctSet.has(option)) {
-            optionClass += ' opacity-40';
-          } else if (!isAnswered) {
-            optionClass += ' hover:bg-black/5 dark:hover:bg-white/10';
-          } else {
-            optionClass += ' opacity-50';
+            optionClass += ' quiz-question__option--wrong';
+          } else if (isAnswered) {
+            optionClass += ' quiz-question__option--dimmed';
           }
 
           return (
@@ -114,15 +111,12 @@ function QuizQuestion({ item, index, selected, onSelect }) {
       </ul>
 
       {isAnswered ? (
-        <div
-          className="theme-border mt-4 rounded-lg border px-4 py-3 text-sm"
-          role="status"
-        >
-          <p className="font-semibold">
+        <div className="quiz-question__feedback theme-border" role="status">
+          <p className="quiz-question__feedback-title">
             {isCorrect ? '✓ Correcto' : '✗ Incorrecto'}
           </p>
           {item.rationale?.map((line, rationaleIndex) => (
-            <p key={rationaleIndex} className="theme-muted mt-1">
+            <p key={rationaleIndex} className="quiz-question__rationale theme-muted">
               {line}
             </p>
           ))}

@@ -1,0 +1,297 @@
+/* ── Series pages ──────────────────────────────────────────────── */
+
+.series-page {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2.5rem 1.25rem;
+}
+
+.series-page--article {
+  max-width: 48rem;
+  padding-top: 2.5rem;
+  padding-bottom: calc(var(--activity-bar-height) + 1.25rem);
+}
+
+.series-page--wide {
+  max-width: 56rem;
+}
+
+.series-page__header {
+  margin-bottom: 2.5rem;
+}
+
+.series-page__kicker {
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.series-page__title {
+  margin-top: 0.5rem;
+  font-size: 1.875rem;
+  font-weight: 700;
+}
+
+.series-page__title--solo {
+  margin-top: 0;
+}
+
+.series-page__description {
+  margin-top: 1rem;
+  font-size: 1.125rem;
+  line-height: 1.625;
+}
+
+.series-page__purpose {
+  margin-top: 1rem;
+  line-height: 1.625;
+}
+
+.series-biblical {
+  margin-bottom: 2.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(0 0 0 / 0.15);
+  padding: 1rem 1.25rem;
+}
+
+html[data-theme='dark'] .series-biblical,
+html.dark .series-biblical {
+  border-color: rgb(255 255 255 / 0.15);
+}
+
+.series-biblical__title {
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.series-biblical__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.series-biblical__text {
+  line-height: 1.625;
+}
+
+.series-biblical__reference {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* ── Breadcrumbs ───────────────────────────────────────────────── */
+
+.series-breadcrumbs {
+  margin-bottom: 2rem;
+  font-size: 0.875rem;
+}
+
+.series-breadcrumbs__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.series-breadcrumbs__item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.series-breadcrumbs__link {
+  font-weight: 500;
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+.series-breadcrumbs__link:hover {
+  opacity: 1;
+}
+
+.series-breadcrumbs__current {
+  font-weight: 500;
+}
+
+/* ── Back link ─────────────────────────────────────────────────── */
+
+.series-back-link {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+.series-back-link:hover {
+  opacity: 1;
+}
+
+/* ── Catalog index ─────────────────────────────────────────────── */
+
+.series-catalog__error {
+  border-radius: 0.5rem;
+  border: 1px solid rgb(239 68 68 / 0.4);
+  background-color: rgb(239 68 68 / 0.1);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: #b91c1c;
+}
+
+html[data-theme='dark'] .series-catalog__error,
+html.dark .series-catalog__error {
+  color: #fca5a5;
+}
+
+.series-catalog__loading,
+.series-catalog__empty {
+  font-size: 0.875rem;
+}
+
+.series-catalog__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.series-catalog__card {
+  display: block;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(0 0 0 / 0.15);
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  transition: background-color 150ms;
+}
+
+.series-catalog__card:hover {
+  background-color: rgb(0 0 0 / 0.05);
+}
+
+html[data-theme='dark'] .series-catalog__card,
+html.dark .series-catalog__card {
+  border-color: rgb(255 255 255 / 0.15);
+}
+
+html[data-theme='dark'] .series-catalog__card:hover,
+html.dark .series-catalog__card:hover {
+  background-color: rgb(255 255 255 / 0.1);
+}
+
+.series-catalog__slug {
+  display: block;
+  margin-top: 0.25rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.series-catalog__desc {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+/* ── Series index page ─────────────────────────────────────────── */
+
+.series-index__title {
+  font-size: 1.875rem;
+  font-weight: 700;
+}
+
+.series-index__intro {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.series-index__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  list-style: none;
+  padding: 0;
+}
+
+.series-posts-heading {
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.series-empty-message {
+  font-size: 0.875rem;
+}
+
+.series-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.series-card {
+  display: block;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(0 0 0 / 0.15);
+  padding: 1rem 1.25rem;
+  transition: background-color 150ms;
+}
+
+.series-card:hover {
+  background-color: rgb(0 0 0 / 0.05);
+}
+
+html[data-theme='dark'] .series-card,
+html.dark .series-card {
+  border-color: rgb(255 255 255 / 0.15);
+}
+
+html[data-theme='dark'] .series-card:hover,
+html.dark .series-card:hover {
+  background-color: rgb(255 255 255 / 0.1);
+}
+
+.series-card__title {
+  font-weight: 600;
+}
+
+.series-card__description {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.625;
+}
+
+.series-card__meta {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.series-card__slug {
+  display: block;
+  margin-top: 0.5rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+}
+
+.series-card--disabled {
+  opacity: 0.6;
+}

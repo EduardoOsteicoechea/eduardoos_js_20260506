@@ -9,19 +9,19 @@ export default function UnitTypeTray({ open, onSelect }) {
 
   return (
     <div
-      className="theme-border theme-surface border-t px-3 py-3"
+      className="unit-type-tray theme-border theme-surface"
       role="region"
       aria-label="Unidades clave"
     >
-      <p className="theme-muted mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide">
-        <span className="inline-flex h-4 w-4 items-center justify-center rounded-sm bg-green-600 text-white dark:bg-green-500">
+      <p className="unit-type-tray__label theme-muted">
+        <span className="unit-type-tray__badge">
           <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M2 6l3 3 5-6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </span>
         Unidades clave
       </p>
-      <div className="flex flex-wrap gap-2">
+      <div className="unit-type-tray__grid">
         {unitTypes.map((entry) => (
           <SiteControlButton
             key={entry.id}
@@ -30,9 +30,9 @@ export default function UnitTypeTray({ open, onSelect }) {
             onClick={() => onSelect(entry.id)}
             title={entry.label}
             aria-label={entry.label}
-            className="relative"
+            className="unit-type-tray__btn"
             icon={
-              <span className="relative inline-flex">
+              <span className="unit-type-tray__icon-wrap">
                 {renderUnitTypeIcon(entry.id)}
                 {entry.keyUnit ? <KeyUnitBadge /> : null}
               </span>

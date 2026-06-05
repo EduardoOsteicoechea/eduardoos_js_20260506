@@ -34,7 +34,7 @@ export default function ChatbotInput({
   disabled,
 }) {
   return (
-    <div className="theme-border shrink-0 border-t p-3">
+    <div className="chatbot-input theme-border">
       <input
         type="text"
         value={value}
@@ -47,12 +47,12 @@ export default function ChatbotInput({
         }}
         disabled={disabled}
         placeholder={inputPlaceholder}
-        className={`${UI_FIELD_CLASS} text-sm`}
+        className={`${UI_FIELD_CLASS} chatbot-input__field`}
         aria-label="Message for assistant"
       />
 
-      <div className="mt-2 flex items-center justify-between gap-2">
-        <div className="flex items-center gap-1.5">
+      <div className="chatbot-input__toolbar">
+        <div className="chatbot-input__toolbar-start">
           <SiteControlButton
             size="md"
             disabled={disabled}
@@ -72,7 +72,7 @@ export default function ChatbotInput({
           />
         </div>
 
-        <div className="ml-auto flex shrink-0 items-center gap-2 border-l border-black/10 pl-2 dark:border-white/10">
+        <div className="chatbot-input__toolbar-end">
           <SiteControlButton
             size="md"
             variant="close"
@@ -89,7 +89,7 @@ export default function ChatbotInput({
             disabled={disabled || !value.trim()}
             icon={<SendIcon />}
             label={sendLabel}
-            className="ui-control--icon-label text-xs"
+            className="ui-control--icon-label chatbot-input__send"
             title={sendLabel}
             aria-label={sendLabel}
           />

@@ -3,8 +3,6 @@ import { defineConfig } from 'astro/config';
 
 import react from '@astrojs/react';
 
-import tailwindcss from '@tailwindcss/vite';
-
 const apiProxyTarget = process.env.PUBLIC_API_BASE || 'http://localhost:8080';
 const telemetryProxyTarget =
   process.env.PUBLIC_TELEMETRY_BASE || 'http://localhost:8100';
@@ -15,7 +13,6 @@ export default defineConfig({
   integrations: [react()],
 
   vite: {
-    plugins: [tailwindcss()],
     server: {
       proxy: {
         '/api/server/health': {

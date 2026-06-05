@@ -12,21 +12,21 @@ export default function VisualizationModePanel({
     <>
       <button
         type="button"
-        className="fixed inset-0 bottom-[45px] z-[55] cursor-default bg-transparent"
+        className="viz-mode-panel__backdrop"
         aria-label="Cerrar selector de vista"
         onClick={onClose}
       />
 
       <aside
-        className="theme-border theme-surface fixed bottom-[45px] left-0 right-0 z-[60] max-h-[50vh] overflow-y-auto border-t px-4 py-4"
+        className="viz-mode-panel__sheet theme-border theme-surface"
         role="dialog"
         aria-label="Modos de visualización"
       >
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide opacity-70">
+        <h2 className="viz-mode-panel__title">
           Modo de visualización
         </h2>
 
-        <div className="grid gap-2">
+        <div className="viz-mode-panel__options">
           {VIEW_MODE_OPTIONS.map((option) => {
             const isSelected = option.id === selectedMode;
 
@@ -35,14 +35,12 @@ export default function VisualizationModePanel({
                 key={option.id}
                 type="button"
                 onClick={() => onSelect(option.id)}
-                className={`theme-border rounded-lg border px-4 py-3 text-left transition ${
-                  isSelected
-                    ? 'ring-2 ring-black dark:ring-white'
-                    : 'hover:bg-black/5 dark:hover:bg-white/10'
+                className={`viz-mode-panel__option theme-border ${
+                  isSelected ? 'viz-mode-panel__option--selected' : ''
                 }`}
               >
-                <span className="block text-base font-semibold">{option.label}</span>
-                <span className="theme-muted mt-1 block text-sm">
+                <span className="viz-mode-panel__option-label">{option.label}</span>
+                <span className="viz-mode-panel__option-desc theme-muted">
                   {option.description}
                 </span>
               </button>

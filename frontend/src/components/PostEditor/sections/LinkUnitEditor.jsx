@@ -6,7 +6,7 @@ export default function LinkUnitEditor({ draft, onChange }) {
   const displayText = text || href;
 
   return (
-    <div className="space-y-4">
+    <div className="link-unit-editor">
       <div>
         <label className={labelClassName} htmlFor="link-href">
           1. URL
@@ -36,13 +36,13 @@ export default function LinkUnitEditor({ draft, onChange }) {
       </div>
 
       {href ? (
-        <p className="text-sm">
+        <p className="link-unit-editor__preview">
           Vista previa:{' '}
           <a
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-medium underline"
+            className="link-unit-editor__preview-link"
           >
             {displayText}
           </a>

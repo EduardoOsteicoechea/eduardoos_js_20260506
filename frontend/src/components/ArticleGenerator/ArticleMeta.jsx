@@ -8,17 +8,14 @@ export default function ArticleMeta({ serie, chapter, creator, slug }) {
   if (!labels.length && !slug) return null;
 
   return (
-    <div className="theme-muted mb-6 flex flex-wrap items-center gap-2 text-sm">
+    <div className="article-meta theme-muted">
       {labels.map((label) => (
-        <span
-          key={label}
-          className="theme-border rounded-full border px-3 py-1 font-medium"
-        >
+        <span key={label} className="article-meta__tag theme-border">
           {label}
         </span>
       ))}
       {slug ? (
-        <span className="font-mono text-xs opacity-50">{slug}</span>
+        <span className="article-meta__slug">{slug}</span>
       ) : null}
     </div>
   );

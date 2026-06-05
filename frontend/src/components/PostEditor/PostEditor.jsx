@@ -39,10 +39,9 @@ import {
 
 const inputClassName = UI_FIELD_CLASS;
 
-const labelClassName = 'mb-1 block text-sm font-medium';
+const labelClassName = 'post-editor__label';
 
-const sectionHeadingInputClassName =
-  'w-full border-0 bg-transparent p-0 text-[1.35em] font-semibold leading-snug outline-none placeholder:opacity-40 focus:ring-0';
+const sectionHeadingInputClassName = 'post-editor__field post-editor__field--heading';
 const NEW_TITLE_OPTION = '__new_title__';
 const CUSTOM_TITLE_OPTION = '__custom_title__';
 
@@ -334,7 +333,6 @@ export default function PostEditor() {
 
     let cancelled = false;
     setArticleIdLoading(true);
-    setPendingMediaFiles(new Map());
 
     fetchSeriesArticle(effectiveSerie, effectiveChapter, selectedId)
       .then((article) => {
@@ -562,18 +560,6 @@ export default function PostEditor() {
   };
 
   const removeSection = (id) => {
-    const removedSection = form.sections.find((section) => section.id === id);
-    if (removedSection) {
-      const removedUnitIds = new Set(
-        (removedSection.content ?? []).map((unit) => unit.id),
-      );
-      setPendingMediaFiles((previous) => {
-        const next = new Map(previous);
-        for (const unitId of removedUnitIds) next.delete(unitId);
-        return next;
-      });
-    }
-
     setForm((previous) => ({
       ...previous,
       sections:
@@ -839,196 +825,188 @@ export default function PostEditor() {
   }, [activityActions]);
 
   return (
-    <div className="post-editor space-y-6 pb-[calc(var(--activity-bar-height)+1.25rem)]">
+    <div className="post-editor">
       <section className="post-editor-metadata" aria-label="Metadatos del artículo">
-        <div className="post-editor-metadata__row">
-          <div className="post-editor-metadata__cell">
-            <CatalogSelect
-              id="post-serie"
-              label="Serie"
-              options={seriesOptions}
-              value={form.serie}
-              isCustom={form.serieIsCustom}
-              customValue={form.serieCustom}
-              disabled={catalogLoading}
-              newOptionLabel="+ Nueva serie…"
-              customPlaceholder="Ej. cartas paulinas"
-              onSelectExisting={handleSerieExisting}
-              onEnableCustom={handleSerieCustom}
-              onCustomValueChange={handleSerieCustomChange}
-              onCommitCustom={commitSerie}
-            />
-          </div>
-
-          <div className="post-editor-metadata__cell">
-            <CatalogSelect
-              id="post-chapter"
-              label="Sección"
-              options={chapterOptions}
-              value={form.chapter}
-              isCustom={form.chapterIsCustom}
-              customValue={form.chapterCustom}
-              disabled={catalogLoading || !chapterFieldEnabled}
-              newOptionLabel="+ Nuevo capítulo…"
-              customPlaceholder="Ej. efesios"
-              onSelectExisting={handleChapterExisting}
-              onEnableCustom={handleChapterCustom}
-              onCustomValueChange={handleChapterCustomChange}
-              onCommitCustom={commitChapter}
-            />
-          </div>
+        <div className="post-editor-metadata__field">
+          <CatalogSelect
+            id="post-serie"
+            label="Serie"
+            options={seriesOptions}
+            value={form.serie}
+            isCustom={form.serieIsCustom}
+            customValue={form.serieCustom}
+            disabled={catalogLoading}
+            newOptionLabel="+ Nueva serie…"
+            customPlaceholder="Ej. cartas paulinas"
+            onSelectExisting={handleSerieExisting}
+            onEnableCustom={handleSerieCustom}
+            onCustomValueChange={handleSerieCustomChange}
+            onCommitCustom={commitSerie}
+          />
         </div>
 
-        <div className="post-editor-metadata__row">
-          <div className="post-editor-metadata__cell">
-            <label htmlFor="post-creator" className={labelClassName}>
-              Autor
-            </label>
-            <input
-              id="post-creator"
-              type="text"
-              value={form.creator}
-              onChange={(event) => updateField('creator', event.target.value)}
-              className={inputClassName}
-            />
-          </div>
-
-          <div className="post-editor-metadata__cell">
-            <label htmlFor="post-folder-name" className={labelClassName}>
-              Nombre de carpeta
-            </label>
-            <input
-              id="post-folder-name"
-              type="text"
-              value={form.folderName}
-              onChange={(event) =>
-                updateField('folderName', normalizeKebabInput(event.target.value))
-              }
-              placeholder="ej: el_origen_de_pablo"
-              maxLength={50}
-              className={inputClassName}
-            />
-          </div>
+        <div className="post-editor-metadata__field">
+          <CatalogSelect
+            id="post-chapter"
+            label="Sección"
+            options={chapterOptions}
+            value={form.chapter}
+            isCustom={form.chapterIsCustom}
+            customValue={form.chapterCustom}
+            disabled={catalogLoading || !chapterFieldEnabled}
+            newOptionLabel="+ Nuevo capítulo…"
+            customPlaceholder="Ej. efesios"
+            onSelectExisting={handleChapterExisting}
+            onEnableCustom={handleChapterCustom}
+            onCustomValueChange={handleChapterCustomChange}
+            onCommitCustom={commitChapter}
+          />
         </div>
 
-        <div className="post-editor-metadata__cell post-editor-metadata__cell--full">
+        <div className="post-editor-metadata__field">
+          <label htmlFor="post-creator" className={labelClassName}>
+            Autor
+          </label>
+          <input
+            id="post-creator"
+            type="text"
+            value={form.creator}
+            onChange={(event) => updateField('creator', event.target.value)}
+            className={inputClassName}
+          />
+        </div>
+
+        <div className="post-editor-metadata__field">
+          <label htmlFor="post-folder-name" className={labelClassName}>
+            Nombre de carpeta
+          </label>
+          <input
+            id="post-folder-name"
+            type="text"
+            value={form.folderName}
+            onChange={(event) =>
+              updateField('folderName', normalizeKebabInput(event.target.value))
+            }
+            placeholder="ej: el_origen_de_pablo"
+            maxLength={50}
+            className={inputClassName}
+          />
+        </div>
+
+        <div className="post-editor-metadata__field post-editor-metadata__field--title">
           <label htmlFor="post-title" className={labelClassName}>
             Título
           </label>
-            <div className="relative">
-              <select
-                id="post-title"
-                value={
-                  titleIsCustom
-                    ? NEW_TITLE_OPTION
-                    : selectedArticleId
-                      ? selectedArticleId
-                      : hasCustomTitle
-                        ? CUSTOM_TITLE_OPTION
-                        : NEW_TITLE_OPTION
-                }
-                onChange={(event) => {
-                  const next = event.target.value;
-                  if (next === NEW_TITLE_OPTION) {
-                    setSelectedArticleId('');
-                    setLoadedArticleId('');
-                    setTitleIsCustom(true);
-                    setPendingMediaFiles(new Map());
-                    setForm((previous) => ({
-                      ...previous,
-                      title: '',
-                      folderName: '',
-                      creator: EMPTY_FORM.creator,
-                      posts: [],
-                      sections: [createEmptySection()],
-                    }));
-                    return;
-                  }
-                  if (next === CUSTOM_TITLE_OPTION) {
-                    setSelectedArticleId('');
-                    setLoadedArticleId('');
-                    setTitleIsCustom(false);
-                    return;
-                  }
-                  const selected = existingArticles.find(
-                    (article) => article.articleId === next,
-                  );
-                  if (!selected) return;
-                  setSelectedArticleId(selected.articleId);
-                  setTitleIsCustom(false);
-                  const nextTitle = selected.title || selected.articleId;
-                  console.log('[PostEditor] title select changed:', {
-                    articleId: selected.articleId,
-                    title: nextTitle,
-                    selected,
-                  });
+          <div className="post-editor__select-wrap">
+            <select
+              id="post-title"
+              value={
+                titleIsCustom
+                  ? NEW_TITLE_OPTION
+                  : selectedArticleId
+                    ? selectedArticleId
+                    : hasCustomTitle
+                      ? CUSTOM_TITLE_OPTION
+                      : NEW_TITLE_OPTION
+              }
+              onChange={(event) => {
+                const next = event.target.value;
+                if (next === NEW_TITLE_OPTION) {
+                  setSelectedArticleId('');
+                  setLoadedArticleId('');
+                  setTitleIsCustom(true);
                   setForm((previous) => ({
                     ...previous,
-                    title: nextTitle,
-                    articleId: selected.articleId,
-                    folderName: selected.articleId,
+                    title: '',
+                    folderName: '',
+                    creator: EMPTY_FORM.creator,
+                    posts: [],
+                    sections: [createEmptySection()],
                   }));
+                  return;
+                }
+                if (next === CUSTOM_TITLE_OPTION) {
+                  setSelectedArticleId('');
+                  setLoadedArticleId('');
+                  setTitleIsCustom(false);
+                  return;
+                }
+                const selected = existingArticles.find(
+                  (article) => article.articleId === next,
+                );
+                if (!selected) return;
+                setSelectedArticleId(selected.articleId);
+                setTitleIsCustom(false);
+                const nextTitle = selected.title || selected.articleId;
+                console.log('[PostEditor] title select changed:', {
+                  articleId: selected.articleId,
+                  title: nextTitle,
+                  selected,
+                });
+                setForm((previous) => ({
+                  ...previous,
+                  title: nextTitle,
+                  articleId: selected.articleId,
+                  folderName: selected.articleId,
+                }));
+              }}
+              className={`${inputClassName} post-editor__field--select`}
+              required
+            >
+              <option value={NEW_TITLE_OPTION}>+ Nuevo título…</option>
+              {hasCustomTitle && !selectedArticleId ? (
+                <option value={CUSTOM_TITLE_OPTION}>{form.title.trim()}</option>
+              ) : null}
+              {existingArticles.map((article) => (
+                <option key={article.articleId} value={article.articleId}>
+                  {article.title}
+                </option>
+              ))}
+            </select>
+            <span aria-hidden="true" className="post-editor__select-chevron">
+              ▼
+            </span>
+          </div>
+          {titleIsCustom ? (
+            <div className="post-editor-title-row">
+              <input
+                id="post-title-custom"
+                type="text"
+                value={form.title}
+                onChange={(event) => updateField('title', event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    event.preventDefault();
+                    commitNewTitle();
+                  }
                 }}
-                className={`${inputClassName} h-10 appearance-none pr-10`}
+                className={`${inputClassName} post-editor__field--grow`}
+                placeholder="Escribe el nuevo título"
                 required
-              >
-                <option value={NEW_TITLE_OPTION}>+ Nuevo título…</option>
-                {hasCustomTitle && !selectedArticleId ? (
-                  <option value={CUSTOM_TITLE_OPTION}>{form.title.trim()}</option>
-                ) : null}
-                {existingArticles.map((article) => (
-                  <option key={article.articleId} value={article.articleId}>
-                    {article.title}
-                  </option>
-                ))}
-              </select>
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm opacity-80"
-              >
-                ▼
-              </span>
-            </div>
-            {titleIsCustom ? (
-              <div className="post-editor-title-row mt-2 flex items-stretch gap-2">
-                <input
-                  id="post-title-custom"
-                  type="text"
-                  value={form.title}
-                  onChange={(event) => updateField('title', event.target.value)}
-                  onKeyDown={(event) => {
-                    if (event.key === 'Enter') {
-                      event.preventDefault();
-                      commitNewTitle();
-                    }
-                  }}
-                  className={`${inputClassName} min-w-0 flex-1`}
-                  placeholder="Escribe el nuevo título"
-                  required
-                />
-                <EditorActionButton
-                  type="button"
-                  onClick={commitNewTitle}
-                  disabled={!form.title.trim()}
-                  className="shrink-0 whitespace-nowrap"
-                >
-                  Añadir título
-                </EditorActionButton>
-              </div>
-            ) : null}
-            {selectedExistingArticle && !titleIsCustom ? (
+              />
               <EditorActionButton
-                variant="primary"
-                className="mt-2"
-                onClick={() => setTitleIsCustom(true)}
+                type="button"
+                onClick={commitNewTitle}
+                disabled={!form.title.trim()}
+                className="post-editor-title-row__action"
               >
-                Editar título
+                Añadir título
               </EditorActionButton>
-            ) : null}
+            </div>
+          ) : null}
+          {selectedExistingArticle && !titleIsCustom ? (
+            <EditorActionButton
+              variant="primary"
+              className="post-editor-title-row__edit-btn"
+              onClick={() => setTitleIsCustom(true)}
+            >
+              Editar título
+            </EditorActionButton>
+          ) : null}
         </div>
 
         {articleIdLoading ? (
-          <p className="theme-muted px-3 py-2 text-sm sm:px-4">
+          <p className="post-editor-metadata__status theme-muted">
             {selectedExistingArticle
               ? 'Cargando artículo existente…'
               : 'Asignando id del artículo…'}
@@ -1037,7 +1015,9 @@ export default function PostEditor() {
       </section>
 
       {catalogLoading ? (
-        <p className="theme-muted px-5 text-sm">Cargando series desde /data/series/…</p>
+        <p className="post-editor-metadata__loading theme-muted">
+          Cargando series desde /data/series/…
+        </p>
       ) : null}
 
       {notice ? (
@@ -1048,19 +1028,19 @@ export default function PostEditor() {
         />
       ) : null}
 
-      <section className="post-editor-sections space-y-3 px-3 sm:px-5">
-        <div className="flex items-center justify-between gap-3">
+      <section className="post-editor-sections">
+        <div className="post-editor-sections__toolbar">
           <EditorActionButton variant="primary" onClick={addSection}>
             + Sección
           </EditorActionButton>
         </div>
 
         {form.sections.map((section, index) => (
-          <div key={section.id} className="space-y-2">
-            <div className="theme-border space-y-2 rounded-xl border p-3 sm:p-4">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex min-w-0 flex-1 items-baseline gap-2">
-                  <span className="text-[1.35em] font-semibold leading-snug">
+          <div key={section.id} className="post-editor-section-block">
+            <div className="post-editor-section-card theme-border">
+              <div className="post-editor-section-card__header">
+                <div className="post-editor-section-card__heading-group">
+                  <span className="post-editor-section-card__number">
                     {index + 1}.
                   </span>
                   <input
@@ -1074,31 +1054,30 @@ export default function PostEditor() {
                     className={sectionHeadingInputClassName}
                   />
                 </div>
-                <div className="flex shrink-0 items-center gap-2">
-                    <EditorActionButton
-                      variant="primary"
-                      className="px-3 text-sm"
-                      onClick={() => setEditingSectionId(section.id)}
-                    >
-                      Editar
-                    </EditorActionButton>
-                    <EditorActionButton
-                      variant="danger"
-                      className="px-3 text-sm"
-                      onClick={() => openDeleteSectionModal(section.id)}
-                    >
-                      Quitar
-                    </EditorActionButton>
+                <div className="post-editor-section-card__actions">
+                  <EditorActionButton
+                    variant="primary"
+                    className="post-editor-section-card__action-btn"
+                    onClick={() => setEditingSectionId(section.id)}
+                  >
+                    Editar
+                  </EditorActionButton>
+                  <EditorActionButton
+                    variant="danger"
+                    className="post-editor-section-card__action-btn"
+                    onClick={() => openDeleteSectionModal(section.id)}
+                  >
+                    Quitar
+                  </EditorActionButton>
                 </div>
               </div>
 
               <SectionUnitsPreview units={section.content ?? []} />
-
             </div>
 
             <EditorActionButton
               variant="primary"
-              className="w-full sm:w-auto"
+              className="post-editor-section-add-btn"
               onClick={() => addSectionAfter(section.id)}
             >
               + Sección
@@ -1138,17 +1117,19 @@ export default function PostEditor() {
       />
 
       {sectionPendingDelete ? (
-        <div className="fixed inset-0 z-[270] bg-black/60 p-4">
-          <div className="theme-surface theme-border mx-auto mt-16 w-full max-w-xl rounded-xl border p-5 shadow-xl">
-            <h3 className="text-base font-semibold">Confirmar eliminación de sección</h3>
-            <p className="theme-muted mt-2 text-sm">
+        <div className="post-editor-delete-overlay">
+          <div className="post-editor-delete-dialog theme-surface theme-border">
+            <h3 className="post-editor-delete-dialog__title">
+              Confirmar eliminación de sección
+            </h3>
+            <p className="post-editor-delete-dialog__text theme-muted">
               Para eliminar esta sección, escribe exactamente su encabezado:
             </p>
-            <p className="mt-1 text-sm font-semibold">
+            <p className="post-editor-delete-dialog__heading">
               {sectionPendingDelete.heading.trim() || '(sin encabezado)'}
             </p>
 
-            <div className="mt-4">
+            <div className="post-editor-delete-dialog__field">
               <label className={labelClassName} htmlFor="delete-section-confirm">
                 Encabezado de confirmación
               </label>
@@ -1162,17 +1143,17 @@ export default function PostEditor() {
               />
             </div>
 
-            <div className="mt-5 flex justify-end gap-2">
+            <div className="post-editor-delete-dialog__actions">
               <button
                 type="button"
                 onClick={closeDeleteSectionModal}
-                className="theme-toolbar-btn px-4"
+                className="theme-toolbar-btn post-editor-delete-dialog__cancel"
               >
                 Cancelar
               </button>
               <EditorActionButton
                 variant="danger"
-                className="px-4 disabled:cursor-not-allowed disabled:opacity-50"
+                className="post-editor-delete-dialog__confirm"
                 onClick={confirmDeleteSection}
                 disabled={
                   deleteSectionInput.trim() !== sectionPendingDelete.heading.trim()

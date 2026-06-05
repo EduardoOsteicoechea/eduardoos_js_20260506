@@ -8,30 +8,27 @@ interface Props {
 const { posts } = Astro.props;
 ---
 
-<ul class="space-y-3">
+<ul class="series-card-list">
   {
     posts.map((post) => (
       <li>
         {post.href ? (
-          <a
-            href={post.href}
-            class="theme-border block rounded-lg border px-5 py-4 transition hover:bg-black/5 dark:hover:bg-white/10"
-          >
-            <span class="font-semibold">
+          <a href={post.href} class="series-card theme-border">
+            <span class="series-card__title">
               {post.articleTitle ?? post.contribution}
             </span>
             {post.abstract ? (
-              <p class="theme-muted mt-2 text-sm leading-relaxed">{post.abstract}</p>
+              <p class="series-card__description theme-muted">{post.abstract}</p>
             ) : null}
-            <span class="theme-muted mt-2 block text-xs">{post.contribution}</span>
+            <span class="series-card__meta theme-muted">{post.contribution}</span>
           </a>
         ) : (
-          <div class="theme-border rounded-lg border px-5 py-4 opacity-60">
-            <span class="font-semibold">{post.contribution}</span>
+          <div class="series-card series-card--disabled theme-border">
+            <span class="series-card__title">{post.contribution}</span>
             {post.abstract ? (
-              <p class="theme-muted mt-2 text-sm leading-relaxed">{post.abstract}</p>
+              <p class="series-card__description theme-muted">{post.abstract}</p>
             ) : null}
-            <span class="theme-muted mt-2 block text-xs">Próximamente</span>
+            <span class="series-card__meta theme-muted">Próximamente</span>
           </div>
         )}
       </li>

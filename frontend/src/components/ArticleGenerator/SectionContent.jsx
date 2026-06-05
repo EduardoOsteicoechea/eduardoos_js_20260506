@@ -14,7 +14,7 @@ export default function SectionContent({
   if (!blocks.length) {
     if (viewMode === VIEW_MODES.outline) {
       return (
-        <p className="theme-muted text-sm italic">
+        <p className="article-section__empty theme-muted">
           Sin referencias bíblicas en esta sección.
         </p>
       );

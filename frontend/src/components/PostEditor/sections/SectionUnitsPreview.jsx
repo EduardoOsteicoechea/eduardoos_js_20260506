@@ -3,12 +3,14 @@ import { UnitPreviewBody } from './unitPreviewDisplay';
 export default function SectionUnitsPreview({ units = [] }) {
   if (!units.length) {
     return (
-      <p className="theme-muted text-sm italic">Sin unidades en esta sección.</p>
+      <p className="section-units-preview__empty theme-muted">
+        Sin unidades en esta sección.
+      </p>
     );
   }
 
   return (
-    <ul className="space-y-3">
+    <ul className="section-units-preview__list">
       {units.map((unit) => (
         <li key={unit.id}>
           <UnitPreviewBody unit={unit} />

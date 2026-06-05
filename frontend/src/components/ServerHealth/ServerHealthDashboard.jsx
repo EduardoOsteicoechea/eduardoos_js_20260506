@@ -48,7 +48,7 @@ function CopyButton({ text, label = 'Copiar' }) {
     <button
       type="button"
       onClick={handleCopy}
-      className="theme-toolbar-btn shrink-0 px-3 py-1 text-xs"
+      className="theme-toolbar-btn server-health__copy-btn"
       title="Copiar al portapapeles"
     >
       {copied ? 'Copiado' : label}
@@ -58,10 +58,10 @@ function CopyButton({ text, label = 'Copiar' }) {
 
 function PanelHeader({ title, subtitle, copyText }) {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-2">
-      <div className="min-w-0">
-        <h2 className="text-lg font-semibold">{title}</h2>
-        {subtitle ? <p className="theme-muted text-xs">{subtitle}</p> : null}
+    <div className="server-health__panel-header">
+      <div className="server-health__panel-title-wrap">
+        <h2 className="server-health__panel-title">{title}</h2>
+        {subtitle ? <p className="server-health__panel-subtitle theme-muted">{subtitle}</p> : null}
       </div>
       <CopyButton text={copyText} />
     </div>
@@ -73,8 +73,8 @@ function StatusBadge({ ok, label }) {
     <span
       className={
         ok
-          ? 'rounded-full bg-green-500/15 px-2 py-0.5 text-xs font-medium text-green-800 dark:text-green-300'
-          : 'rounded-full bg-red-500/15 px-2 py-0.5 text-xs font-medium text-red-800 dark:text-red-300'
+          ? 'server-health__badge server-health__badge--ok'
+          : 'server-health__badge server-health__badge--fail'
       }
     >
       {label}
@@ -154,7 +154,7 @@ function formatArtifactText(artifact) {
 
 function MetricCard({ label, copyText, children }) {
   return (
-    <div className="theme-border space-y-2 rounded-xl border p-4">
+    <div className="server-health__panel theme-border">
       <PanelHeader title={label} copyText={copyText} />
       {children}
     </div>
@@ -163,7 +163,7 @@ function MetricCard({ label, copyText, children }) {
 
 function InfoPanel({ title, subtitle, copyText, children }) {
   return (
-    <section className="theme-border space-y-2 rounded-xl border p-4">
+    <section className="server-health__panel theme-border">
       <PanelHeader title={title} subtitle={subtitle} copyText={copyText} />
       {children}
     </section>
@@ -178,16 +178,16 @@ function LogPanel({ title, block }) {
   const scopeLabel = block?.scope ? ` · ${block.scope}` : '';
 
   return (
-    <section className="theme-border space-y-2 rounded-xl border p-4">
+    <section className="server-health__panel theme-border">
       <PanelHeader
         title={title}
         subtitle={`${block?.service ?? ''}${scopeLabel}`}
         copyText={copyText}
       />
       {error ? (
-        <p className="text-sm text-red-600 dark:text-red-300">{error}</p>
+        <p className="server-health__log-error">{error}</p>
       ) : null}
-      <pre className="theme-border max-h-72 overflow-auto rounded-lg border bg-black/5 p-3 text-xs leading-relaxed dark:bg-white/5">
+      <pre className="server-health__log-pre theme-border">
         {logText}
       </pre>
     </section>
@@ -233,11 +233,11 @@ export default function ServerHealthDashboard() {
   const issuesCopyText = issues.length ? issues.join('\n') : 'Sin problemas críticos.';
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <div className="server-health">
+      <div className="server-health__header">
         <div>
-          <h1 className="text-2xl font-semibold">Estado del servidor</h1>
-          <p className="theme-muted mt-1 text-sm">
+          <h1 className="server-health__title">Estado del servidor</h1>
+          <p className="server-health__subtitle theme-muted">
             Servicios, puertos, artefactos de deploy, probes HTTP, logs y recursos.
           </p>
         </div>
@@ -245,30 +245,30 @@ export default function ServerHealthDashboard() {
           type="button"
           onClick={load}
           disabled={loading}
-          className="theme-toolbar-btn px-4 py-2 text-sm disabled:opacity-50"
+          className="theme-toolbar-btn server-health__refresh"
         >
           {loading ? 'Actualizando…' : 'Actualizar'}
         </button>
       </div>
 
       {error ? (
-        <p className="rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-300">
+        <p className="server-health__error">
           No se pudo cargar {HEALTH_API_PATH}: {error}
         </p>
       ) : null}
 
       {data ? (
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="server-health__status-row">
           <StatusBadge ok={data.ok} label={data.ok ? 'Sistema OK' : 'Hay problemas'} />
           {data.timestamp ? (
-            <span className="theme-muted text-xs">Última respuesta: {data.timestamp}</span>
+            <span className="server-health__timestamp theme-muted">Última respuesta: {data.timestamp}</span>
           ) : null}
         </div>
       ) : null}
 
       {data && issues.length > 0 ? (
         <InfoPanel title="Problemas detectados" copyText={issuesCopyText}>
-          <ul className="list-inside list-disc space-y-1 text-sm text-red-700 dark:text-red-300">
+          <ul className="server-health__issues">
             {issues.map((issue) => (
               <li key={issue}>{issue}</li>
             ))}
@@ -278,7 +278,7 @@ export default function ServerHealthDashboard() {
 
       {data && warnings.length > 0 ? (
         <InfoPanel title="Avisos en logs recientes" copyText={warnings.join('\n')}>
-          <ul className="list-inside list-disc space-y-1 text-sm text-amber-800 dark:text-amber-300">
+          <ul className="server-health__warnings">
             {warnings.map((warning) => (
               <li key={warning}>{warning}</li>
             ))}
@@ -287,13 +287,13 @@ export default function ServerHealthDashboard() {
       ) : null}
 
       {services ? (
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="server-health__grid server-health__grid--two">
           <InfoPanel
             title="Servicio backend"
             subtitle={services.backend?.unit}
             copyText={formatUnitText(services.backend)}
           >
-            <ul className="space-y-1 text-sm">
+            <ul className="server-health__list">
               <li>
                 Activo: <StatusBadge ok={services.backend?.active} label={services.backend?.active ? 'sí' : 'no'} />
               </li>
@@ -309,7 +309,7 @@ export default function ServerHealthDashboard() {
             subtitle={services.documenter?.unit}
             copyText={formatUnitText(services.documenter)}
           >
-            <ul className="space-y-1 text-sm">
+            <ul className="server-health__list">
               <li>
                 Activo:{' '}
                 <StatusBadge
@@ -326,7 +326,7 @@ export default function ServerHealthDashboard() {
             subtitle={services.legacy_api?.unit}
             copyText={formatUnitText(services.legacy_api)}
           >
-            <ul className="space-y-1 text-sm">
+            <ul className="server-health__list">
               <li>Existe: {services.legacy_api?.exists ? 'sí' : 'no'}</li>
               <li>
                 Activo:{' '}
@@ -343,7 +343,7 @@ export default function ServerHealthDashboard() {
             subtitle={services.chatbot?.unit}
             copyText={formatUnitText(services.chatbot)}
           >
-            <ul className="space-y-1 text-sm">
+            <ul className="server-health__list">
               <li>
                 Activo:{' '}
                 <StatusBadge
@@ -360,7 +360,7 @@ export default function ServerHealthDashboard() {
             subtitle={services.posts_db?.unit}
             copyText={formatUnitText(services.posts_db)}
           >
-            <ul className="space-y-1 text-sm">
+            <ul className="server-health__list">
               <li>
                 Activo:{' '}
                 <StatusBadge
@@ -377,7 +377,7 @@ export default function ServerHealthDashboard() {
             subtitle={services.telemetry?.unit}
             copyText={formatUnitText(services.telemetry)}
           >
-            <ul className="space-y-1 text-sm">
+            <ul className="server-health__list">
               <li>
                 Activo:{' '}
                 <StatusBadge
@@ -402,7 +402,7 @@ export default function ServerHealthDashboard() {
             formatPortText(ports.telemetry),
           ].join('\n\n')}
         >
-          <ul className="space-y-2 text-sm">
+          <ul className="server-health__list server-health__list--spaced">
             <li>
               <strong>8080 backend:</strong>{' '}
               {ports.backend?.listening
@@ -442,7 +442,7 @@ export default function ServerHealthDashboard() {
           title="Artefactos de deploy"
           copyText={`${formatArtifactText(deploy.backend_dist)}\n\n${formatArtifactText(deploy.documenter_dist)}`}
         >
-          <ul className="space-y-1 text-sm">
+          <ul className="server-health__list">
             <li>
               Backend:{' '}
               <StatusBadge
@@ -450,7 +450,7 @@ export default function ServerHealthDashboard() {
                 label={deploy.backend_dist?.exists ? 'dist/server.js OK' : 'falta dist'}
               />
             </li>
-            <li className="theme-muted text-xs break-all">{deploy.backend_dist?.path}</li>
+            <li className="server-health__path theme-muted">{deploy.backend_dist?.path}</li>
             <li>
               Documenter:{' '}
               <StatusBadge
@@ -458,7 +458,7 @@ export default function ServerHealthDashboard() {
                 label={deploy.documenter_dist?.exists ? 'dist/server.js OK' : 'falta dist'}
               />
             </li>
-            <li className="theme-muted text-xs break-all">{deploy.documenter_dist?.path}</li>
+            <li className="server-health__path theme-muted">{deploy.documenter_dist?.path}</li>
           </ul>
         </InfoPanel>
       ) : null}
@@ -473,7 +473,7 @@ export default function ServerHealthDashboard() {
             formatProbeText(probes.posts_db_health),
           ].join('\n\n')}
         >
-          <ul className="space-y-2 text-sm">
+          <ul className="server-health__list server-health__list--spaced">
             <li>
               Catalog:{' '}
               <StatusBadge ok={probes.backend_catalog?.ok} label={probes.backend_catalog?.ok ? 'OK' : 'falló'} />
@@ -482,13 +482,13 @@ export default function ServerHealthDashboard() {
                 ? ` · ${probes.backend_catalog.latency_ms} ms`
                 : ''}
             </li>
-            <li className="theme-muted break-all text-xs">{probes.backend_catalog?.url}</li>
+            <li className="server-health__path theme-muted">{probes.backend_catalog?.url}</li>
             <li>
               Documenter /health:{' '}
               <StatusBadge ok={probes.documenter_health?.ok} label={probes.documenter_health?.ok ? 'OK' : 'falló'} />
               {probes.documenter_health?.status ? ` HTTP ${probes.documenter_health.status}` : ''}
             </li>
-            <li className="theme-muted break-all text-xs">{probes.documenter_health?.url}</li>
+            <li className="server-health__path theme-muted">{probes.documenter_health?.url}</li>
             <li>
               Chatbot /health:{' '}
               <StatusBadge ok={probes.chatbot_health?.ok} label={probes.chatbot_health?.ok ? 'OK' : 'falló'} />
@@ -497,7 +497,7 @@ export default function ServerHealthDashboard() {
                 ? ` · ${probes.chatbot_health.latency_ms} ms`
                 : ''}
             </li>
-            <li className="theme-muted break-all text-xs">{probes.chatbot_health?.url}</li>
+            <li className="server-health__path theme-muted">{probes.chatbot_health?.url}</li>
             <li>
               Posts DB /health:{' '}
               <StatusBadge ok={probes.posts_db_health?.ok} label={probes.posts_db_health?.ok ? 'OK' : 'falló'} />
@@ -506,28 +506,28 @@ export default function ServerHealthDashboard() {
                 ? ` · ${probes.posts_db_health.latency_ms} ms`
                 : ''}
             </li>
-            <li className="theme-muted break-all text-xs">{probes.posts_db_health?.url}</li>
+            <li className="server-health__path theme-muted">{probes.posts_db_health?.url}</li>
           </ul>
         </InfoPanel>
       ) : null}
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="server-health__grid server-health__grid--metrics">
         <MetricCard label="Memoria RAM" copyText={formatMemoryText(memory)}>
           {memory ? (
-            <ul className="space-y-1 text-sm">
+            <ul className="server-health__list">
               <li>Total: {formatBytes(memory.total_bytes)}</li>
               <li>Usada: {formatBytes(memory.used_bytes)}</li>
               <li>Disponible: {formatBytes(memory.available_bytes)}</li>
               <li>Uso: {memory.used_percent}%</li>
             </ul>
           ) : (
-            <p className="theme-muted text-sm">Sin datos</p>
+            <p className="theme-muted">Sin datos</p>
           )}
         </MetricCard>
 
         <MetricCard label="Disco" copyText={formatDiskText(disk)}>
           {disk ? (
-            <ul className="space-y-1 text-sm">
+            <ul className="server-health__list">
               <li>Ruta: {disk.path}</li>
               <li>Total: {formatBytes(disk.total_bytes)}</li>
               <li>Usado: {formatBytes(disk.used_bytes)}</li>
@@ -535,13 +535,13 @@ export default function ServerHealthDashboard() {
               <li>Uso: {disk.used_percent}%</li>
             </ul>
           ) : (
-            <p className="theme-muted text-sm">Sin datos</p>
+            <p className="theme-muted">Sin datos</p>
           )}
         </MetricCard>
       </div>
 
       {data?.system?.error ? (
-        <p className="text-sm text-amber-700 dark:text-amber-300">{data.system.error}</p>
+        <p className="server-health__system-error">{data.system.error}</p>
       ) : null}
 
       {data ? (

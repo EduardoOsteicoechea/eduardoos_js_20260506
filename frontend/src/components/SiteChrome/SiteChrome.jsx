@@ -9,20 +9,16 @@ import {
 } from '../../lib/chatbot/chatbotStore';
 
 /**
- * Fixed overlay shell: chat tray stacks above the activity bar so inputs are never hidden.
+ * Single fixed site chrome: AI chat tray + activity bar, identical on every page.
  *
  * @param {{
  *   pathname: string,
  *   activityBarMode?: import('../../config/activityBarConfig').ActivityBarPageMode,
- *   showActivityBar?: boolean,
- *   reserveBottomBar?: boolean,
  * }} props
  */
-export default function SiteChromeShell({
+export default function SiteChrome({
   pathname,
   activityBarMode = 'default',
-  showActivityBar = true,
-  reserveBottomBar = false,
 }) {
   const [mounted, setMounted] = useState(false);
 
@@ -43,18 +39,13 @@ export default function SiteChromeShell({
   if (!mounted) return null;
 
   return createPortal(
-    <div
-      className={`site-chrome${!showActivityBar && reserveBottomBar ? ' site-chrome--reserve-bar' : ''}`}
-      data-site-chrome
-    >
+    <div className="site-chrome" data-site-chrome>
       <div className="site-chrome__chat-region">
-        <ChatbotTray inline />
+        <ChatbotTray />
       </div>
-      {showActivityBar ? (
-        <div className="site-chrome__bar">
-          <ActivityBar pathname={pathname} pageMode={activityBarMode} />
-        </div>
-      ) : null}
+      <div className="site-chrome__bar">
+        <ActivityBar pathname={pathname} pageMode={activityBarMode} />
+      </div>
     </div>,
     document.body,
   );

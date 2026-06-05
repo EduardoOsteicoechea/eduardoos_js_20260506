@@ -24,12 +24,12 @@ export default function SectionActions({ units = [], onChangeUnits }) {
   };
 
   return (
-    <div className="space-y-3">
-      <div className="flex flex-wrap gap-2">
+    <div className="section-actions">
+      <div className="section-actions__row">
         <button
           type="button"
           onClick={handleOpenPicker}
-          className="theme-toolbar-btn text-sm"
+          className="theme-toolbar-btn section-actions__btn"
         >
           + Añadir unidad
         </button>

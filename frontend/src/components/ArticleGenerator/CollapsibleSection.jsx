@@ -10,29 +10,26 @@ export default function CollapsibleSection({
   return (
     <section
       id={getSectionId(number)}
-      className="theme-border article-section scroll-mt-6 border-b last:border-b-0"
+      className="article-section theme-border"
     >
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={isExpanded}
-        className={`article-section-toggle flex w-full items-start justify-between gap-3 px-4 py-5 text-left ${
+        className={`article-section-toggle ${
           isExpanded ? 'article-section-toggle--active' : ''
         }`}
       >
-        <span className="text-[1.35em] font-semibold leading-snug">
+        <span className="article-section-toggle__title">
           {number}. {heading}
         </span>
-        <span
-          className="theme-muted mt-1 shrink-0 text-xl leading-none"
-          aria-hidden="true"
-        >
+        <span className="article-section-toggle__icon theme-muted" aria-hidden="true">
           {isExpanded ? '−' : '+'}
         </span>
       </button>
 
       {isExpanded ? (
-        <div className="article-section-content px-4 pb-10 pt-2">{children}</div>
+        <div className="article-section-content">{children}</div>
       ) : null}
     </section>
   );

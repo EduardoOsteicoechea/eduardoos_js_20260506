@@ -23,16 +23,16 @@ export default function ListUnitEditor({ items = [], onChange }) {
   };
 
   return (
-    <div className="space-y-5">
-      <ul className="list-disc space-y-5 pl-5">
+    <div className="list-unit-editor">
+      <ul className="list-unit-editor__items">
         {items.map((item, index) => (
-          <li key={index} className="space-y-3">
-            <div className="flex items-center justify-between gap-2">
-              <p className="text-sm font-medium opacity-70">Elemento {index + 1}</p>
+          <li key={index} className="list-unit-editor__item-fields">
+            <div className="list-unit-editor__item-header">
+              <p className="list-unit-editor__item-label">Elemento {index + 1}</p>
               <button
                 type="button"
                 onClick={() => removeItem(index)}
-                className="theme-toolbar-btn text-xs"
+                className="theme-toolbar-btn list-unit-editor__remove-btn"
               >
                 Quitar elemento
               </button>
@@ -49,7 +49,7 @@ export default function ListUnitEditor({ items = [], onChange }) {
                   updateItem(index, 'content', event.target.value)
                 }
                 rows={2}
-                className={`${inputClassName} resize-y`}
+                className={`${inputClassName} post-editor__field--textarea`}
               />
             </div>
 
@@ -73,7 +73,7 @@ export default function ListUnitEditor({ items = [], onChange }) {
             </div>
 
             {(item.content ?? '').trim() ? (
-              <p className="text-sm leading-relaxed">
+              <p className="list-unit-editor__preview">
                 <EmphasizedTextPreview
                   content={item.content}
                   emphasized={item.emphasized}
@@ -84,7 +84,11 @@ export default function ListUnitEditor({ items = [], onChange }) {
         ))}
       </ul>
 
-      <button type="button" onClick={addItem} className="theme-toolbar-btn text-sm">
+      <button
+        type="button"
+        onClick={addItem}
+        className="theme-toolbar-btn list-unit-editor__add-item-btn"
+      >
         + Añadir elemento
       </button>
     </div>

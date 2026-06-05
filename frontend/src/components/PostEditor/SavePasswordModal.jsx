@@ -40,27 +40,27 @@ export default function SavePasswordModal({
 
   return (
     <div
-      className="fixed inset-0 z-[220] flex items-center justify-center bg-black/40 p-4"
+      className="save-password-overlay"
       role="presentation"
       onClick={isSubmitting ? undefined : onClose}
     >
       <div
-        className="theme-border theme-surface max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto rounded-xl border p-6 shadow-xl"
+        className="save-password-dialog theme-border theme-surface"
         role="dialog"
         aria-modal="true"
         aria-labelledby="save-password-title"
         onClick={(event) => event.stopPropagation()}
       >
-        <h2 id="save-password-title" className="text-xl font-semibold">
+        <h2 id="save-password-title" className="save-password-dialog__title">
           Confirmar guardado
         </h2>
-        <p className="theme-muted mt-2 text-sm">
+        <p className="save-password-dialog__intro theme-muted">
           Introduce la contraseña del editor para guardar este artículo.
         </p>
 
-        <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+        <form onSubmit={handleSubmit} className="save-password-dialog__form">
           <div>
-            <label htmlFor="editor-password" className="mb-1 block text-sm font-medium">
+            <label htmlFor="editor-password" className="post-editor__label">
               Contraseña
             </label>
             <input
@@ -76,27 +76,24 @@ export default function SavePasswordModal({
           </div>
 
           {error ? (
-            <p
-              className="whitespace-pre-wrap break-words text-sm text-red-600 dark:text-red-400"
-              role="alert"
-            >
+            <p className="save-password-dialog__error" role="alert">
               {error}
             </p>
           ) : null}
 
-          <div className="flex justify-end gap-2 pt-2">
+          <div className="save-password-dialog__actions">
             <button
               type="button"
               disabled={isSubmitting}
               onClick={onClose}
-              className="theme-toolbar-btn disabled:cursor-not-allowed disabled:opacity-50"
+              className="theme-toolbar-btn"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isSubmitting || !password.trim()}
-              className="theme-toolbar-btn disabled:cursor-not-allowed disabled:opacity-50"
+              className="theme-toolbar-btn"
             >
               {isSubmitting ? 'Guardando…' : 'Guardar'}
             </button>

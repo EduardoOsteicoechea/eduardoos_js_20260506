@@ -7,10 +7,11 @@ export default function ChatbotToggleButton({ className = '' }) {
   return (
     <SiteControlButton
       size="bar"
+      variant="framed"
       label="AI"
       active={open}
       onClick={toggleTray}
-      className={`font-bold tracking-wide ${className}`.trim()}
+      className={`ui-control--bar-label ${className}`.trim()}
       aria-label={open ? 'Cerrar asistente AI' : 'Abrir asistente AI'}
       aria-expanded={open}
       title="Asistente AI"

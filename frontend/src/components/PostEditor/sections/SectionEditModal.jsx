@@ -68,10 +68,10 @@ export default function SectionEditModal({ section, onSave, onClose }) {
   if (!mounted) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[250] flex flex-col bg-white dark:bg-black">
-      <header className="theme-border flex shrink-0 items-center gap-3 border-b px-4 py-4">
-        <div className="min-w-0 flex-1">
-          <p className="theme-muted text-xs font-semibold uppercase tracking-wide">
+    <div className="section-edit-modal">
+      <header className="section-edit-modal__header theme-border">
+        <div className="section-edit-modal__header-field">
+          <p className="section-edit-modal__kicker theme-muted">
             Editar sección
           </p>
           <input
@@ -90,13 +90,13 @@ export default function SectionEditModal({ section, onSave, onClose }) {
         </div>
       </header>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4 pb-6">
+      <div className="section-edit-modal__body">
         {(draftSection.content ?? []).length === 0 ? (
-          <p className="theme-muted rounded-lg border border-dashed px-4 py-8 text-center text-sm">
+          <p className="section-edit-modal__empty theme-muted">
             Usa «Añadir unidad» en la barra inferior para crear contenido.
           </p>
         ) : (
-          <ul className="space-y-3">
+          <ul className="section-edit-modal__units">
             {(draftSection.content ?? []).map((unit) => (
               <li key={unit.id}>
                 <SectionUnitEditor
@@ -110,7 +110,7 @@ export default function SectionEditModal({ section, onSave, onClose }) {
         )}
       </div>
 
-      <div className="shrink-0">
+      <div className="section-edit-modal__footer">
         <UnitTypeTray open={typeTrayOpen} onSelect={handleAddUnit} />
         <SectionEditActivityBar
           typeTrayOpen={typeTrayOpen}

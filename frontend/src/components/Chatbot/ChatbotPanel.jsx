@@ -146,7 +146,7 @@ export default function ChatbotPanel() {
   }, [languageConfig.id, pageContext]);
 
   return (
-    <div className="chatbot-panel theme-surface flex h-full min-h-0 flex-col">
+    <div className="chatbot-panel theme-surface">
       <ChatbotContextBar />
       <ChatbotMessageList
         messages={messages}

@@ -155,13 +155,13 @@ export default function ArticleViewer({
   return (
     <>
       {reloadError ? (
-        <p className="theme-border mb-4 rounded-lg border px-4 py-2 text-sm">
+        <p className="article-viewer__notice theme-border">
           Error al recargar: {reloadError}
         </p>
       ) : null}
 
       {pdfError ? (
-        <p className="theme-border mb-4 rounded-lg border px-4 py-2 text-sm text-red-700 dark:text-red-300">
+        <p className="article-viewer__notice article-viewer__notice--error theme-border">
           Error al generar PDF: {pdfError}
         </p>
       ) : null}

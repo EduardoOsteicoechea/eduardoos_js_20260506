@@ -208,7 +208,7 @@ const props = Astro.props as PageProps;
     activityBarMode="article"
   >
 
-    <main class="mx-auto max-w-3xl px-5 pb-[calc(var(--activity-bar-height)+1.25rem)] pt-10">
+    <main class="series-page series-page--article">
 
       <SeriesBackLink client:load />
 
@@ -236,61 +236,57 @@ const props = Astro.props as PageProps;
 
   <Layout title={`${props.pageTitle} | Eduardo Osteicoechea`}>
 
-    <main class="mx-auto max-w-4xl px-5 py-10">
+    <main class="series-page series-page--wide">
 
       <SeriesBreadcrumbs crumbs={props.breadcrumbs} currentLabel={props.pageTitle} client:load />
 
+      <header class="series-page__header">
 
-
-      <header class="mb-10">
-
-        <p class="theme-muted text-sm uppercase tracking-wide">
+        <p class="series-page__kicker theme-muted">
 
           {props.hub.series ? `Serie ${props.hub.series}` : "Series"}
 
         </p>
 
-        <h1 class="mt-2 text-3xl font-bold">{props.pageTitle}</h1>
+        <h1 class="series-page__title">{props.pageTitle}</h1>
 
         {props.hub.description ? (
 
-          <p class="theme-muted mt-4 text-lg leading-relaxed">{props.hub.description}</p>
+          <p class="series-page__description theme-muted">{props.hub.description}</p>
 
         ) : null}
 
         {props.hub.purpose ? (
 
-          <p class="mt-4 leading-relaxed">{props.hub.purpose}</p>
+          <p class="series-page__purpose">{props.hub.purpose}</p>
 
         ) : null}
 
       </header>
 
-
-
       {
 
         props.hub.biblical_texts?.length ? (
 
-          <section class="theme-border mb-10 rounded-lg border px-5 py-4">
+          <section class="series-biblical theme-border">
 
-            <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide opacity-70">
+            <h2 class="series-biblical__title">
 
               Texto bíblico
 
             </h2>
 
-            <ul class="space-y-3">
+            <ul class="series-biblical__list">
 
               {props.hub.biblical_texts.map((item) => (
 
                 <li>
 
-                  {item.text ? <p class="leading-relaxed">{item.text}</p> : null}
+                  {item.text ? <p class="series-biblical__text">{item.text}</p> : null}
 
                   {item.reference ? (
 
-                    <p class="theme-muted mt-1 text-sm font-medium">{item.reference}</p>
+                    <p class="series-biblical__reference theme-muted">{item.reference}</p>
 
                   ) : null}
 
@@ -324,15 +320,13 @@ const props = Astro.props as PageProps;
 
   <Layout title={`${props.pageTitle} | Eduardo Osteicoechea`}>
 
-    <main class="mx-auto max-w-4xl px-5 py-10">
+    <main class="series-page series-page--wide">
 
       <SeriesBreadcrumbs crumbs={props.breadcrumbs} currentLabel={props.pageTitle} client:load />
 
+      <header class="series-page__header">
 
-
-      <header class="mb-10">
-
-        <h1 class="text-3xl font-bold">{props.pageTitle}</h1>
+        <h1 class="series-page__title series-page__title--solo">{props.pageTitle}</h1>
 
       </header>
 

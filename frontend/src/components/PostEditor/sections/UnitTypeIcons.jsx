@@ -2,7 +2,7 @@
 export function KeyUnitBadge() {
   return (
     <span
-      className="absolute -right-0.5 -top-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-sm bg-green-600 text-white dark:bg-green-500"
+      className="unit-type-icon__key-badge"
       aria-hidden="true"
     >
       <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">

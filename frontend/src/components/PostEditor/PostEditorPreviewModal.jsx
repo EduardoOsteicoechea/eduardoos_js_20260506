@@ -14,22 +14,22 @@ export default function PostEditorPreviewModal({ open, article, onClose }) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[260] bg-black/60 p-4 sm:p-6">
-      <div className="theme-surface theme-border mx-auto flex h-full w-full max-w-5xl flex-col rounded-xl border shadow-xl">
-        <header className="theme-border flex items-center justify-between border-b px-4 py-3">
-          <h2 className="text-sm font-semibold uppercase tracking-wide opacity-70">
+    <div className="post-editor-preview-overlay">
+      <div className="post-editor-preview-dialog theme-surface theme-border">
+        <header className="post-editor-preview-dialog__header">
+          <h2 className="post-editor-preview-dialog__title">
             Vista previa del artículo
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="theme-toolbar-btn text-sm"
+            className="theme-toolbar-btn"
           >
             Cerrar
           </button>
         </header>
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
+        <div className="post-editor-preview-dialog__body">
           {previewArticle ? (
             <ArticleGenerator
               article={previewArticle}
@@ -46,7 +46,7 @@ export default function PostEditorPreviewModal({ open, article, onClose }) {
               }}
             />
           ) : (
-            <p className="theme-muted text-sm">
+            <p className="theme-muted">
               Completa al menos el título y una sección para previsualizar.
             </p>
           )}

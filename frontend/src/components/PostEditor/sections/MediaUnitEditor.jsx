@@ -24,7 +24,7 @@ export default function MediaUnitEditor({ type, draft, onChange }) {
   const previewSrc = resolvePreviewSrc(draft.src);
 
   return (
-    <div className="space-y-4">
+    <div className="media-unit-editor">
       <div>
         <label className={labelClassName} htmlFor={`${type}-url`}>
           1. URL del recurso ({MEDIA_LABEL_BY_TYPE[type]})
@@ -37,7 +37,7 @@ export default function MediaUnitEditor({ type, draft, onChange }) {
           placeholder="https://… o /data/series/…"
           className={inputClassName}
         />
-        <p className="theme-muted mt-1 text-xs">
+        <p className="post-editor__hint theme-muted">
           Enlace público al archivo (no se sube el archivo al servidor).
         </p>
       </div>
@@ -74,7 +74,7 @@ export default function MediaUnitEditor({ type, draft, onChange }) {
         <img
           src={previewSrc}
           alt={draft.label || draft.name || 'Vista previa'}
-          className="max-h-48 w-auto rounded-lg border border-black/10 dark:border-white/10"
+          className="media-unit-editor__preview-image"
         />
       ) : null}
 
@@ -82,12 +82,12 @@ export default function MediaUnitEditor({ type, draft, onChange }) {
         <video
           src={previewSrc}
           controls
-          className="max-h-48 w-full rounded-lg border border-black/10 dark:border-white/10"
+          className="media-unit-editor__preview-video"
         />
       ) : null}
 
       {type === 'audio' && previewSrc ? (
-        <audio src={previewSrc} controls className="w-full" />
+        <audio src={previewSrc} controls className="media-unit-editor__preview-audio" />
       ) : null}
     </div>
   );

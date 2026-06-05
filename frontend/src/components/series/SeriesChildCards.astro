@@ -8,19 +8,16 @@ interface Props {
 const { items: childLinks } = Astro.props;
 ---
 
-<ul class="space-y-3">
+<ul class="series-card-list">
   {
     childLinks.map((child) => (
       <li>
-        <a
-          href={`/series/${child.slug}`}
-          class="theme-border block rounded-lg border px-5 py-4 transition hover:bg-black/5 dark:hover:bg-white/10"
-        >
-          <span class="font-semibold">{child.label}</span>
+        <a href={`/series/${child.slug}`} class="series-card theme-border">
+          <span class="series-card__title">{child.label}</span>
           {child.description ? (
-            <p class="theme-muted mt-2 text-sm leading-relaxed">{child.description}</p>
+            <p class="series-card__description theme-muted">{child.description}</p>
           ) : null}
-          <span class="theme-muted mt-2 block font-mono text-xs">/series/{child.slug}</span>
+          <span class="series-card__slug theme-muted">/series/{child.slug}</span>
         </a>
       </li>
     ))

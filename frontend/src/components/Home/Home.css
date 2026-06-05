@@ -1,0 +1,248 @@
+/* ── Home page content ─────────────────────────────────────────── */
+
+.home-main--page {
+  min-height: 100vh;
+  padding: 1.25rem 1rem calc(var(--activity-bar-height) + 1.25rem);
+}
+
+@media (min-width: 640px) {
+  .home-main--page {
+    padding: 1.5rem 1.25rem calc(var(--activity-bar-height) + 1.25rem);
+  }
+}
+
+.home-main__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+@media (min-width: 640px) {
+  .home-main__title {
+    font-size: 1.875rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-main__title {
+    font-size: 2.25rem;
+  }
+}
+
+.home-main__intro {
+  margin-top: 1rem;
+  font-size: 1rem;
+  line-height: 1.625;
+}
+
+@media (min-width: 640px) {
+  .home-main__intro {
+    font-size: 1.125rem;
+  }
+}
+
+.home-main__outro {
+  margin-top: 2rem;
+  font-size: 1rem;
+  line-height: 1.625;
+}
+
+@media (min-width: 640px) {
+  .home-main__outro {
+    font-size: 1.125rem;
+  }
+}
+
+/* ── Home CTA buttons ──────────────────────────────────────────── */
+
+.home-cta {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .home-cta {
+    gap: 0.75rem;
+  }
+}
+
+.home-cta__btn {
+  display: inline-flex;
+  min-height: 2.75rem;
+  min-width: 0;
+  flex: 1 1 0%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: 1px solid;
+  padding: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: background-color 150ms;
+}
+
+@media (min-width: 640px) {
+  .home-cta__btn {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-cta__btn {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+.home-cta__btn--talk {
+  border-color: rgb(22 163 74 / 0.7);
+  background-color: rgb(34 197 94 / 0.2);
+  color: #14532d;
+}
+
+.home-cta__btn--talk:hover {
+  background-color: rgb(34 197 94 / 0.3);
+}
+
+html[data-theme='dark'] .home-cta__btn--talk,
+html.dark .home-cta__btn--talk {
+  border-color: rgb(74 222 128 / 0.6);
+  background-color: rgb(34 197 94 / 0.25);
+  color: #bbf7d0;
+}
+
+html[data-theme='dark'] .home-cta__btn--talk:hover,
+html.dark .home-cta__btn--talk:hover {
+  background-color: rgb(34 197 94 / 0.35);
+}
+
+.home-cta__btn--ask {
+  border-color: rgb(37 99 235 / 0.7);
+  background-color: rgb(59 130 246 / 0.2);
+  color: #1e3a8a;
+}
+
+.home-cta__btn--ask:hover {
+  background-color: rgb(59 130 246 / 0.3);
+}
+
+html[data-theme='dark'] .home-cta__btn--ask,
+html.dark .home-cta__btn--ask {
+  border-color: rgb(96 165 250 / 0.6);
+  background-color: rgb(59 130 246 / 0.25);
+  color: #dbeafe;
+}
+
+html[data-theme='dark'] .home-cta__btn--ask:hover,
+html.dark .home-cta__btn--ask:hover {
+  background-color: rgb(59 130 246 / 0.35);
+}
+
+/* ── Home skills grid ──────────────────────────────────────────── */
+
+.home-skills {
+  margin-top: 2rem;
+}
+
+.home-skills__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+@media (min-width: 640px) {
+  .home-skills__title {
+    font-size: 1.875rem;
+  }
+}
+
+.home-skills__grid {
+  display: grid;
+  list-style: none;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+}
+
+@media (min-width: 420px) {
+  .home-skills__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 640px) {
+  .home-skills__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-skills__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.home-skills__card {
+  display: flex;
+  aspect-ratio: 1;
+  flex-direction: column;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(0 0 0 / 0.15);
+  background-color: rgb(255 255 255 / 0.8);
+  padding: 0.75rem;
+  backdrop-filter: blur(2px);
+}
+
+html[data-theme='dark'] .home-skills__card,
+html.dark .home-skills__card {
+  border-color: rgb(255 255 255 / 0.15);
+  background-color: rgb(0 0 0 / 0.75);
+}
+
+.home-skills__card-label {
+  text-align: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 640px) {
+  .home-skills__card-label {
+    font-size: 0.75rem;
+  }
+}
+
+.home-skills__card-icon-wrap {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 0%;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.25rem 0;
+}
+
+.home-skills__card-icon {
+  height: 55%;
+  width: 55%;
+  max-height: 6rem;
+  max-width: 6rem;
+  opacity: 0.9;
+}
+
+.home-skills__icon {
+  display: block;
+  height: 100%;
+  width: 100%;
+}

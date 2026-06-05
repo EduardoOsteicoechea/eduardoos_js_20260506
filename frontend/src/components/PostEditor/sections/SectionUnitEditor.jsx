@@ -66,7 +66,7 @@ export default function SectionUnitEditor({ unit, onCommit, onRemove }) {
                 handleFieldChange('content', event.target.value)
               }
               rows={4}
-              className={`${inputClassName} resize-y`}
+              className={`${inputClassName} post-editor__field--textarea`}
             />
           </div>
 
@@ -101,7 +101,7 @@ export default function SectionUnitEditor({ unit, onCommit, onRemove }) {
               placeholder="Debe aparecer exactamente en el contenido"
               className={inputClassName}
             />
-            <p className="theme-muted mt-1 text-xs">
+            <p className="post-editor__hint theme-muted">
               Si coincide con el contenido, se guarda en negrita en el JSON.
             </p>
           </div>
@@ -114,27 +114,29 @@ export default function SectionUnitEditor({ unit, onCommit, onRemove }) {
 
   if (!unitSupportsEditor(unit.type)) {
     return (
-      <article className="theme-border rounded-xl border px-4 py-3">
-        <div className="flex justify-end">
-          <EditorActionButton
-            variant="danger"
-            className="shrink-0 text-xs"
-            onClick={() => onRemove(unit.id)}
-            aria-label="Quitar unidad"
-          >
-            Quitar
-          </EditorActionButton>
+      <article className="section-unit theme-border">
+        <div className="section-unit__unsupported">
+          <div className="section-unit__toolbar">
+            <EditorActionButton
+              variant="danger"
+              className="section-unit__toolbar-btn"
+              onClick={() => onRemove(unit.id)}
+              aria-label="Quitar unidad"
+            >
+              Quitar
+            </EditorActionButton>
+          </div>
         </div>
       </article>
     );
   }
 
   return (
-    <article className="theme-border rounded-xl border">
-      <div className="flex items-center justify-end px-4 py-2">
+    <article className="section-unit theme-border">
+      <div className="section-unit__toolbar">
         <EditorActionButton
           variant="danger"
-          className="shrink-0 text-xs"
+          className="section-unit__toolbar-btn"
           onClick={() => onRemove(unit.id)}
           aria-label="Quitar unidad"
         >
@@ -142,7 +144,7 @@ export default function SectionUnitEditor({ unit, onCommit, onRemove }) {
         </EditorActionButton>
       </div>
 
-      <div className="theme-border space-y-4 border-t px-4 py-4">
+      <div className="section-unit__body theme-border">
         {renderEditorFields()}
       </div>
     </article>

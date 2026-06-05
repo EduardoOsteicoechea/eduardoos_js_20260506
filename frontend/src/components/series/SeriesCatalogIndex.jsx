@@ -11,16 +11,13 @@ function SeriesCard({ seriesId, chapters }) {
 
   return (
     <li>
-      <a
-        href={`/series/${seriesId}`}
-        className="theme-border block rounded-lg border px-5 py-4 font-semibold transition hover:bg-black/5 dark:hover:bg-white/10"
-      >
+      <a href={`/series/${seriesId}`} className="series-catalog__card theme-border">
         {label}
-        <span className="theme-muted mt-1 block font-mono text-xs font-normal">
+        <span className="series-catalog__slug theme-muted">
           /series/{seriesId}
         </span>
         {chapterCount > 0 ? (
-          <span className="theme-muted mt-2 block text-sm font-normal">
+          <span className="series-catalog__desc theme-muted">
             {chapterCount} {chapterCount === 1 ? 'section' : 'sections'}
           </span>
         ) : null}
@@ -56,25 +53,19 @@ export default function SeriesCatalogIndex() {
   }, []);
 
   if (error) {
-    return (
-      <p className="theme-muted rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-300">
-        {error}
-      </p>
-    );
+    return <p className="series-catalog__error">{error}</p>;
   }
 
   if (!catalog) {
-    return <p className="theme-muted text-sm">Loading series…</p>;
+    return <p className="series-catalog__loading theme-muted">Loading series…</p>;
   }
 
   if (catalog.series.length === 0) {
-    return (
-      <p className="theme-muted">No series found in the catalog.</p>
-    );
+    return <p className="series-catalog__empty theme-muted">No series found in the catalog.</p>;
   }
 
   return (
-    <ul className="space-y-3">
+    <ul className="series-catalog__list">
       {catalog.series.map((seriesId) => (
         <SeriesCard
           key={seriesId}

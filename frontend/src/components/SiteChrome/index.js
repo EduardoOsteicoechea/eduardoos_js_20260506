@@ -1,1 +1,1 @@
-export { default as SiteChromeShell } from './SiteChromeShell';
+export { default as SiteChrome } from './SiteChrome';

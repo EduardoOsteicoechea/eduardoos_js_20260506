@@ -1,0 +1,232 @@
+/* ── Server health dashboard ───────────────────────────────────── */
+
+.server-health {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.server-health__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.server-health__title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.server-health__subtitle {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.server-health__refresh {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.server-health__refresh:disabled {
+  opacity: 0.5;
+}
+
+.server-health__error {
+  border-radius: 0.5rem;
+  border: 1px solid rgb(239 68 68 / 0.4);
+  background-color: rgb(239 68 68 / 0.1);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: #b91c1c;
+}
+
+html[data-theme='dark'] .server-health__error,
+html.dark .server-health__error {
+  color: #fca5a5;
+}
+
+.server-health__status-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.server-health__timestamp {
+  font-size: 0.75rem;
+}
+
+.server-health__badge {
+  border-radius: 9999px;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.server-health__badge--ok {
+  background-color: rgb(34 197 94 / 0.15);
+  color: #166534;
+}
+
+html[data-theme='dark'] .server-health__badge--ok,
+html.dark .server-health__badge--ok {
+  color: #86efac;
+}
+
+.server-health__badge--fail {
+  background-color: rgb(239 68 68 / 0.15);
+  color: #991b1b;
+}
+
+html[data-theme='dark'] .server-health__badge--fail,
+html.dark .server-health__badge--fail {
+  color: #fca5a5;
+}
+
+.server-health__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgb(0 0 0 / 0.15);
+  padding: 1rem;
+}
+
+html[data-theme='dark'] .server-health__panel,
+html.dark .server-health__panel {
+  border-color: rgb(255 255 255 / 0.15);
+}
+
+.server-health__panel-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.server-health__panel-title-wrap {
+  min-width: 0;
+}
+
+.server-health__panel-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.server-health__panel-subtitle {
+  font-size: 0.75rem;
+}
+
+.server-health__copy-btn {
+  flex-shrink: 0;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+.server-health__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.server-health__list--spaced {
+  gap: 0.5rem;
+}
+
+.server-health__issues {
+  list-style: disc inside;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: #b91c1c;
+  margin: 0;
+  padding: 0;
+}
+
+html[data-theme='dark'] .server-health__issues,
+html.dark .server-health__issues {
+  color: #fca5a5;
+}
+
+.server-health__warnings {
+  list-style: disc inside;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: #92400e;
+  margin: 0;
+  padding: 0;
+}
+
+html[data-theme='dark'] .server-health__warnings,
+html.dark .server-health__warnings {
+  color: #fcd34d;
+}
+
+.server-health__grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .server-health__grid--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 640px) {
+  .server-health__grid--metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.server-health__log-error {
+  font-size: 0.875rem;
+  color: #dc2626;
+}
+
+html[data-theme='dark'] .server-health__log-error,
+html.dark .server-health__log-error {
+  color: #fca5a5;
+}
+
+.server-health__log-pre {
+  max-height: 18rem;
+  overflow: auto;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(0 0 0 / 0.15);
+  background-color: rgb(0 0 0 / 0.05);
+  padding: 0.75rem;
+  font-size: 0.75rem;
+  line-height: 1.625;
+}
+
+html[data-theme='dark'] .server-health__log-pre,
+html.dark .server-health__log-pre {
+  border-color: rgb(255 255 255 / 0.15);
+  background-color: rgb(255 255 255 / 0.05);
+}
+
+.server-health__path {
+  overflow-wrap: anywhere;
+  font-size: 0.75rem;
+}
+
+.server-health__system-error {
+  font-size: 0.875rem;
+  color: #b45309;
+}
+
+html[data-theme='dark'] .server-health__system-error,
+html.dark .server-health__system-error {
+  color: #fcd34d;
+}

@@ -1,7 +1,6 @@
 ---
-// Import your Tailwind CSS file
 import "../styles/global.css";
-import { SiteChromeShell } from "../components/SiteChrome";
+import { SiteChrome } from "../components/SiteChrome";
 import { PageLanguageApplier } from "../components/SiteLanguage";
 import PageBackground from "../components/PageBackground/PageBackground.astro";
 import { isHomePath } from "../config/homeLayout";
@@ -12,13 +11,11 @@ const pageHome = isHomePath(pathname);
 
 interface Props {
   title?: string;
-  showGlobalActivityBar?: boolean;
   activityBarMode?: "default" | "article" | "editor";
 }
 
 const {
   title = "Eduardo Osteicoechea",
-  showGlobalActivityBar = true,
   activityBarMode = "default",
 } = Astro.props;
 
@@ -168,12 +165,10 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
 
       <PageLanguageApplier client:load />
 
-      <SiteChromeShell
+      <SiteChrome
         client:load
         pathname={pathname}
         activityBarMode={activityBarMode}
-        showActivityBar={showGlobalActivityBar}
-        reserveBottomBar={!showGlobalActivityBar}
       />
     </body>
 </html>

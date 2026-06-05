@@ -6,7 +6,7 @@ const NEW_OPTION = '__new__';
 
 const inputClassName = UI_FIELD_CLASS;
 
-const selectClassName = inputClassName;
+const selectClassName = `${inputClassName} post-editor__field--select`;
 
 export default function CatalogSelect({
   id,
@@ -32,11 +32,11 @@ export default function CatalogSelect({
   };
 
   return (
-    <div>
-      <label htmlFor={id} className="mb-1 block text-sm font-medium">
+    <div className="catalog-select">
+      <label htmlFor={id} className="post-editor__label">
         {label}
       </label>
-      <div className="relative">
+      <div className="post-editor__select-wrap">
         <select
           id={id}
           disabled={disabled}
@@ -49,7 +49,7 @@ export default function CatalogSelect({
             }
             onSelectExisting(next);
           }}
-          className={`${selectClassName} appearance-none pr-10`}
+          className={selectClassName}
         >
           <option value="" disabled>
             Seleccionar…
@@ -61,16 +61,13 @@ export default function CatalogSelect({
           ))}
           <option value={NEW_OPTION}>{newOptionLabel}</option>
         </select>
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm opacity-80"
-        >
+        <span aria-hidden="true" className="post-editor__select-chevron">
           ▼
         </span>
       </div>
 
       {isCustom ? (
-        <div className="mt-2 space-y-2">
+        <div className="catalog-select__custom">
           <input
             type="text"
             value={customValue}
@@ -93,7 +90,7 @@ export default function CatalogSelect({
               type="button"
               disabled={disabled || !canCommit}
               onClick={handleCommit}
-              className="theme-toolbar-btn w-full text-sm disabled:cursor-not-allowed disabled:opacity-50"
+              className="theme-toolbar-btn catalog-select__commit"
             >
               Añadir {label.toLowerCase()}
             </button>
