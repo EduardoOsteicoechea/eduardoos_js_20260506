@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"io"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -212,6 +213,7 @@ func (a *API) SaveArticle(w http.ResponseWriter, r *http.Request) {
 
 	postID, sortOrder, err := a.Store.SaveArticle(input)
 	if err != nil {
+		log.Printf("[posts-db] save article: %v", err)
 		writeError(w, http.StatusInternalServerError, "could not save article")
 		return
 	}

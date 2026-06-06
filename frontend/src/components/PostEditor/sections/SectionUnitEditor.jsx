@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { SiteControlButton } from '../../ui';
 import LinkUnitEditor from './LinkUnitEditor';
 import ListUnitEditor from './ListUnitEditor';
@@ -41,23 +41,26 @@ function UnitEditorSidebar({ unit, onRemove }) {
 
 export default function SectionUnitEditor({ unit, onCommit, onRemove }) {
   const [draft, setDraft] = useState(() => normalizeUnitData(unit));
+  const draftRef = useRef(draft);
 
   useEffect(() => {
-    setDraft(normalizeUnitData(unit));
+    const next = normalizeUnitData(unit);
+    draftRef.current = next;
+    setDraft(next);
   }, [unit.id]);
 
   const updateDraft = useCallback(
     (updater) => {
-      setDraft((previous) => {
-        const next =
-          typeof updater === 'function' ? updater(previous) : updater;
+      const previous = draftRef.current;
+      const next =
+        typeof updater === 'function' ? updater(previous) : updater;
 
-        if (unitSupportsEditor(unit.type)) {
-          onCommit(unit.id, commitUnitFields(unit, next));
-        }
+      draftRef.current = next;
+      setDraft(next);
 
-        return next;
-      });
+      if (unitSupportsEditor(unit.type)) {
+        onCommit(unit.id, commitUnitFields(unit, next));
+      }
     },
     [unit.id, unit.type, onCommit],
   );

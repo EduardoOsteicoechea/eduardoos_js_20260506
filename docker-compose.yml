@@ -14,7 +14,7 @@ services:
       DB_PATH: /data/posts.db
       POSTS_DB_INTERNAL_TOKEN: dev-internal-posts-db-token
     volumes:
-      - ./database/posts.db:/data/posts.db:ro
+      - ./database/posts.db:/data/posts.db
     expose:
       - "8120"
     restart: unless-stopped
