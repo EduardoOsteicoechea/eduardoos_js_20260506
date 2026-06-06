@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config';
 
 import react from '@astrojs/react';
 
-const apiProxyTarget = process.env.PUBLIC_API_BASE || 'http://localhost:8080';
+const apiProxyTarget = process.env.PUBLIC_API_BASE || 'https://eduardoos.com';
 const telemetryProxyTarget =
   process.env.PUBLIC_TELEMETRY_BASE || 'http://localhost:8100';
 

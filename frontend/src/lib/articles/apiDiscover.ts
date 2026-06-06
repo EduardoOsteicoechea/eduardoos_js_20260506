@@ -4,6 +4,7 @@ import type {
   SeriesHubData,
   SeriesHubEntry,
 } from './types';
+import { buildArticleApiPath, getApiBase } from './articleApi';
 
 interface DiscoverResponse {
   articles?: Array<{
@@ -18,19 +19,6 @@ interface DiscoverResponse {
   slugs?: string[];
 }
 
-function postsDbBase(): string | null {
-  const direct = process.env.POSTS_DB_URL?.trim().replace(/\/+$/g, '');
-  if (direct) return direct;
-  return null;
-}
-
-function apiBase(): string {
-  return (process.env.PUBLIC_API_BASE || 'http://127.0.0.1:8080').replace(
-    /\/+$/g,
-    '',
-  );
-}
-
 let discoverCache: Promise<{
   articles: ArticleEntry[];
   hubs: SeriesHubEntry[];
@@ -38,23 +26,13 @@ let discoverCache: Promise<{
 }> | null = null;
 
 async function fetchDiscoverPayload(): Promise<DiscoverResponse> {
-  const token = process.env.POSTS_DB_INTERNAL_TOKEN?.trim();
-  const postsDb = postsDbBase();
+  const base = getApiBase();
+  const response = await fetch(`${base}/api/series/discover`);
 
-  if (postsDb && token) {
-    const response = await fetch(`${postsDb}/discover`, {
-      headers: { 'X-Posts-Db-Internal-Token': token },
-    });
-    if (!response.ok) {
-      throw new Error(`posts-db discover failed (${response.status})`);
-    }
-    return (await response.json()) as DiscoverResponse;
-  }
-
-  const response = await fetch(`${apiBase()}/api/series/discover`);
   if (!response.ok) {
     throw new Error(`backend discover failed (${response.status})`);
   }
+
   return (await response.json()) as DiscoverResponse;
 }
 
@@ -70,11 +48,10 @@ export async function loadDiscoverSnapshot() {
 }
 
 function buildDiscoverSnapshot(payload: DiscoverResponse) {
-
   const articles: ArticleEntry[] = (payload.articles ?? []).map((entry) => ({
     slug: entry.slug,
     data: entry.data,
-    dataPath: `/api/series/article?serie=${entry.slug.split('/')[0]}&chapter=${entry.slug.split('/')[1]}&article_id=${entry.slug.split('/').slice(2).join('/')}`,
+    dataPath: buildArticleApiPath(entry.slug),
     sermonPath: entry.sermon_url || undefined,
   }));
 

@@ -1016,7 +1016,7 @@ export default function PostEditor() {
 
       {catalogLoading ? (
         <p className="post-editor-metadata__loading theme-muted">
-          Cargando series desde /data/series/…
+          Cargando series desde el servidor…
         </p>
       ) : null}
 

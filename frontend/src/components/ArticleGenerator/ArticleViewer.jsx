@@ -16,7 +16,7 @@ import {
 export default function ArticleViewer({
   initialArticle,
   slug,
-  jsonPath,
+  articleApiPath,
   sermonPath: initialSermonPath,
 }) {
   const [article, setArticle] = useState(initialArticle);
@@ -33,24 +33,8 @@ export default function ArticleViewer({
   const sermon = useSermonPlayer(sermonPath);
 
   useEffect(() => {
-    if (initialSermonPath) {
-      setSermonPath(initialSermonPath);
-      return;
-    }
-
-    if (!slug) {
-      setSermonPath(undefined);
-      return;
-    }
-
-    const candidate = `/data/series/${slug.replace(/^\/+|\/+$/g, '')}/sermon.mp3`;
-
-    fetch(candidate, { method: 'HEAD' })
-      .then((response) => {
-        setSermonPath(response.ok ? candidate : undefined);
-      })
-      .catch(() => setSermonPath(undefined));
-  }, [initialSermonPath, slug]);
+    setSermonPath(initialSermonPath || undefined);
+  }, [initialSermonPath]);
 
   useEffect(() => {
     setViewMode(getStoredViewMode());
@@ -85,14 +69,14 @@ export default function ArticleViewer({
     });
   }, []);
 
-  const reloadJson = useCallback(async () => {
-    if (!jsonPath) return;
+  const reloadArticle = useCallback(async () => {
+    if (!articleApiPath) return;
 
     setIsReloading(true);
     setReloadError(null);
 
     try {
-      const response = await fetch(`${jsonPath}?t=${Date.now()}`, {
+      const response = await fetch(`${articleApiPath}&t=${Date.now()}`, {
         cache: 'no-store',
       });
 
@@ -101,23 +85,29 @@ export default function ArticleViewer({
       }
 
       const data = await response.json();
+      const nextArticle = data?.article;
 
-      if (!data?.title || !Array.isArray(data.sections)) {
-        throw new Error('JSON inválido: falta title o sections');
+      if (!nextArticle?.title || !Array.isArray(nextArticle.sections)) {
+        throw new Error('Respuesta inválida: falta article.title o sections');
       }
 
-      setArticle(data);
+      setArticle(nextArticle);
+      setSermonPath(
+        typeof data.sermon_url === 'string' && data.sermon_url.trim()
+          ? data.sermon_url.trim()
+          : undefined,
+      );
       setExpandedSections(new Set());
       sermon.stop();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (error) {
       setReloadError(
-        error instanceof Error ? error.message : 'No se pudo recargar el JSON',
+        error instanceof Error ? error.message : 'No se pudo recargar el artículo',
       );
     } finally {
       setIsReloading(false);
     }
-  }, [jsonPath, sermon]);
+  }, [articleApiPath, sermon]);
 
   const handleDownloadPdf = useCallback(async () => {
     if (!slug) return;
@@ -142,7 +132,7 @@ export default function ArticleViewer({
     onSelectViewMode: setViewMode,
     onScrollToTop: scrollToTop,
     onScrollToBottom: scrollToBottom,
-    onReload: reloadJson,
+    onReload: reloadArticle,
     isReloading,
     onDownloadPdf: handleDownloadPdf,
     isGeneratingPdf,

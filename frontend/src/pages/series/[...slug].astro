@@ -39,6 +39,8 @@ interface ArticleProps {
 
   article: ArticleData;
 
+  articleApiPath: string;
+
   sermonPath?: string;
 
 }
@@ -110,6 +112,8 @@ export async function getStaticPaths() {
             slug,
 
             article: article.data,
+
+            articleApiPath: article.dataPath,
 
             sermonPath: article.sermonPath,
 
@@ -220,7 +224,7 @@ const props = Astro.props as PageProps;
 
         slug={slug}
 
-        jsonPath={`/data/series/${slug}/data.json`}
+        articleApiPath={props.articleApiPath}
 
         sermonPath={props.sermonPath}
 
