@@ -9,7 +9,7 @@ import SeriesEmptyMessage from "../../components/series/SeriesEmptyMessage.jsx";
 
 import SeriesChildCards from "../../components/series/SeriesChildCards.astro";
 
-import SeriesHubPosts from "../../components/series/SeriesHubPosts.astro";
+import SeriesHubPostsLive from "../../components/series/SeriesHubPostsLive.jsx";
 
 import { loadDiscoverSnapshot } from "../../lib/articles/discover";
 import {
@@ -152,7 +152,12 @@ const props = import.meta.env.PROD
 
         <SeriesPostsHeading client:load />
 
-        <SeriesHubPosts posts={props.hubPosts} />
+        <SeriesHubPostsLive
+          client:load
+          hubSlug={slug}
+          hub={props.hub}
+          initialPosts={props.hubPosts}
+        />
 
       </section>
 

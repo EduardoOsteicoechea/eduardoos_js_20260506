@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { POST_EDITOR_PASSWORD } from '../constants/index.js';
+import { requestFrontendRebuild } from '../deployHook.js';
 import {
   isPostsDbConfigured,
   savePostsDbArticle,
@@ -116,6 +117,9 @@ export async function savePostEditorArticle(req: Request, res: Response) {
     const rawPayload = readSavePayload(req.body);
     const payload = normalizeMediaUrls(ensureArticlePayload(rawPayload));
     const result = await savePostsDbArticle(payload);
+    void requestFrontendRebuild().catch((error) => {
+      console.warn('[post/editor] frontend rebuild hook failed:', error);
+    });
 
     return res.json({
       ok: true,

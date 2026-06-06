@@ -1,0 +1,22 @@
+# Offline / isolated DB: docker compose -f docker-compose.yml -f docker-compose.local-db.yml up
+#
+# Uses database/posts.db on the host instead of the production API.
+
+services:
+  postsdb:
+    profiles: []
+
+  backend:
+    environment:
+      POSTS_DB_URL: http://postsdb:8120
+      POSTS_DB_INTERNAL_TOKEN: dev-internal-posts-db-token
+    depends_on:
+      - postsdb
+
+  frontend:
+    build:
+      args:
+        PUBLIC_API_BASE: http://backend:8080
+    environment:
+      PUBLIC_API_BASE: http://backend:8080
+      DEV_API_PROXY: http://backend:8080

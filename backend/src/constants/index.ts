@@ -33,6 +33,11 @@ export const POSTS_DB_INTERNAL_TOKEN = getEnvOrDefault(
   'POSTS_DB_INTERNAL_TOKEN',
   'dev-internal-posts-db-token',
 );
+export const GITHUB_DEPLOY_TOKEN = getEnvOrDefault('GITHUB_DEPLOY_TOKEN', '');
+export const GITHUB_REPO = getEnvOrDefault(
+  'GITHUB_REPO',
+  'EduardoOsteicoechea/eduardoos_js_20260506',
+);
 
 export const CORS_ORIGINS = [
   'http://localhost:3000',

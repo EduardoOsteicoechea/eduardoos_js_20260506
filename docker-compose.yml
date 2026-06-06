@@ -4,6 +4,7 @@ name: eduardoos-com
 
 services:
   postsdb:
+    profiles: ["local-db"]
     build:
       context: ./database
       dockerfile: Dockerfile
@@ -56,7 +57,6 @@ services:
     volumes:
       - ./backend/public/data:/app/public/data
     depends_on:
-      - postsdb
       - chatbot
     restart: unless-stopped
 
@@ -108,12 +108,12 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        PUBLIC_API_BASE: http://backend:8080
+        PUBLIC_API_BASE: ${PRODUCTION_API_BASE:-https://eduardoos.com}
         PUBLIC_DOCUMENTER_BASE: http://documenter:8090
     container_name: eduardoos-frontend
     environment:
-      PUBLIC_API_BASE: http://backend:8080
-      DEV_API_PROXY: http://backend:8080
+      PUBLIC_API_BASE: ${PRODUCTION_API_BASE:-https://eduardoos.com}
+      DEV_API_PROXY: ${DEV_API_PROXY:-https://eduardoos.com}
       PUBLIC_DOCUMENTER_BASE: http://documenter:8090
       PUBLIC_TELEMETRY_BASE: http://telemetry:8100
     depends_on:

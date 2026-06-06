@@ -11,6 +11,8 @@ on:
       - 'frontend/src/pages/server/**'
       - 'frontend/src/components/ServerHealth/**'
       - '.github/workflows/deploy-frontend.yml'
+  repository_dispatch:
+    types: [rebuild-frontend]
   workflow_dispatch:
 
 jobs:
