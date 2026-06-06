@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'frontend/**'
+      - 'database/posts.db'
       - 'deploy/nginx/**'
       - 'frontend/src/pages/server/**'
       - 'frontend/src/components/ServerHealth/**'

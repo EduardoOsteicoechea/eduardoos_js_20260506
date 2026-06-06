@@ -64,6 +64,14 @@ jobs:
             go build -ldflags="-s -w" -o postsdb ./cmd/server
           file postsdb
 
+      - name: Export self-contained posts.db for deploy
+        run: |
+          if [ -f "./posts.db" ]; then
+            go run ./cmd/checkpoint posts.db.deploy
+            mv posts.db.deploy posts.db
+            rm -f posts.db-wal posts.db-shm posts.db.export posts.db.tmp
+          fi
+
       - name: Sync and Restart Service on EC2
         run: |
           REMOTE_DIR="/home/$EC2_USER/database"
@@ -78,6 +86,7 @@ jobs:
             rsync -avz -e "ssh $SSH_OPTS" \
               ./posts.db \
               "$EC2_USER@$EC2_HOST:$REMOTE_DIR/posts.db"
+            ssh $SSH_OPTS "$EC2_USER@$EC2_HOST" "rm -f $REMOTE_DIR/posts.db-wal $REMOTE_DIR/posts.db-shm"
           else
             echo "WARN: database/posts.db not in repo — service will start with empty schema"
           fi

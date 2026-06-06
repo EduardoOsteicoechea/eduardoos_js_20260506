@@ -19,7 +19,9 @@ func Open(path string) (*Store, error) {
 
 	conn.SetMaxOpenConns(1)
 
-	if _, err := conn.Exec(`PRAGMA journal_mode = WAL;`); err != nil {
+	// DELETE mode writes directly to posts.db (no -wal/-shm sidecars).
+	// Required for Docker bind-mounting a single db file on Windows hosts.
+	if _, err := conn.Exec(`PRAGMA journal_mode = DELETE;`); err != nil {
 		_ = conn.Close()
 		return nil, fmt.Errorf("pragma journal_mode: %w", err)
 	}
