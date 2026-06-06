@@ -36,7 +36,15 @@ async function fetchDiscoverPayload(): Promise<DiscoverResponse> {
   return (await response.json()) as DiscoverResponse;
 }
 
+export function resetDiscoverCache() {
+  discoverCache = null;
+}
+
 export async function loadDiscoverSnapshot() {
+  if (import.meta.env.DEV) {
+    return buildDiscoverSnapshot(await fetchDiscoverPayload());
+  }
+
   if (!discoverCache) {
     discoverCache = (async () => {
       const payload = await fetchDiscoverPayload();

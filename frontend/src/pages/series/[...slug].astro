@@ -11,195 +11,35 @@ import SeriesChildCards from "../../components/series/SeriesChildCards.astro";
 
 import SeriesHubPosts from "../../components/series/SeriesHubPosts.astro";
 
+import { loadDiscoverSnapshot } from "../../lib/articles/discover";
 import {
-
-  loadDiscoverSnapshot,
-
-  formatSegmentLabel,
-
-  getHubPostLinks,
-
-  getSeriesBreadcrumbs,
-
-  getSeriesChildren,
-
-} from "../../lib/articles/discover";
-
-import type { ArticleData, SeriesHubData } from "../../lib/articles/types";
+  resolveSeriesRoute,
+  type SeriesRouteProps,
+} from "../../lib/articles/seriesRoute";
 
 import ArticleViewer from "../../components/ArticleGenerator/ArticleViewer.jsx";
 
+type PageProps = SeriesRouteProps;
 
-
-interface ArticleProps {
-
-  routeKind: "article";
-
-  slug: string;
-
-  article: ArticleData;
-
-  articleApiPath: string;
-
-  sermonPath?: string;
-
-}
-
-
-
-interface HubProps {
-
-  routeKind: "hub";
-
-  slug: string;
-
-  hub: SeriesHubData;
-
-  hubPosts: ReturnType<typeof getHubPostLinks>;
-
-  pageTitle: string;
-
-  breadcrumbs: ReturnType<typeof getSeriesBreadcrumbs>;
-
-}
-
-
-
-interface IndexProps {
-
-  routeKind: "index";
-
-  slug: string;
-
-  pageTitle: string;
-
-  breadcrumbs: ReturnType<typeof getSeriesBreadcrumbs>;
-
-  children: Awaited<ReturnType<typeof getSeriesChildren>>;
-
-}
-
-
-
-type PageProps = ArticleProps | HubProps | IndexProps;
+export const prerender = import.meta.env.PROD;
 
 export async function getStaticPaths() {
-
-  const { articles, hubs, slugs } = await loadDiscoverSnapshot();
-
-  const hubBySlug = new Map(hubs.map((hub) => [hub.slug, hub]));
-
-  const articleBySlug = new Map(articles.map((article) => [article.slug, article]));
-
-
+  const { slugs } = await loadDiscoverSnapshot();
 
   return Promise.all(
-
-    slugs.map(async (slug) => {
-
-      const article = articleBySlug.get(slug);
-
-      if (article) {
-
-        return {
-
-          params: { slug },
-
-          props: {
-
-            routeKind: "article",
-
-            slug,
-
-            article: article.data,
-
-            articleApiPath: article.dataPath,
-
-            sermonPath: article.sermonPath,
-
-          } satisfies ArticleProps,
-
-        };
-
-      }
-
-
-
-      const hub = hubBySlug.get(slug);
-
-      if (hub) {
-
-        const pageTitle = hub.data.section
-
-          ? String(hub.data.section)
-
-          : formatSegmentLabel(slug.split("/").pop() ?? slug);
-
-
-
-        return {
-
-          params: { slug },
-
-          props: {
-
-            routeKind: "hub",
-
-            slug,
-
-            hub: hub.data,
-
-            hubPosts: getHubPostLinks(slug, hub.data, articles),
-
-            pageTitle,
-
-            breadcrumbs: getSeriesBreadcrumbs(slug),
-
-          } satisfies HubProps,
-
-        };
-
-      }
-
-
-
-      const pageTitle = formatSegmentLabel(slug.split("/").pop() ?? slug);
-
-
-
-      return {
-
-        params: { slug },
-
-        props: {
-
-          routeKind: "index",
-
-          slug,
-
-          pageTitle,
-
-          breadcrumbs: getSeriesBreadcrumbs(slug),
-
-          children: await getSeriesChildren(slug, articles, hubs),
-
-        } satisfies IndexProps,
-
-      };
-
-    }),
-
+    slugs.map(async (slug) => ({
+      params: { slug },
+      props: (await resolveSeriesRoute(slug)) as PageProps,
+    })),
   );
-
 }
 
-
-
 const slugParam = Astro.params.slug as string | string[] | undefined;
-
 const slug = Array.isArray(slugParam) ? slugParam.join("/") : (slugParam ?? "");
 
-const props = Astro.props as PageProps;
+const props = import.meta.env.PROD
+  ? (Astro.props as PageProps)
+  : ((await resolveSeriesRoute(slug)) as PageProps);
 
 ---
 

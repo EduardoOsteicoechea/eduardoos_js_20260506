@@ -359,7 +359,72 @@ VALUES (?, ?, ?, ?, datetime('now'))`,
 		}
 	}
 
+	if err := s.EnsureHubPostEntry(input.SeriesSlug, input.Chapter, input.Slug, input.Title, input.HubEntry); err != nil {
+		return 0, 0, err
+	}
+
 	return postID, input.SortOrder, nil
+}
+
+func (s *Store) EnsureHubPostEntry(
+	seriesSlug, chapter, postSlug, title string,
+	hubEntry map[string]any,
+) error {
+	postSlug = strings.TrimSpace(postSlug)
+	if postSlug == "" {
+		return nil
+	}
+
+	seriesID, err := s.UpsertSeries(seriesSlug, seriesSlug)
+	if err != nil {
+		return err
+	}
+
+	hub, err := s.GetHub(seriesSlug, chapter)
+	if err != nil {
+		hub = map[string]any{
+			"series": seriesSlug,
+			"section": chapter,
+			"posts":   []any{},
+		}
+	}
+
+	posts, _ := hub["posts"].([]any)
+	for _, item := range posts {
+		post, ok := item.(map[string]any)
+		if !ok {
+			continue
+		}
+		if strings.TrimSpace(fmtAny(post["name"])) == postSlug {
+			return nil
+		}
+	}
+
+	contribution := strings.TrimSpace(title)
+	abstract := ""
+	if hubEntry != nil {
+		if value := strings.TrimSpace(fmtAny(hubEntry["contribution"])); value != "" {
+			contribution = value
+		}
+		if value := strings.TrimSpace(fmtAny(hubEntry["abstract"])); value != "" {
+			abstract = value
+		}
+	}
+	if contribution == "" {
+		contribution = postSlug
+	}
+
+	posts = append(posts, map[string]any{
+		"name":         postSlug,
+		"contribution": contribution,
+		"abstract":     abstract,
+		"biblical_texts": []any{
+			map[string]any{"reference": "", "text": ""},
+		},
+	})
+	hub["posts"] = posts
+
+	return s.UpsertChapter(seriesID, chapter, hub)
 }
 
 func nullIfEmpty(value string) any {
@@ -521,6 +586,11 @@ func ParseSaveArticlePayload(raw map[string]any) (SaveArticleInput, error) {
 		title = slug
 	}
 
+	hubEntry := map[string]any{}
+	if entry, ok := raw["hub_entry"].(map[string]any); ok && entry != nil {
+		hubEntry = entry
+	}
+
 	metadata := map[string]any{}
 	for _, key := range []string{"chapter", "book", "chapters", "verses", "posts"} {
 		if value, ok := raw[key]; ok {
@@ -574,6 +644,7 @@ func ParseSaveArticlePayload(raw map[string]any) (SaveArticleInput, error) {
 		Slug:       slug,
 		Title:      title,
 		Author:     author,
+		HubEntry:   hubEntry,
 		Metadata:   metadata,
 		Sections:   sections,
 	}, nil

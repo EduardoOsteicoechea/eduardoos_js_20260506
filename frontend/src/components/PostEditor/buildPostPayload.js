@@ -45,6 +45,7 @@ export function buildPostPayload(form, options = {}) {
   const articleId = form.articleId?.trim() || '';
   const folderName = normalizeFolderName(form.folderName);
 
+  const title = form.title.trim();
   const payload = {
     serie: serie || undefined,
     series: serie || undefined,
@@ -53,7 +54,13 @@ export function buildPostPayload(form, options = {}) {
     article_id: articleId || undefined,
     folder_name: folderName || undefined,
     creator: form.creator.trim() || undefined,
-    title: form.title.trim(),
+    title,
+    hub_entry: title
+      ? {
+          contribution: title,
+          abstract: '',
+        }
+      : undefined,
     posts: Array.isArray(form.posts) ? form.posts : [],
     sections: form.sections
       .map((section) => {
