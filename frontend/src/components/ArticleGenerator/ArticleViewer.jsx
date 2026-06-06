@@ -69,6 +69,57 @@ export default function ArticleViewer({
     });
   }, []);
 
+  const fetchLiveArticle = useCallback(async () => {
+    if (!articleApiPath) {
+      throw new Error('articleApiPath no configurado');
+    }
+
+    const response = await fetch(`${articleApiPath}&t=${Date.now()}`, {
+      cache: 'no-store',
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+    const nextArticle = data?.article;
+
+    if (!nextArticle?.title || !Array.isArray(nextArticle.sections)) {
+      throw new Error('Respuesta inválida: falta article.title o sections');
+    }
+
+    return {
+      article: nextArticle,
+      sermonPath:
+        typeof data.sermon_url === 'string' && data.sermon_url.trim()
+          ? data.sermon_url.trim()
+          : undefined,
+    };
+  }, [articleApiPath]);
+
+  useEffect(() => {
+    if (!articleApiPath) return;
+
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const live = await fetchLiveArticle();
+        if (!cancelled) {
+          setArticle(live.article);
+          setSermonPath(live.sermonPath);
+        }
+      } catch {
+        // Keep SSR/static fallback when the live API is unreachable.
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [articleApiPath, fetchLiveArticle]);
+
   const reloadArticle = useCallback(async () => {
     if (!articleApiPath) return;
 
@@ -76,27 +127,9 @@ export default function ArticleViewer({
     setReloadError(null);
 
     try {
-      const response = await fetch(`${articleApiPath}&t=${Date.now()}`, {
-        cache: 'no-store',
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      const data = await response.json();
-      const nextArticle = data?.article;
-
-      if (!nextArticle?.title || !Array.isArray(nextArticle.sections)) {
-        throw new Error('Respuesta inválida: falta article.title o sections');
-      }
-
-      setArticle(nextArticle);
-      setSermonPath(
-        typeof data.sermon_url === 'string' && data.sermon_url.trim()
-          ? data.sermon_url.trim()
-          : undefined,
-      );
+      const live = await fetchLiveArticle();
+      setArticle(live.article);
+      setSermonPath(live.sermonPath);
       setExpandedSections(new Set());
       sermon.stop();
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -107,7 +140,7 @@ export default function ArticleViewer({
     } finally {
       setIsReloading(false);
     }
-  }, [articleApiPath, sermon]);
+  }, [articleApiPath, fetchLiveArticle, sermon]);
 
   const handleDownloadPdf = useCallback(async () => {
     if (!slug) return;
