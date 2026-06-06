@@ -743,14 +743,14 @@ export default function PostEditor() {
       const auth = await validateEditorPassword(password);
       console.log('Auth /api/auth/post/editor/:', auth.response.status, auth.data);
 
-      if (!auth.response.ok) {
+      if (!auth.response.ok || auth.data?.valid !== true) {
         setModalError(
           auth.data?.error ?? 'Contraseña incorrecta. No se guardó el artículo.',
         );
         return;
       }
 
-      const save = await savePostPayloadWithAssets(payload);
+      const save = await savePostPayloadWithAssets(payload, password);
       console.log('Save /api/post/editor/:', save.response.status, save.data);
 
       if (!save.response.ok) {

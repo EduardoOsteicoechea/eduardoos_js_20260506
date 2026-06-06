@@ -9,17 +9,17 @@ export async function validateEditorPassword(password) {
   return { response, data };
 }
 
-export async function savePostPayload(payload) {
+export async function savePostPayload(payload, password) {
   const response = await fetch('/api/post/editor/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({ password, payload }),
   });
 
   const data = await response.json().catch(() => ({}));
   return { response, data };
 }
 
-export async function savePostPayloadWithAssets(payload) {
-  return savePostPayload(payload);
+export async function savePostPayloadWithAssets(payload, password) {
+  return savePostPayload(payload, password);
 }

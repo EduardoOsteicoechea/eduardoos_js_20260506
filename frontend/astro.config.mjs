@@ -3,7 +3,9 @@ import { defineConfig } from 'astro/config';
 
 import react from '@astrojs/react';
 
-const apiProxyTarget = process.env.PUBLIC_API_BASE || 'https://eduardoos.com';
+// Dev-only Vite proxy. Defaults to production so `npm run dev` works without local backend.
+const apiProxyTarget =
+  process.env.DEV_API_PROXY || 'https://eduardoos.com';
 const telemetryProxyTarget =
   process.env.PUBLIC_TELEMETRY_BASE || 'http://localhost:8100';
 

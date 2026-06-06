@@ -5,10 +5,19 @@ import {
   savePostsDbArticle,
 } from '../postsDbClient.js';
 
-export function validatePostEditorPassword(req: Request, res: Response) {
-  const { password } = req.body as { password?: string };
+function readEditorPassword(body: unknown): string {
+  if (!body || typeof body !== 'object') return '';
+  return String((body as { password?: string }).password ?? '').trim();
+}
 
-  if (!password || password !== POST_EDITOR_PASSWORD) {
+function isEditorPasswordValid(password: string): boolean {
+  return Boolean(password) && password === POST_EDITOR_PASSWORD;
+}
+
+export function validatePostEditorPassword(req: Request, res: Response) {
+  const password = readEditorPassword(req.body);
+
+  if (!isEditorPasswordValid(password)) {
     return res.status(401).json({ valid: false, error: 'Contraseña incorrecta' });
   }
 
@@ -75,6 +84,21 @@ function normalizeMediaUrls(payload: Record<string, unknown>): Record<string, un
   };
 }
 
+function readSavePayload(body: unknown): unknown {
+  if (!body || typeof body !== 'object') {
+    throw new Error('Cuerpo JSON inválido');
+  }
+
+  const record = body as { payload?: unknown };
+  if (record.payload == null) {
+    return body;
+  }
+
+  return typeof record.payload === 'string'
+    ? JSON.parse(record.payload)
+    : record.payload;
+}
+
 export async function savePostEditorArticle(req: Request, res: Response) {
   if (!isPostsDbConfigured()) {
     return res.status(503).json({
@@ -83,12 +107,13 @@ export async function savePostEditorArticle(req: Request, res: Response) {
     });
   }
 
-  try {
-    const rawPayload =
-      typeof req.body?.payload === 'string'
-        ? JSON.parse(req.body.payload)
-        : req.body;
+  const password = readEditorPassword(req.body);
+  if (!isEditorPasswordValid(password)) {
+    return res.status(401).json({ ok: false, error: 'Contraseña incorrecta' });
+  }
 
+  try {
+    const rawPayload = readSavePayload(req.body);
     const payload = normalizeMediaUrls(ensureArticlePayload(rawPayload));
     const result = await savePostsDbArticle(payload);
 

@@ -1,4 +1,4 @@
-import { inputClassName, labelClassName } from './editorInputStyles';
+import { inputClassName } from './editorInputStyles';
 
 const MEDIA_LABEL_BY_TYPE = {
   image: 'Imagen',
@@ -25,50 +25,35 @@ export default function MediaUnitEditor({ type, draft, onChange }) {
 
   return (
     <div className="media-unit-editor">
-      <div>
-        <label className={labelClassName} htmlFor={`${type}-url`}>
-          1. URL del recurso ({MEDIA_LABEL_BY_TYPE[type]})
-        </label>
-        <input
-          id={`${type}-url`}
-          type="url"
-          value={draft.src ?? ''}
-          onChange={(event) => onChange({ ...draft, src: event.target.value })}
-          placeholder="https://… o /data/series/…"
-          className={inputClassName}
-        />
-        <p className="post-editor__hint theme-muted">
-          Enlace público al archivo (no se sube el archivo al servidor).
-        </p>
-      </div>
+      <input
+        id={`${type}-url`}
+        type="url"
+        value={draft.src ?? ''}
+        onChange={(event) => onChange({ ...draft, src: event.target.value })}
+        placeholder={`URL de ${MEDIA_LABEL_BY_TYPE[type].toLowerCase()}`}
+        aria-label={`URL de ${MEDIA_LABEL_BY_TYPE[type]}`}
+        className={inputClassName}
+      />
 
-      <div>
-        <label className={labelClassName} htmlFor={`${type}-name`}>
-          2. Nombre del recurso
-        </label>
-        <input
-          id={`${type}-name`}
-          type="text"
-          value={draft.name ?? ''}
-          onChange={(event) => onChange({ ...draft, name: event.target.value })}
-          placeholder="Nombre descriptivo del archivo"
-          className={inputClassName}
-        />
-      </div>
+      <input
+        id={`${type}-name`}
+        type="text"
+        value={draft.name ?? ''}
+        onChange={(event) => onChange({ ...draft, name: event.target.value })}
+        placeholder="Nombre del recurso"
+        aria-label="Nombre del recurso"
+        className={inputClassName}
+      />
 
-      <div>
-        <label className={labelClassName} htmlFor={`${type}-label`}>
-          3. Etiqueta accesible
-        </label>
-        <input
-          id={`${type}-label`}
-          type="text"
-          value={draft.label ?? ''}
-          onChange={(event) => onChange({ ...draft, label: event.target.value })}
-          placeholder="Texto alternativo o título accesible"
-          className={inputClassName}
-        />
-      </div>
+      <input
+        id={`${type}-label`}
+        type="text"
+        value={draft.label ?? ''}
+        onChange={(event) => onChange({ ...draft, label: event.target.value })}
+        placeholder="Etiqueta accesible"
+        aria-label="Etiqueta accesible"
+        className={inputClassName}
+      />
 
       {type === 'image' && previewSrc ? (
         <img

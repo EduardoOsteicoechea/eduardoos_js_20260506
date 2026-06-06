@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
-import EditorActionButton from '../../EditorActionButton';
-import { inputClassName, labelClassName } from './editorInputStyles';
+import { useCallback, useEffect, useState } from 'react';
+import { SiteControlButton } from '../../ui';
 import LinkUnitEditor from './LinkUnitEditor';
 import ListUnitEditor from './ListUnitEditor';
 import MediaUnitEditor from './MediaUnitEditor';
@@ -11,100 +10,131 @@ import {
   unitSupportsEditor,
   unitSupportsTextEmphasis,
 } from './unitContentModel';
+import { renderUnitTypeIcon, TrashIcon } from './UnitTypeIcons';
+import { getUnitTypeLabel } from './unitTypes';
+import { inputClassName } from './editorInputStyles';
+
+function UnitEditorSidebar({ unit, onRemove }) {
+  return (
+    <div className="section-unit__actions">
+      <SiteControlButton
+        size="bar"
+        variant="default"
+        className="section-unit__type-btn"
+        title={getUnitTypeLabel(unit.type)}
+        aria-label={getUnitTypeLabel(unit.type)}
+        tabIndex={-1}
+        disabled
+        icon={renderUnitTypeIcon(unit.type)}
+      />
+      <SiteControlButton
+        size="bar"
+        variant="danger"
+        className="section-unit__remove-btn"
+        onClick={() => onRemove(unit.id)}
+        aria-label="Quitar unidad"
+        icon={<TrashIcon />}
+      />
+    </div>
+  );
+}
 
 export default function SectionUnitEditor({ unit, onCommit, onRemove }) {
-  const normalized = normalizeUnitData(unit);
-  const [draft, setDraft] = useState(normalized);
+  const [draft, setDraft] = useState(() => normalizeUnitData(unit));
 
   useEffect(() => {
     setDraft(normalizeUnitData(unit));
-  }, [unit]);
+  }, [unit.id]);
+
+  const updateDraft = useCallback(
+    (updater) => {
+      setDraft((previous) => {
+        const next =
+          typeof updater === 'function' ? updater(previous) : updater;
+
+        if (unitSupportsEditor(unit.type)) {
+          onCommit(unit.id, commitUnitFields(unit, next));
+        }
+
+        return next;
+      });
+    },
+    [unit.id, unit.type, onCommit],
+  );
 
   const handleFieldChange = (field, value) => {
-    setDraft((previous) => ({ ...previous, [field]: value }));
+    updateDraft((previous) => ({ ...previous, [field]: value }));
   };
-
-  useEffect(() => {
-    if (!unitSupportsEditor(unit.type)) return;
-    const committed = commitUnitFields(unit, draft);
-    const current = commitUnitFields(unit, normalizeUnitData(unit));
-    if (JSON.stringify(committed) === JSON.stringify(current)) return;
-    onCommit(unit.id, committed);
-  }, [draft, unit, onCommit]);
 
   const renderEditorFields = () => {
     if (unit.type === 'list') {
       return (
         <ListUnitEditor
           items={draft.list ?? []}
-          onChange={(list) => setDraft((previous) => ({ ...previous, list }))}
+          onChange={(list) => updateDraft((previous) => ({ ...previous, list }))}
         />
       );
     }
 
     if (unitIsMediaType(unit.type)) {
       return (
-        <MediaUnitEditor type={unit.type} draft={draft} onChange={setDraft} />
+        <MediaUnitEditor
+          type={unit.type}
+          draft={draft}
+          onChange={(nextDraft) => updateDraft(nextDraft)}
+        />
       );
     }
 
     if (unit.type === 'link') {
-      return <LinkUnitEditor draft={draft} onChange={setDraft} />;
+      return (
+        <LinkUnitEditor
+          draft={draft}
+          onChange={(nextDraft) => updateDraft(nextDraft)}
+        />
+      );
     }
 
     if (unitSupportsTextEmphasis(unit.type)) {
       return (
         <>
-          <div>
-            <label className={labelClassName} htmlFor={`${unit.id}-content`}>
-              1. Contenido
-            </label>
-            <textarea
-              id={`${unit.id}-content`}
-              value={draft.content ?? ''}
-              onChange={(event) =>
-                handleFieldChange('content', event.target.value)
-              }
-              rows={4}
-              className={`${inputClassName} post-editor__field--textarea`}
-            />
-          </div>
+          <textarea
+            id={`${unit.id}-content`}
+            value={draft.content ?? ''}
+            onChange={(event) =>
+              handleFieldChange('content', event.target.value)
+            }
+            rows={3}
+            placeholder="Contenido"
+            aria-label="Contenido"
+            className={`${inputClassName} post-editor__field--textarea`}
+          />
 
           {unit.type === 'biblical_quote' ? (
-            <div>
-              <label className={labelClassName} htmlFor={`${unit.id}-reference`}>
-                Referencia bíblica
-              </label>
-              <input
-                id={`${unit.id}-reference`}
-                type="text"
-                value={draft.reference ?? ''}
-                onChange={(event) =>
-                  handleFieldChange('reference', event.target.value)
-                }
-                className={inputClassName}
-              />
-            </div>
-          ) : null}
-
-          <div>
-            <label className={labelClassName} htmlFor={`${unit.id}-emphasized`}>
-              2. Texto enfatizado
-            </label>
             <input
-              id={`${unit.id}-emphasized`}
+              id={`${unit.id}-reference`}
               type="text"
-              value={draft.emphasized ?? ''}
+              value={draft.reference ?? ''}
               onChange={(event) =>
-                handleFieldChange('emphasized', event.target.value)
+                handleFieldChange('reference', event.target.value)
               }
-              placeholder="Debe aparecer exactamente en el contenido"
+              placeholder="Referencia bíblica"
+              aria-label="Referencia bíblica"
               className={inputClassName}
             />
-            <p className="post-editor__hint theme-muted">
-              Si coincide con el contenido, se guarda en negrita en el JSON.
-            </p>
-          </div>
+          ) : null}
+
+          <input
+            id={`${unit.id}-emphasized`}
+            type="text"
+            value={draft.emphasized ?? ''}
+            onChange={(event) =>
+              handleFieldChange('emphasized', event.target.value)
+            }
+            placeholder="Texto enfatizado (opcional)"
+            aria-label="Texto enfatizado"
+            className={inputClassName}
+          />
         </>
       );
     }
@@ -115,17 +145,11 @@ export default function SectionUnitEditor({ unit, onCommit, onRemove }) {
   if (!unitSupportsEditor(unit.type)) {
     return (
       <article className="section-unit theme-border">
-        <div className="section-unit__unsupported">
-          <div className="section-unit__toolbar">
-            <EditorActionButton
-              variant="danger"
-              className="section-unit__toolbar-btn"
-              onClick={() => onRemove(unit.id)}
-              aria-label="Quitar unidad"
-            >
-              Quitar
-            </EditorActionButton>
-          </div>
+        <div className="section-unit__layout">
+          <p className="section-unit__unsupported theme-muted">
+            Tipo de unidad no editable en el editor.
+          </p>
+          <UnitEditorSidebar unit={unit} onRemove={onRemove} />
         </div>
       </article>
     );
@@ -133,19 +157,9 @@ export default function SectionUnitEditor({ unit, onCommit, onRemove }) {
 
   return (
     <article className="section-unit theme-border">
-      <div className="section-unit__toolbar">
-        <EditorActionButton
-          variant="danger"
-          className="section-unit__toolbar-btn"
-          onClick={() => onRemove(unit.id)}
-          aria-label="Quitar unidad"
-        >
-          Quitar
-        </EditorActionButton>
-      </div>
-
-      <div className="section-unit__body theme-border">
-        {renderEditorFields()}
+      <div className="section-unit__layout">
+        <div className="section-unit__fields">{renderEditorFields()}</div>
+        <UnitEditorSidebar unit={unit} onRemove={onRemove} />
       </div>
     </article>
   );

@@ -3,6 +3,22 @@
 name: eduardoos-com
 
 services:
+  postsdb:
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    container_name: eduardoos-postsdb
+    environment:
+      PORT: 8120
+      BIND_HOST: 0.0.0.0
+      DB_PATH: /data/posts.db
+      POSTS_DB_INTERNAL_TOKEN: dev-internal-posts-db-token
+    volumes:
+      - ./database/posts.db:/data/posts.db:ro
+    expose:
+      - "8120"
+    restart: unless-stopped
+
   chatbot:
     build:
       context: ./chatbot
@@ -24,19 +40,23 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: eduardoos-backend
+    env_file:
+      - ./backend/.env
     environment:
       PORT: 8080
-      POST_EDITOR_PASSWORD: editor-dev
       SERIES_DATA_ROOT: /app/public/data/series
       DOCUMENTER_URL: http://documenter:8090
       CHATBOT_URL: http://chatbot:8110
       CHATBOT_INTERNAL_TOKEN: dev-internal-chatbot-token
       CHATBOT_PUBLIC_AUTH_ENABLED: "false"
+      POSTS_DB_URL: http://postsdb:8120
+      POSTS_DB_INTERNAL_TOKEN: dev-internal-posts-db-token
     ports:
       - "8080:8080"
     volumes:
       - ./backend/public/data:/app/public/data
     depends_on:
+      - postsdb
       - chatbot
     restart: unless-stopped
 
@@ -93,6 +113,7 @@ services:
     container_name: eduardoos-frontend
     environment:
       PUBLIC_API_BASE: http://backend:8080
+      DEV_API_PROXY: http://backend:8080
       PUBLIC_DOCUMENTER_BASE: http://documenter:8090
       PUBLIC_TELEMETRY_BASE: http://telemetry:8100
     depends_on:

@@ -1,6 +1,6 @@
 import { SiteControlButton } from '../../ui';
 import { getEditorAddableUnitTypes } from './unitTypes';
-import { KeyUnitBadge, renderUnitTypeIcon } from './UnitTypeIcons';
+import { renderUnitTypeIcon } from './UnitTypeIcons';
 
 export default function UnitTypeTray({ open, onSelect }) {
   if (!open) return null;
@@ -31,12 +31,7 @@ export default function UnitTypeTray({ open, onSelect }) {
             title={entry.label}
             aria-label={entry.label}
             className="unit-type-tray__btn"
-            icon={
-              <span className="unit-type-tray__icon-wrap">
-                {renderUnitTypeIcon(entry.id)}
-                {entry.keyUnit ? <KeyUnitBadge /> : null}
-              </span>
-            }
+            icon={renderUnitTypeIcon(entry.id)}
           />
         ))}
       </div>

@@ -109,6 +109,25 @@ textarea {
   box-sizing: border-box;
 }
 
+/* Native select dropdowns follow color-scheme (otherwise OS paints a light list). */
+html[data-theme='light'] select,
+html:not([data-theme]) select {
+  color-scheme: light;
+}
+
+html[data-theme='dark'] select,
+html.dark select {
+  color-scheme: dark;
+  background-color: var(--site-body-bg);
+  color: var(--site-body-fg);
+}
+
+html[data-theme='dark'] select option,
+html.dark select option {
+  background-color: var(--site-body-bg);
+  color: var(--site-body-fg);
+}
+
 /* ── Theme helpers ─────────────────────────────────────────────── */
 
 .theme-border {

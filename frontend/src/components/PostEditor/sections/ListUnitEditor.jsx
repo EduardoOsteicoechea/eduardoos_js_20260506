@@ -1,5 +1,5 @@
 import EmphasizedTextPreview from './EmphasizedTextPreview';
-import { inputClassName, labelClassName } from './editorInputStyles';
+import { inputClassName } from './editorInputStyles';
 
 export default function ListUnitEditor({ items = [], onChange }) {
   const updateItem = (index, field, value) => {
@@ -38,39 +38,29 @@ export default function ListUnitEditor({ items = [], onChange }) {
               </button>
             </div>
 
-            <div>
-              <label className={labelClassName} htmlFor={`list-item-${index}-content`}>
-                1. Contenido
-              </label>
-              <textarea
-                id={`list-item-${index}-content`}
-                value={item.content ?? ''}
-                onChange={(event) =>
-                  updateItem(index, 'content', event.target.value)
-                }
-                rows={2}
-                className={`${inputClassName} post-editor__field--textarea`}
-              />
-            </div>
+            <textarea
+              id={`list-item-${index}-content`}
+              value={item.content ?? ''}
+              onChange={(event) =>
+                updateItem(index, 'content', event.target.value)
+              }
+              rows={2}
+              placeholder="Contenido"
+              aria-label={`Contenido del elemento ${index + 1}`}
+              className={`${inputClassName} post-editor__field--textarea`}
+            />
 
-            <div>
-              <label
-                className={labelClassName}
-                htmlFor={`list-item-${index}-emphasized`}
-              >
-                2. Texto enfatizado
-              </label>
-              <input
-                id={`list-item-${index}-emphasized`}
-                type="text"
-                value={item.emphasized ?? ''}
-                onChange={(event) =>
-                  updateItem(index, 'emphasized', event.target.value)
-                }
-                placeholder="Debe aparecer exactamente en el contenido"
-                className={inputClassName}
-              />
-            </div>
+            <input
+              id={`list-item-${index}-emphasized`}
+              type="text"
+              value={item.emphasized ?? ''}
+              onChange={(event) =>
+                updateItem(index, 'emphasized', event.target.value)
+              }
+              placeholder="Texto enfatizado (opcional)"
+              aria-label={`Texto enfatizado del elemento ${index + 1}`}
+              className={inputClassName}
+            />
 
             {(item.content ?? '').trim() ? (
               <p className="list-unit-editor__preview">

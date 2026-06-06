@@ -1,4 +1,4 @@
-import { inputClassName, labelClassName } from './editorInputStyles';
+import { inputClassName } from './editorInputStyles';
 
 export default function LinkUnitEditor({ draft, onChange }) {
   const href = String(draft.href ?? '').trim();
@@ -7,33 +7,25 @@ export default function LinkUnitEditor({ draft, onChange }) {
 
   return (
     <div className="link-unit-editor">
-      <div>
-        <label className={labelClassName} htmlFor="link-href">
-          1. URL
-        </label>
-        <input
-          id="link-href"
-          type="url"
-          value={draft.href ?? ''}
-          onChange={(event) => onChange({ ...draft, href: event.target.value })}
-          placeholder="https://ejemplo.com/recurso"
-          className={inputClassName}
-        />
-      </div>
+      <input
+        id="link-href"
+        type="url"
+        value={draft.href ?? ''}
+        onChange={(event) => onChange({ ...draft, href: event.target.value })}
+        placeholder="URL del enlace"
+        aria-label="URL del enlace"
+        className={inputClassName}
+      />
 
-      <div>
-        <label className={labelClassName} htmlFor="link-text">
-          2. Texto visible del enlace
-        </label>
-        <input
-          id="link-text"
-          type="text"
-          value={draft.text ?? ''}
-          onChange={(event) => onChange({ ...draft, text: event.target.value })}
-          placeholder="Texto que verá el lector"
-          className={inputClassName}
-        />
-      </div>
+      <input
+        id="link-text"
+        type="text"
+        value={draft.text ?? ''}
+        onChange={(event) => onChange({ ...draft, text: event.target.value })}
+        placeholder="Texto visible"
+        aria-label="Texto visible del enlace"
+        className={inputClassName}
+      />
 
       {href ? (
         <p className="link-unit-editor__preview">
