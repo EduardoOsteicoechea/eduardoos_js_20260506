@@ -3,6 +3,25 @@
 name: eduardoos-com
 
 services:
+  s3api:
+    build:
+      context: ./s3
+      dockerfile: Dockerfile
+    container_name: eduardoos-s3api
+    environment:
+      PORT: 8130
+      BIND_HOST: 0.0.0.0
+      S3_INTERNAL_TOKEN: dev-internal-s3-token
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      S3_BUCKET: ${S3_BUCKET:-}
+      S3_ROOT_PREFIX: ${S3_ROOT_PREFIX:-media}
+      S3_PUBLIC_BASE_URL: ${S3_PUBLIC_BASE_URL:-}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+    expose:
+      - "8130"
+    restart: unless-stopped
+
   postsdb:
     profiles: ["local-db"]
     build:
@@ -52,11 +71,14 @@ services:
       CHATBOT_PUBLIC_AUTH_ENABLED: "false"
       POSTS_DB_URL: http://postsdb:8120
       POSTS_DB_INTERNAL_TOKEN: dev-internal-posts-db-token
+      S3_URL: http://s3api:8130
+      S3_INTERNAL_TOKEN: dev-internal-s3-token
     ports:
       - "8080:8080"
     volumes:
       - ./backend/public/data:/app/public/data
     depends_on:
+      - s3api
       - chatbot
     restart: unless-stopped
 

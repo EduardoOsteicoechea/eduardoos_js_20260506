@@ -10,6 +10,11 @@ import {
 } from '../handlers/postHandlers.js';
 import { generatePdf, getPdfCapabilities } from '../handlers/pdfHandlers.js';
 import {
+  getMediaURL,
+  listMedia,
+  uploadMedia,
+} from '../handlers/mediaHandlers.js';
+import {
   getSeriesArticle,
   getSeriesArticles,
   getSeriesCatalog,
@@ -28,6 +33,9 @@ publicRouter.get('/series/articles', getSeriesArticles);
 publicRouter.get('/series/article', getSeriesArticle);
 publicRouter.post('/auth/post/editor/', validatePostEditorPassword);
 publicRouter.post('/post/editor/', savePostEditorArticle);
+publicRouter.get('/media/list', listMedia);
+publicRouter.get('/media/url', getMediaURL);
+publicRouter.post('/media/upload', ...uploadMedia);
 publicRouter.post('/documents/article-pdf', downloadArticlePdf);
 publicRouter.post('/chatbot', chatbotPublicAuth, proxyChatbot);
 publicRouter.get('/pdf/capabilities', getPdfCapabilities);

@@ -38,6 +38,11 @@ export const GITHUB_REPO = getEnvOrDefault(
   'GITHUB_REPO',
   'EduardoOsteicoechea/eduardoos_js_20260506',
 );
+export const S3_URL = getEnvOrDefault('S3_URL', 'http://127.0.0.1:8130');
+export const S3_INTERNAL_TOKEN = getEnvOrDefault(
+  'S3_INTERNAL_TOKEN',
+  'dev-internal-s3-token',
+);
 
 export const CORS_ORIGINS = [
   'http://localhost:3000',

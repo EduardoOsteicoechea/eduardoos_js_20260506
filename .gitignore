@@ -61,6 +61,8 @@ database/postsdb.exe
 database/postsdb
 database/import.exe
 database/import
+s3/s3api.exe
+s3/s3api
 
 # SQLite WAL sidecars (commit posts.db, not these)
 database/*.db-wal
