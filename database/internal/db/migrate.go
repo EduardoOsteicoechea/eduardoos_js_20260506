@@ -15,6 +15,9 @@ func (s *Store) migrate() error {
 		createPostsSeriesChapterIndex,
 		createPostSectionsPostIndex,
 		createPostSectionUnitsSectionIndex,
+		createServiceLogsTable,
+		createServiceLogsCreatedIndex,
+		createServiceLogsServiceIndex,
 	} {
 		if _, err := s.DB.Exec(stmt); err != nil {
 			return fmt.Errorf("migrate: %w", err)

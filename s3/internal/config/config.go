@@ -6,14 +6,16 @@ import (
 )
 
 type Config struct {
-	Port           string
-	BindHost       string
-	InternalToken  string
-	AWSRegion      string
-	Bucket         string
-	RootPrefix     string
-	PublicBaseURL  string
-	MaxUploadBytes int64
+	Port                 string
+	BindHost             string
+	InternalToken        string
+	AWSRegion            string
+	Bucket               string
+	RootPrefix           string
+	PublicBaseURL        string
+	MaxUploadBytes       int64
+	PostsDBURL           string
+	PostsDBInternalToken string
 }
 
 func Load() Config {
@@ -32,7 +34,9 @@ func Load() Config {
 		Bucket:         strings.TrimSpace(os.Getenv("S3_BUCKET")),
 		RootPrefix:     normalizePrefix(envOr("S3_ROOT_PREFIX", "media")),
 		PublicBaseURL:  strings.TrimRight(strings.TrimSpace(os.Getenv("S3_PUBLIC_BASE_URL")), "/"),
-		MaxUploadBytes: maxUpload,
+		MaxUploadBytes:       maxUpload,
+		PostsDBURL:           strings.TrimRight(strings.TrimSpace(os.Getenv("POSTS_DB_URL")), "/"),
+		PostsDBInternalToken: strings.TrimSpace(os.Getenv("POSTS_DB_INTERNAL_TOKEN")),
 	}
 }
 

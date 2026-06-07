@@ -7,11 +7,17 @@ import (
 
 	"github.com/eduardoos/s3/internal/config"
 	"github.com/eduardoos/s3/internal/handler"
+	"github.com/eduardoos/s3/internal/logship"
 	"github.com/eduardoos/s3/internal/storage"
 )
 
 func main() {
 	cfg := config.Load()
+	logship.Install(logship.Config{
+		Service: "s3",
+		URL:     cfg.PostsDBURL,
+		Token:   cfg.PostsDBInternalToken,
+	})
 
 	store, err := storage.New(context.Background(), cfg)
 	if err != nil {

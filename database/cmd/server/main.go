@@ -7,6 +7,7 @@ import (
 	"github.com/eduardoos/database/internal/config"
 	"github.com/eduardoos/database/internal/db"
 	"github.com/eduardoos/database/internal/handler"
+	"github.com/eduardoos/database/internal/logship"
 )
 
 func main() {
@@ -17,6 +18,11 @@ func main() {
 		log.Fatalf("open database: %v", err)
 	}
 	defer store.Close()
+
+	logship.Install(logship.Config{
+		Service: "database",
+		Store:   store,
+	})
 
 	mux := http.NewServeMux()
 	handler.Register(mux, cfg, store)

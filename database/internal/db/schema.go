@@ -70,3 +70,21 @@ ON post_sections (post_id, sort_order);`
 const createPostSectionUnitsSectionIndex = `
 CREATE INDEX IF NOT EXISTS idx_post_section_units_section
 ON post_section_units (section_id, sort_order);`
+
+const createServiceLogsTable = `
+CREATE TABLE IF NOT EXISTS service_logs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  service TEXT NOT NULL,
+  level TEXT NOT NULL DEFAULT 'info',
+  message TEXT NOT NULL,
+  context_json TEXT NOT NULL DEFAULT '{}',
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);`
+
+const createServiceLogsCreatedIndex = `
+CREATE INDEX IF NOT EXISTS idx_service_logs_created
+ON service_logs (created_at DESC, id DESC);`
+
+const createServiceLogsServiceIndex = `
+CREATE INDEX IF NOT EXISTS idx_service_logs_service
+ON service_logs (service, created_at DESC, id DESC);`

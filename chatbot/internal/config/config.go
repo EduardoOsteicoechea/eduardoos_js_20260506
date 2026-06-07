@@ -7,16 +7,18 @@ import (
 )
 
 type Config struct {
-	Port              string
-	BindHost          string
-	InternalToken     string
-	PublicAuthEnabled bool
-	LLMAPIURL         string
-	LLMAPIKey         string
-	LLMModel          string
-	GuidelinesPath    string
-	KnowledgeDir      string
-	KnowledgeMaxChars int
+	Port                  string
+	BindHost              string
+	InternalToken         string
+	PublicAuthEnabled     bool
+	LLMAPIURL             string
+	LLMAPIKey             string
+	LLMModel              string
+	GuidelinesPath        string
+	KnowledgeDir          string
+	KnowledgeMaxChars     int
+	PostsDBURL            string
+	PostsDBInternalToken  string
 }
 
 func Load() Config {
@@ -37,7 +39,9 @@ func Load() Config {
 		LLMModel:          envOr("LLM_MODEL", "deepseek-chat"),
 		GuidelinesPath:    envOr("GUIDELINES_PATH", "guidelines/RESPONSE_GUIDELINES.md"),
 		KnowledgeDir:      envOr("KNOWLEDGE_DIR", "guidelines/knowledge"),
-		KnowledgeMaxChars: maxKnowledge,
+		KnowledgeMaxChars:    maxKnowledge,
+		PostsDBURL:           strings.TrimRight(strings.TrimSpace(os.Getenv("POSTS_DB_URL")), "/"),
+		PostsDBInternalToken: strings.TrimSpace(os.Getenv("POSTS_DB_INTERNAL_TOKEN")),
 	}
 }
 

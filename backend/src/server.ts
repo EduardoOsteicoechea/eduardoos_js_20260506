@@ -3,6 +3,9 @@ import express from 'express';
 import cors from 'cors';
 import { apiRouter } from './router/index.js';
 import { CORS_ORIGINS_SET, PORT } from './constants/index.js';
+import { installLogShip } from './logship.js';
+
+installLogShip('backend');
 
 const app = express();
 

@@ -62,7 +62,7 @@ export const PAGE_BACKGROUND_ROUTES = [
     show: false,
   },
   {
-    patterns: ['/server/health'],
+    patterns: ['/server/health', '/logs', '/media'],
     show: false,
   },
   {

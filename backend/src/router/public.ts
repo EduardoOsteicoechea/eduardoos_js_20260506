@@ -15,6 +15,7 @@ import {
   serveMediaObject,
   uploadMedia,
 } from '../handlers/mediaHandlers.js';
+import { getServiceLogs } from '../handlers/logsHandlers.js';
 import {
   getSeriesArticle,
   getSeriesArticles,
@@ -35,6 +36,7 @@ publicRouter.get('/series/article', getSeriesArticle);
 publicRouter.post('/auth/post/editor/', validatePostEditorPassword);
 publicRouter.post('/post/editor/', savePostEditorArticle);
 publicRouter.post('/catalog/save', saveCatalogMetadata);
+publicRouter.get('/logs', getServiceLogs);
 publicRouter.get('/media/list', listMedia);
 publicRouter.get('/media/object', serveMediaObject);
 publicRouter.post('/media/upload', ...uploadMedia);

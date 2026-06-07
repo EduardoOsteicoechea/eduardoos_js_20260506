@@ -1,6 +1,6 @@
 export const PAGE_CONTEXT_SCHEMA_VERSION = 1;
 
-/** @typedef {'home' | 'profile' | 'series' | 'article' | 'post-editor' | 'post-creator' | 'server-health' | 'generic'} PageContextType */
+/** @typedef {'home' | 'profile' | 'series' | 'article' | 'post-editor' | 'post-creator' | 'server-health' | 'service-logs' | 's3-media' | 'generic'} PageContextType */
 
 /**
  * @typedef {Object} PageContextSection
@@ -34,6 +34,8 @@ export function inferPageType(pathname) {
   if (path === '/catalog') return 'post-editor';
   if (path === '/post/creator') return 'post-creator';
   if (path === '/server/health') return 'server-health';
+  if (path === '/logs') return 'service-logs';
+  if (path === '/media') return 's3-media';
   if (path === '/series') return 'series';
   if (path.startsWith('/series/') || path.startsWith('/articles/')) return 'article';
   return 'generic';

@@ -159,3 +159,32 @@ export async function savePostsDbCatalogEntry(payload: {
     body: JSON.stringify(payload),
   });
 }
+
+export interface PostsDbServiceLog {
+  id: number;
+  service: string;
+  level: string;
+  message: string;
+  context?: Record<string, unknown>;
+  created_at: string;
+}
+
+export interface PostsDbLogsResult {
+  ok: boolean;
+  total: number;
+  logs: PostsDbServiceLog[];
+}
+
+export async function fetchPostsDbLogs(
+  params: URLSearchParams = new URLSearchParams(),
+): Promise<PostsDbLogsResult> {
+  const query = params.toString();
+  const data = await postsDbFetch<PostsDbLogsResult>(
+    query ? `/logs?${query}` : '/logs',
+  );
+  return {
+    ok: Boolean(data.ok),
+    total: Number(data.total) || 0,
+    logs: Array.isArray(data.logs) ? data.logs : [],
+  };
+}

@@ -1,0 +1,10 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { S3MediaBrowser } from '../components/S3MediaBrowser';
+---
+
+<Layout title="Media S3 | Eduardo Osteicoechea">
+  <main class="page-main page-main--wide">
+    <S3MediaBrowser client:load />
+  </main>
+</Layout>

@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const pdfHandlers_js_1 = require("./handlers/pdfHandlers.js");
+const logship_js_1 = require("./logship.js");
+(0, logship_js_1.installLogShip)('documenter');
 const app = (0, express_1.default)();
 const PORT = Number(process.env.PORT || 8090);
 app.use(express_1.default.json());
