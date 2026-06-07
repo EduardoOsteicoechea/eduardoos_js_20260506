@@ -68,3 +68,4 @@ s3/s3api
 database/*.db-wal
 database/*.db-shm
 database/posts.db-journal
+database/data/

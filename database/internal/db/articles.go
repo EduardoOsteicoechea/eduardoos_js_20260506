@@ -98,6 +98,45 @@ ON CONFLICT(series_id, slug) DO UPDATE SET
 	return err
 }
 
+func hubPostsCount(hub map[string]any) int {
+	if hub == nil {
+		return 0
+	}
+	posts, ok := hub["posts"]
+	if !ok {
+		return 0
+	}
+	switch typed := posts.(type) {
+	case []any:
+		return len(typed)
+	case []map[string]any:
+		return len(typed)
+	default:
+		return 0
+	}
+}
+
+func (s *Store) mergeCatalogHub(seriesSlug, chapter string, hub map[string]any) (map[string]any, error) {
+	if hub == nil {
+		return map[string]any{}, nil
+	}
+	if hubPostsCount(hub) > 0 {
+		return hub, nil
+	}
+
+	existing, err := s.GetHub(seriesSlug, chapter)
+	if err != nil || hubPostsCount(existing) == 0 {
+		return hub, nil
+	}
+
+	merged := make(map[string]any, len(hub)+1)
+	for key, value := range hub {
+		merged[key] = value
+	}
+	merged["posts"] = existing["posts"]
+	return merged, nil
+}
+
 func (s *Store) GetHub(seriesSlug, chapter string) (map[string]any, error) {
 	var raw string
 	err := s.DB.QueryRow(`

@@ -9,6 +9,12 @@ on:
       - 'deploy/systemd/eduardoos-database.service'
       - '.github/workflows/deploy-database.yml'
   workflow_dispatch:
+    inputs:
+      sync_posts_db:
+        description: Overwrite EC2 posts.db from the repo copy
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   deploy-database:
@@ -64,7 +70,30 @@ jobs:
             go build -ldflags="-s -w" -o postsdb ./cmd/server
           file postsdb
 
+      - name: Detect whether posts.db should be synced
+        id: posts_db
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            if [ "${{ inputs.sync_posts_db }}" = "true" ]; then
+              echo "sync=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "sync=false" >> "$GITHUB_OUTPUT"
+            fi
+            exit 0
+          fi
+
+          BEFORE="${{ github.event.before }}"
+          if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            BEFORE="HEAD~1"
+          fi
+          if git diff --name-only "$BEFORE" "${{ github.sha }}" -- posts.db | grep -q .; then
+            echo "sync=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "sync=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Export self-contained posts.db for deploy
+        if: steps.posts_db.outputs.sync == 'true'
         run: |
           if [ -f "./posts.db" ]; then
             go run ./cmd/checkpoint posts.db.deploy
@@ -82,13 +111,18 @@ jobs:
             ./postsdb \
             "$EC2_USER@$EC2_HOST:$REMOTE_DIR/postsdb"
 
-          if [ -f "./posts.db" ]; then
+          if [ "${{ steps.posts_db.outputs.sync }}" = "true" ] && [ -f "./posts.db" ]; then
+            ssh $SSH_OPTS "$EC2_USER@$EC2_HOST" \
+              "if [ -f $REMOTE_DIR/posts.db ]; then cp $REMOTE_DIR/posts.db $REMOTE_DIR/posts.db.backup-\$(date +%Y%m%d%H%M%S); fi"
             rsync -avz -e "ssh $SSH_OPTS" \
               ./posts.db \
               "$EC2_USER@$EC2_HOST:$REMOTE_DIR/posts.db"
             ssh $SSH_OPTS "$EC2_USER@$EC2_HOST" "rm -f $REMOTE_DIR/posts.db-wal $REMOTE_DIR/posts.db-shm"
-          else
+            echo "Synced posts.db from repo to EC2 (previous copy backed up on server)"
+          elif [ "${{ steps.posts_db.outputs.sync }}" = "true" ]; then
             echo "WARN: database/posts.db not in repo — service will start with empty schema"
+          else
+            echo "Skipped posts.db sync (repo copy unchanged in this push)"
           fi
 
           rsync -avz -e "ssh $SSH_OPTS" \

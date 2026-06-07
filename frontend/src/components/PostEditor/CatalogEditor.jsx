@@ -220,7 +220,7 @@ export default function CatalogEditor() {
         {
           series_slug: effectiveSerie,
           series_name: form.seriesName.trim() || effectiveSerie,
-          chapter: effectiveChapter || undefined,
+          chapter: hub ? effectiveChapter || undefined : undefined,
           hub,
         },
         password,

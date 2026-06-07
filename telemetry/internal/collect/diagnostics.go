@@ -41,6 +41,9 @@ func EvaluateIssues(
 	if !services.PostsDb.Active {
 		issues = append(issues, fmt.Sprintf("systemd unit %s is not active", services.PostsDb.Unit))
 	}
+	if !services.S3.Active {
+		issues = append(issues, fmt.Sprintf("systemd unit %s is not active", services.S3.Unit))
+	}
 
 	if cfg.LogMode != "docker" {
 		if !deploy.BackendDist.Exists {
@@ -79,6 +82,7 @@ func EvaluateIssues(
 	checkPort("documenter", ports.Documenter, []string{"node"})
 	checkPort("chatbot", ports.Chatbot, []string{"chatbot"})
 	checkPort("posts-db", ports.PostsDb, []string{"postsdb"})
+	checkPort("s3", ports.S3, []string{"s3api"})
 	checkPort("telemetry", ports.Telemetry, []string{"telemetry", "node"})
 
 	if !probes.BackendCatalog.OK {
@@ -117,6 +121,16 @@ func EvaluateIssues(
 			msg = fmt.Sprintf("%s: %s", msg, *probes.PostsDbHealth.Error)
 		} else if probes.PostsDbHealth.Status > 0 {
 			msg = fmt.Sprintf("%s: HTTP %d", msg, probes.PostsDbHealth.Status)
+		}
+		issues = append(issues, msg)
+	}
+
+	if !probes.S3Health.OK {
+		msg := "s3 health probe failed"
+		if probes.S3Health.Error != nil {
+			msg = fmt.Sprintf("%s: %s", msg, *probes.S3Health.Error)
+		} else if probes.S3Health.Status > 0 {
+			msg = fmt.Sprintf("%s: HTTP %d", msg, probes.S3Health.Status)
 		}
 		issues = append(issues, msg)
 	}

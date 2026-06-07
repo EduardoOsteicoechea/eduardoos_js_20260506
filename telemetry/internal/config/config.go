@@ -14,11 +14,13 @@ type Config struct {
 	DocumenterUnit            string
 	TelemetryUnit             string
 	ChatbotUnit               string
-	PostsDbUnit                 string
+	PostsDbUnit               string
+	S3Unit                    string
 	LegacyAPIUnit             string
 	DockerBackendContainer    string
 	DockerDocumenterContainer string
 	DockerChatbotContainer    string
+	DockerS3Container         string
 	HostProcRoot              string
 	DiskPath                  string
 	BackendDistPath           string
@@ -27,11 +29,13 @@ type Config struct {
 	DocumenterHealthURL       string
 	ChatbotHealthURL          string
 	PostsDbHealthURL          string
+	S3HealthURL               string
 	BackendPort               int
 	DocumenterPort            int
 	TelemetryPort             int
 	ChatbotPort               int
 	PostsDbPort               int
+	S3Port                    int
 }
 
 func Load() Config {
@@ -52,6 +56,7 @@ func Load() Config {
 	telemetryPort := envInt("TELEMETRY_PORT", 8100)
 	chatbotPort := envInt("CHATBOT_PORT", 8110)
 	postsDbPort := envInt("POSTS_DB_PORT", 8120)
+	s3Port := envInt("S3_PORT", 8130)
 
 	return Config{
 		Port:                      envOr("PORT", "8100"),
@@ -62,10 +67,12 @@ func Load() Config {
 		TelemetryUnit:             envOr("TELEMETRY_UNIT", "eduardoos-telemetry"),
 		ChatbotUnit:               envOr("CHATBOT_UNIT", "eduardoos-chatbot"),
 		PostsDbUnit:               envOr("POSTS_DB_UNIT", "eduardoos-database"),
+		S3Unit:                    envOr("S3_UNIT", "eduardoos-s3"),
 		LegacyAPIUnit:             envOr("LEGACY_API_UNIT", "eduardoos-api"),
 		DockerBackendContainer:    envOr("DOCKER_BACKEND_CONTAINER", "eduardoos-backend"),
 		DockerDocumenterContainer: envOr("DOCKER_DOCUMENTER_CONTAINER", "eduardoos-documenter"),
 		DockerChatbotContainer:    envOr("DOCKER_CHATBOT_CONTAINER", "eduardoos-chatbot"),
+		DockerS3Container:         envOr("DOCKER_S3_CONTAINER", "eduardoos-s3api"),
 		HostProcRoot:              strings.TrimSuffix(envOr("HOST_PROC", "/proc"), "/"),
 		DiskPath:                  envOr("DISK_PATH", "/"),
 		BackendDistPath: envOr(
@@ -92,11 +99,16 @@ func Load() Config {
 			"POSTS_DB_HEALTH_URL",
 			"http://127.0.0.1:8120/health",
 		),
+		S3HealthURL: envOr(
+			"S3_HEALTH_URL",
+			"http://127.0.0.1:8130/health",
+		),
 		BackendPort:    backendPort,
 		DocumenterPort: documenterPort,
 		TelemetryPort:  telemetryPort,
 		ChatbotPort:    chatbotPort,
 		PostsDbPort:    postsDbPort,
+		S3Port:         s3Port,
 	}
 }
 

@@ -36,7 +36,7 @@ services:
       DB_PATH: /data/posts.db
       POSTS_DB_INTERNAL_TOKEN: dev-internal-posts-db-token
     volumes:
-      - ./database/posts.db:/data/posts.db
+      - ./database/data:/data
     expose:
       - "8120"
     restart: unless-stopped
@@ -119,6 +119,10 @@ services:
       BACKEND_HEALTH_URL: http://backend:8080/api/series/catalog
       DOCUMENTER_HEALTH_URL: http://documenter:8090/health
       CHATBOT_HEALTH_URL: http://chatbot:8110/health
+      S3_HEALTH_URL: http://s3api:8130/health
+      S3_UNIT: eduardoos-s3api
+      S3_PORT: 8130
+      DOCKER_S3_CONTAINER: eduardoos-s3api
       CHATBOT_UNIT: eduardoos-chatbot
       CHATBOT_PORT: 8110
       DOCKER_CHATBOT_CONTAINER: eduardoos-chatbot

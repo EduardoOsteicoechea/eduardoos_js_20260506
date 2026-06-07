@@ -153,11 +153,17 @@ func (s *Store) SaveCatalogEntry(seriesSlug, seriesName, chapter string, hub map
 		return nil
 	}
 
-	if hub == nil {
-		hub = map[string]any{}
+	if hub == nil || len(hub) == 0 {
+		// Series-name-only save: do not replace an existing chapter hub with {}.
+		return nil
 	}
 
-	return s.UpsertChapter(seriesID, chapter, hub)
+	mergedHub, err := s.mergeCatalogHub(seriesSlug, chapter, hub)
+	if err != nil {
+		return err
+	}
+
+	return s.UpsertChapter(seriesID, chapter, mergedHub)
 }
 
 func (s *Store) UpsertPost(seriesID int64, chapter, slug, title, author string, sortOrder int) error {

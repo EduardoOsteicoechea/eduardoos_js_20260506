@@ -373,6 +373,23 @@ export default function ServerHealthDashboard() {
           </InfoPanel>
 
           <InfoPanel
+            title="S3 API"
+            subtitle={services.s3?.unit}
+            copyText={formatUnitText(services.s3)}
+          >
+            <ul className="server-health__list">
+              <li>
+                Activo:{' '}
+                <StatusBadge
+                  ok={services.s3?.active}
+                  label={services.s3?.active ? 'sí' : 'no'}
+                />
+              </li>
+              <li>Estado: {services.s3?.state}</li>
+            </ul>
+          </InfoPanel>
+
+          <InfoPanel
             title="Telemetry"
             subtitle={services.telemetry?.unit}
             copyText={formatUnitText(services.telemetry)}
@@ -393,12 +410,13 @@ export default function ServerHealthDashboard() {
 
       {ports ? (
         <InfoPanel
-          title="Puertos (8080 / 8090 / 8100 / 8110 / 8120)"
+          title="Puertos (8080 / 8090 / 8100 / 8110 / 8120 / 8130)"
           copyText={[
             formatPortText(ports.backend),
             formatPortText(ports.documenter),
             formatPortText(ports.chatbot),
             formatPortText(ports.posts_db),
+            formatPortText(ports.s3),
             formatPortText(ports.telemetry),
           ].join('\n\n')}
         >
@@ -425,6 +443,12 @@ export default function ServerHealthDashboard() {
               <strong>8120 posts-db:</strong>{' '}
               {ports.posts_db?.listening
                 ? `${ports.posts_db.process ?? '?'} (pid ${ports.posts_db.pid ?? '?'})`
+                : 'no escucha'}
+            </li>
+            <li>
+              <strong>8130 s3:</strong>{' '}
+              {ports.s3?.listening
+                ? `${ports.s3.process ?? '?'} (pid ${ports.s3.pid ?? '?'})`
                 : 'no escucha'}
             </li>
             <li>
@@ -471,6 +495,7 @@ export default function ServerHealthDashboard() {
             formatProbeText(probes.documenter_health),
             formatProbeText(probes.chatbot_health),
             formatProbeText(probes.posts_db_health),
+            formatProbeText(probes.s3_health),
           ].join('\n\n')}
         >
           <ul className="server-health__list server-health__list--spaced">
@@ -507,6 +532,15 @@ export default function ServerHealthDashboard() {
                 : ''}
             </li>
             <li className="server-health__path theme-muted">{probes.posts_db_health?.url}</li>
+            <li>
+              S3 /health:{' '}
+              <StatusBadge ok={probes.s3_health?.ok} label={probes.s3_health?.ok ? 'OK' : 'falló'} />
+              {probes.s3_health?.status ? ` HTTP ${probes.s3_health.status}` : ''}
+              {probes.s3_health?.latency_ms != null
+                ? ` · ${probes.s3_health.latency_ms} ms`
+                : ''}
+            </li>
+            <li className="server-health__path theme-muted">{probes.s3_health?.url}</li>
           </ul>
         </InfoPanel>
       ) : null}
@@ -550,6 +584,7 @@ export default function ServerHealthDashboard() {
           <LogPanel title="Logs documenter" block={data.documenter} />
           <LogPanel title="Logs chatbot" block={data.chatbot} />
           <LogPanel title="Logs posts-db" block={data.posts_db} />
+          <LogPanel title="Logs s3" block={data.s3} />
         </>
       ) : null}
     </div>

@@ -21,6 +21,7 @@ type ServicesBlock struct {
 	Documenter UnitStatus `json:"documenter"`
 	Chatbot    UnitStatus `json:"chatbot"`
 	PostsDb    UnitStatus `json:"posts_db"`
+	S3         UnitStatus `json:"s3"`
 	Telemetry  UnitStatus `json:"telemetry"`
 	LegacyAPI  UnitStatus `json:"legacy_api"`
 }
@@ -32,6 +33,7 @@ func ServicesStatus(cfg config.Config) ServicesBlock {
 			Documenter: dockerContainerStatus(cfg.DockerDocumenterContainer),
 			Chatbot:    dockerContainerStatus(cfg.DockerChatbotContainer),
 			PostsDb:    UnitStatus{Unit: cfg.PostsDbUnit, Exists: false, State: "n/a"},
+			S3:         dockerContainerStatus(cfg.DockerS3Container),
 			Telemetry:  dockerContainerStatus("eduardoos-telemetry"),
 			LegacyAPI:  UnitStatus{Unit: cfg.LegacyAPIUnit, Exists: false, State: "n/a"},
 		}
@@ -42,6 +44,7 @@ func ServicesStatus(cfg config.Config) ServicesBlock {
 		Documenter: systemdUnitStatus(cfg.DocumenterUnit),
 		Chatbot:    systemdUnitStatus(cfg.ChatbotUnit),
 		PostsDb:    systemdUnitStatus(cfg.PostsDbUnit),
+		S3:         systemdUnitStatus(cfg.S3Unit),
 		Telemetry:  systemdUnitStatus(cfg.TelemetryUnit),
 		LegacyAPI:  systemdUnitStatus(cfg.LegacyAPIUnit),
 	}

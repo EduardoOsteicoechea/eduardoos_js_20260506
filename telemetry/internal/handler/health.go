@@ -22,6 +22,7 @@ type healthResponse struct {
 	Documenter collect.ServiceLogs    `json:"documenter"`
 	Chatbot    collect.ServiceLogs    `json:"chatbot"`
 	PostsDb    collect.ServiceLogs    `json:"posts_db"`
+	S3         collect.ServiceLogs    `json:"s3"`
 	System     collect.SystemBlock    `json:"system"`
 }
 
@@ -49,12 +50,14 @@ func Health(cfg config.Config) http.HandlerFunc {
 			cfg, cfg.ChatbotUnit, cfg.DockerChatbotContainer,
 		)
 		postsDbLogs := collect.ServiceLogsFor(cfg, cfg.PostsDbUnit, "")
+		s3Logs := collect.ServiceLogsFor(cfg, cfg.S3Unit, cfg.DockerS3Container)
 
 		warnings := []string{}
 		warnings = append(warnings, collect.RecentLogWarnings(backendLogs, services.Backend.Active)...)
 		warnings = append(warnings, collect.RecentLogWarnings(documenterLogs, services.Documenter.Active)...)
 		warnings = append(warnings, collect.RecentLogWarnings(chatbotLogs, services.Chatbot.Active)...)
 		warnings = append(warnings, collect.RecentLogWarnings(postsDbLogs, services.PostsDb.Active)...)
+		warnings = append(warnings, collect.RecentLogWarnings(s3Logs, services.S3.Active)...)
 
 		if issues == nil {
 			issues = []string{}
@@ -76,6 +79,7 @@ func Health(cfg config.Config) http.HandlerFunc {
 			Documenter: documenterLogs,
 			Chatbot:    chatbotLogs,
 			PostsDb:    postsDbLogs,
+			S3:         s3Logs,
 			System: collect.SystemStats(cfg),
 		}
 
