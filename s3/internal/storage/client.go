@@ -42,6 +42,12 @@ type UploadResult struct {
 	ContentType string `json:"content_type"`
 }
 
+type ObjectBody struct {
+	Body        io.ReadCloser
+	ContentType string
+	Size        int64
+}
+
 type Client struct {
 	cfg    appconfig.Config
 	client *s3.Client
@@ -135,6 +141,32 @@ func (c *Client) Upload(
 		URL:         c.objectURL(key),
 		Size:        size,
 		ContentType: contentType,
+	}, nil
+}
+
+func (c *Client) OpenObject(ctx context.Context, relativeKey string) (ObjectBody, error) {
+	key, err := c.resolveObjectKey(relativeKey)
+	if err != nil {
+		return ObjectBody{}, err
+	}
+
+	output, err := c.client.GetObject(ctx, &s3.GetObjectInput{
+		Bucket: aws.String(c.cfg.Bucket),
+		Key:    aws.String(key),
+	})
+	if err != nil {
+		return ObjectBody{}, err
+	}
+
+	contentType := aws.ToString(output.ContentType)
+	if contentType == "" {
+		contentType = "application/octet-stream"
+	}
+
+	return ObjectBody{
+		Body:        output.Body,
+		ContentType: contentType,
+		Size:        aws.ToInt64(output.ContentLength),
 	}, nil
 }
 

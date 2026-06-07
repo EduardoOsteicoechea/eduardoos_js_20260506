@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -27,6 +28,28 @@ func (a *API) List(w http.ResponseWriter, r *http.Request) {
 		"folders": result.Folders,
 		"objects": result.Objects,
 	})
+}
+
+func (a *API) Object(w http.ResponseWriter, r *http.Request) {
+	key := strings.TrimSpace(r.URL.Query().Get("key"))
+	if key == "" {
+		writeError(w, http.StatusBadRequest, "key is required")
+		return
+	}
+
+	body, err := a.Store.OpenObject(r.Context(), key)
+	if err != nil {
+		writeError(w, http.StatusNotFound, "object not found")
+		return
+	}
+	defer body.Body.Close()
+
+	w.Header().Set("Content-Type", body.ContentType)
+	if body.Size > 0 {
+		w.Header().Set("Content-Length", fmt.Sprintf("%d", body.Size))
+	}
+	w.WriteHeader(http.StatusOK)
+	_, _ = io.Copy(w, body.Body)
 }
 
 func (a *API) URL(w http.ResponseWriter, r *http.Request) {

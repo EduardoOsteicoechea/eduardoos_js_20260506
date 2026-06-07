@@ -79,6 +79,20 @@ export async function fetchS3ObjectURL(key: string): Promise<{ ok: boolean; key:
   return s3Fetch(`/url?${params.toString()}`);
 }
 
+export async function fetchS3ObjectStream(key: string): Promise<Response> {
+  const base = s3Base();
+  if (!base || !S3_INTERNAL_TOKEN) {
+    throw new Error('S3 service is not configured');
+  }
+
+  const params = new URLSearchParams({ key });
+  return fetch(`${base}/object?${params.toString()}`, {
+    headers: {
+      [INTERNAL_HEADER]: S3_INTERNAL_TOKEN,
+    },
+  });
+}
+
 export async function uploadS3File(
   file: Buffer,
   filename: string,

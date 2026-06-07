@@ -1,9 +1,10 @@
 import type { Request, Response } from 'express';
 import multer from 'multer';
 import { POST_EDITOR_PASSWORD } from '../constants/index.js';
+import { buildMediaProxyUrl, proxyUrlForS3List } from '../mediaProxy.js';
 import {
   fetchS3List,
-  fetchS3ObjectURL,
+  fetchS3ObjectStream,
   isS3Configured,
   uploadS3File,
 } from '../s3Client.js';
@@ -38,7 +39,7 @@ export async function listMedia(req: Request, res: Response) {
 
   try {
     const prefix = String(req.query.prefix ?? '').trim();
-    const result = await fetchS3List(prefix);
+    const result = proxyUrlForS3List(await fetchS3List(prefix));
     return res.json(result);
   } catch (error) {
     console.error('[media/list]', error);
@@ -49,7 +50,7 @@ export async function listMedia(req: Request, res: Response) {
   }
 }
 
-export async function getMediaURL(req: Request, res: Response) {
+export async function serveMediaObject(req: Request, res: Response) {
   if (!ensureConfigured(res)) return;
 
   const key = String(req.query.key ?? '').trim();
@@ -58,13 +59,31 @@ export async function getMediaURL(req: Request, res: Response) {
   }
 
   try {
-    const result = await fetchS3ObjectURL(key);
-    return res.json(result);
+    const upstream = await fetchS3ObjectStream(key);
+    if (!upstream.ok) {
+      return res.status(upstream.status === 404 ? 404 : 502).json({
+        ok: false,
+        error: 'No se encontró el archivo en S3',
+      });
+    }
+
+    const contentType =
+      upstream.headers.get('content-type') ?? 'application/octet-stream';
+    const contentLength = upstream.headers.get('content-length');
+
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Cache-Control', 'private, max-age=3600');
+    if (contentLength) {
+      res.setHeader('Content-Length', contentLength);
+    }
+
+    const buffer = Buffer.from(await upstream.arrayBuffer());
+    return res.send(buffer);
   } catch (error) {
-    console.error('[media/url]', error);
-    return res.status(404).json({
+    console.error('[media/object]', error);
+    return res.status(502).json({
       ok: false,
-      error: 'No se encontró el archivo en S3',
+      error: 'No se pudo leer el archivo desde S3',
     });
   }
 }
@@ -95,7 +114,7 @@ export const uploadMedia = [
       return res.json({
         ok: true,
         key: result.key,
-        url: result.url,
+        url: buildMediaProxyUrl(result.key),
         size: result.size,
         content_type: result.content_type,
       });

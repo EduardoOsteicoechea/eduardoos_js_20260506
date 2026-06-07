@@ -10,8 +10,8 @@ import {
 } from '../handlers/postHandlers.js';
 import { generatePdf, getPdfCapabilities } from '../handlers/pdfHandlers.js';
 import {
-  getMediaURL,
   listMedia,
+  serveMediaObject,
   uploadMedia,
 } from '../handlers/mediaHandlers.js';
 import {
@@ -34,7 +34,7 @@ publicRouter.get('/series/article', getSeriesArticle);
 publicRouter.post('/auth/post/editor/', validatePostEditorPassword);
 publicRouter.post('/post/editor/', savePostEditorArticle);
 publicRouter.get('/media/list', listMedia);
-publicRouter.get('/media/url', getMediaURL);
+publicRouter.get('/media/object', serveMediaObject);
 publicRouter.post('/media/upload', ...uploadMedia);
 publicRouter.post('/documents/article-pdf', downloadArticlePdf);
 publicRouter.post('/chatbot', chatbotPublicAuth, proxyChatbot);

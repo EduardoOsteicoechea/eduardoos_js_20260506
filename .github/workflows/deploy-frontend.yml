@@ -46,7 +46,6 @@ jobs:
       - name: Build Astro Site
         env:
           PUBLIC_API_BASE: https://eduardoos.com
-          PUBLIC_MEDIA_BASE_URL: https://eduardoos20260607.s3.us-east-1.amazonaws.com/media
         run: npm run build
 
       - name: Sync to EC2 Nginx Directory

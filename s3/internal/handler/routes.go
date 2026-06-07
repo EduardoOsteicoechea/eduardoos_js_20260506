@@ -18,6 +18,7 @@ func Register(mux *http.ServeMux, cfg config.Config, store *storage.Client) {
 	}
 
 	registerProtected("GET /list", api.List)
+	registerProtected("GET /object", api.Object)
 	registerProtected("GET /url", api.URL)
 	registerProtected("POST /upload", api.Upload)
 }

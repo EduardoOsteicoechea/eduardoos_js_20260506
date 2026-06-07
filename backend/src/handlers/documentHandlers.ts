@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { DOCUMENTER_URL } from '../constants/index.js';
+import { buildMediaProxyUrl } from '../mediaProxy.js';
 
 export async function downloadArticlePdf(req: Request, res: Response) {
   try {
@@ -22,11 +23,14 @@ export async function downloadArticlePdf(req: Request, res: Response) {
       });
     }
 
+    const key = String(data.key ?? '').trim();
+    const url = key ? buildMediaProxyUrl(key) : String(data.url ?? '').trim();
+
     return res.json({
       ok: true,
-      url: data.url,
-      key: data.key,
-      publicPath: data.publicPath ?? data.url,
+      url,
+      key,
+      publicPath: url,
       bytes: data.bytes,
     });
   } catch (error) {
