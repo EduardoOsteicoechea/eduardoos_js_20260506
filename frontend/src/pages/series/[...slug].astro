@@ -28,12 +28,21 @@ export async function getStaticPaths() {
   const { slugs } = await loadDiscoverSnapshot();
   const buildSlugs = await collectSeriesBuildSlugs(slugs);
 
-  return Promise.all(
-    buildSlugs.map(async (slug) => ({
-      params: { slug },
-      props: (await resolveSeriesRoute(slug)) as PageProps,
-    })),
+  const paths = await Promise.all(
+    buildSlugs.map(async (slug) => {
+      try {
+        return {
+          params: { slug },
+          props: (await resolveSeriesRoute(slug)) as PageProps,
+        };
+      } catch (error) {
+        console.warn(`[build] skipping props for /series/${slug}`, error);
+        return null;
+      }
+    }),
   );
+
+  return paths.filter((entry): entry is NonNullable<typeof entry> => entry !== null);
 }
 
 const slugParam = Astro.params.slug as string | string[] | undefined;
