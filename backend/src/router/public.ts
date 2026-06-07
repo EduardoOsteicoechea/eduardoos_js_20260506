@@ -19,6 +19,7 @@ import { getServiceLogs } from '../handlers/logsHandlers.js';
 import {
   getSeriesArticle,
   getSeriesArticles,
+  getDbSeriesCatalog,
   getSeriesCatalog,
   getSeriesDiscover,
   getSeriesHub,
@@ -28,6 +29,7 @@ import {
 export const publicRouter = Router();
 
 publicRouter.get('/series/catalog', getSeriesCatalog);
+publicRouter.get('/db/series/catalog', getDbSeriesCatalog);
 publicRouter.get('/series/discover', getSeriesDiscover);
 publicRouter.get('/series/hub', getSeriesHub);
 publicRouter.get('/series/next-article-id', getSeriesNextArticleId);

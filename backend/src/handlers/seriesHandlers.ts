@@ -14,18 +14,40 @@ function postsDbUnavailable(error: unknown): void {
   console.warn(`[series] posts-db unavailable: ${message}`);
 }
 
-export async function getSeriesCatalog(_req: Request, res: Response) {
+async function loadSeriesCatalogFromDb() {
   if (!isPostsDbConfigured()) {
-    return res.status(503).json({ error: 'Posts database is not configured' });
+    return { status: 503 as const, body: { error: 'Posts database is not configured' } };
   }
 
   try {
     const catalog = await fetchPostsDbCatalog();
-    return res.json(catalog);
+    return { status: 200 as const, body: catalog };
   } catch (error) {
     console.error('[series/catalog]', error);
-    return res.status(500).json({ error: 'No se pudo cargar el catálogo de series' });
+    return {
+      status: 500 as const,
+      body: { error: 'No se pudo cargar el catálogo de series' },
+    };
   }
+}
+
+/** Legacy route: flat catalog JSON from posts-db. */
+export async function getSeriesCatalog(_req: Request, res: Response) {
+  const result = await loadSeriesCatalogFromDb();
+  return res.status(result.status).json(result.body);
+}
+
+/** Explicit DB-backed catalog (includes source metadata). */
+export async function getDbSeriesCatalog(_req: Request, res: Response) {
+  const result = await loadSeriesCatalogFromDb();
+  if (result.status !== 200) {
+    return res.status(result.status).json(result.body);
+  }
+
+  return res.json({
+    source: 'posts-db',
+    ...result.body,
+  });
 }
 
 export async function getSeriesDiscover(_req: Request, res: Response) {
