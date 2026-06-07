@@ -29,6 +29,10 @@ import { normalizeKebabInput } from './slugify';
 import { SectionEditModal } from './sections';
 import SectionUnitsPreview from './sections/SectionUnitsPreview';
 import { downloadArticlePdf } from '../../lib/articlePdfDownload';
+import {
+  readStoredEditorPassword,
+  rememberEditorPassword,
+} from './editorPasswordSession';
 import { savePostPayloadWithAssets, validateEditorPassword } from './postEditorApi';
 import {
   fetchNextArticleId,
@@ -178,7 +182,16 @@ export default function PostEditor() {
   const [previewModalOpen, setPreviewModalOpen] = useState(false);
   const [deleteSectionId, setDeleteSectionId] = useState(null);
   const [deleteSectionInput, setDeleteSectionInput] = useState('');
-  const editorPasswordRef = useRef('');
+  const editorPasswordRef = useRef(readStoredEditorPassword());
+  const [editorPassword, setEditorPassword] = useState(() =>
+    readStoredEditorPassword(),
+  );
+
+  const storeEditorPassword = useCallback((password) => {
+    const clean = rememberEditorPassword(password);
+    editorPasswordRef.current = clean;
+    setEditorPassword(clean);
+  }, []);
 
   const showNotice = useCallback((variant, message) => {
     if (!message?.trim()) {
@@ -766,7 +779,7 @@ export default function PostEditor() {
         return;
       }
 
-      editorPasswordRef.current = password;
+      storeEditorPassword(password);
       setModalOpen(false);
       showNotice('success', 'Artículo guardado correctamente.');
 
@@ -1113,7 +1126,8 @@ export default function PostEditor() {
         <SectionEditModal
           section={editingSection}
           uploadPrefix={mediaUploadPrefix}
-          editorPassword={editorPasswordRef.current}
+          editorPassword={editorPassword}
+          onRememberPassword={storeEditorPassword}
           onSave={(updatedSection) => {
             updateSection(updatedSection.id, {
               heading: updatedSection.heading,

@@ -12,6 +12,7 @@ export default function SectionEditModal({
   onClose,
   uploadPrefix = '',
   editorPassword = '',
+  onRememberPassword,
 }) {
   const [draftSection, setDraftSection] = useState(section);
   const [typeTrayOpen, setTypeTrayOpen] = useState(false);
@@ -118,6 +119,7 @@ export default function SectionEditModal({
                   onRemove={handleRemoveUnit}
                   uploadPrefix={uploadPrefix}
                   editorPassword={editorPassword}
+                  onRememberPassword={onRememberPassword}
                 />
               </li>
             ))}

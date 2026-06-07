@@ -389,7 +389,7 @@ html.dark .post-editor-delete-dialog {
 .save-password-overlay {
   position: fixed;
   inset: 0;
-  z-index: 220;
+  z-index: 280;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -929,6 +929,28 @@ html.dark .section-content-list__item {
 .media-unit-editor__error {
   margin: 0.35rem 0 0;
   font-size: 0.9rem;
+  color: #dc2626;
+}
+
+html[data-theme='dark'] .media-unit-editor__error,
+html.dark .media-unit-editor__error {
+  color: #f87171;
+}
+
+.media-unit-editor__prefix {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.media-unit-editor__prefix code {
+  font-size: 0.78rem;
+}
+
+.media-unit-editor__preview-error {
+  margin: 0;
+  padding: 0.5rem;
+  font-size: 0.85rem;
+  text-align: center;
 }
 
 .media-unit-editor {

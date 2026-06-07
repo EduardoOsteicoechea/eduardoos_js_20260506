@@ -45,6 +45,7 @@ export default function SectionUnitEditor({
   onRemove,
   uploadPrefix = '',
   editorPassword = '',
+  onRememberPassword,
 }) {
   const [draft, setDraft] = useState(() => normalizeUnitData(unit));
   const draftRef = useRef(draft);
@@ -93,6 +94,7 @@ export default function SectionUnitEditor({
           onChange={(nextDraft) => updateDraft(nextDraft)}
           uploadPrefix={uploadPrefix}
           editorPassword={editorPassword}
+          onRememberPassword={onRememberPassword}
         />
       );
     }

@@ -7,6 +7,10 @@ export default function SavePasswordModal({
   error,
   onClose,
   onConfirm,
+  title = 'Confirmar guardado',
+  intro = 'Introduce la contraseña del editor para guardar este artículo.',
+  submitLabel = 'Guardar',
+  submittingLabel = 'Guardando…',
 }) {
   const [password, setPassword] = useState('');
   const inputRef = useRef(null);
@@ -52,11 +56,9 @@ export default function SavePasswordModal({
         onClick={(event) => event.stopPropagation()}
       >
         <h2 id="save-password-title" className="save-password-dialog__title">
-          Confirmar guardado
+          {title}
         </h2>
-        <p className="save-password-dialog__intro theme-muted">
-          Introduce la contraseña del editor para guardar este artículo.
-        </p>
+        <p className="save-password-dialog__intro theme-muted">{intro}</p>
 
         <form onSubmit={handleSubmit} className="save-password-dialog__form">
           <div>
@@ -95,7 +97,7 @@ export default function SavePasswordModal({
               disabled={isSubmitting || !password.trim()}
               className="theme-toolbar-btn"
             >
-              {isSubmitting ? 'Guardando…' : 'Guardar'}
+              {isSubmitting ? submittingLabel : submitLabel}
             </button>
           </div>
         </form>
