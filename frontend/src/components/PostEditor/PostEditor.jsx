@@ -28,6 +28,7 @@ import {
 import { normalizeKebabInput } from './slugify';
 import { SectionEditModal } from './sections';
 import SectionUnitsPreview from './sections/SectionUnitsPreview';
+import { SectionMoveDownIcon, SectionMoveUpIcon } from './SectionMoveIcons';
 import { downloadArticlePdf } from '../../lib/articlePdfDownload';
 import {
   readStoredEditorPassword,
@@ -590,6 +591,29 @@ export default function PostEditor() {
     }));
   };
 
+  const moveSection = (sectionId, direction) => {
+    setForm((previous) => {
+      const index = previous.sections.findIndex((section) => section.id === sectionId);
+      if (index < 0) return previous;
+
+      const targetIndex = direction === 'up' ? index - 1 : index + 1;
+      if (targetIndex < 0 || targetIndex >= previous.sections.length) {
+        return previous;
+      }
+
+      const sections = [...previous.sections];
+      [sections[index], sections[targetIndex]] = [
+        sections[targetIndex],
+        sections[index],
+      ];
+
+      return {
+        ...previous,
+        sections,
+      };
+    });
+  };
+
   const openDeleteSectionModal = (sectionId) => {
     setDeleteSectionId(sectionId);
     setDeleteSectionInput('');
@@ -1101,13 +1125,33 @@ export default function PostEditor() {
               <SectionUnitsPreview units={section.content ?? []} />
             </div>
 
-            <EditorActionButton
-              variant="primary"
-              className="post-editor-section-add-btn"
-              onClick={() => addSectionAfter(section.id)}
-            >
-              + Sección
-            </EditorActionButton>
+            <div className="post-editor-section-block__toolbar">
+              <EditorActionButton
+                variant="default"
+                icon={<SectionMoveUpIcon />}
+                title="Mover sección arriba"
+                aria-label="Mover sección arriba"
+                className="post-editor-section-move-btn"
+                onClick={() => moveSection(section.id, 'up')}
+                disabled={index === 0}
+              />
+              <EditorActionButton
+                variant="default"
+                icon={<SectionMoveDownIcon />}
+                title="Mover sección abajo"
+                aria-label="Mover sección abajo"
+                className="post-editor-section-move-btn"
+                onClick={() => moveSection(section.id, 'down')}
+                disabled={index === form.sections.length - 1}
+              />
+              <EditorActionButton
+                variant="primary"
+                className="post-editor-section-add-btn"
+                onClick={() => addSectionAfter(section.id)}
+              >
+                + Sección
+              </EditorActionButton>
+            </div>
           </div>
         ))}
       </section>
