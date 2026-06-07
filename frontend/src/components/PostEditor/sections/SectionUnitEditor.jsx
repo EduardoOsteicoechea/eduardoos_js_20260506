@@ -39,7 +39,13 @@ function UnitEditorSidebar({ unit, onRemove }) {
   );
 }
 
-export default function SectionUnitEditor({ unit, onCommit, onRemove }) {
+export default function SectionUnitEditor({
+  unit,
+  onCommit,
+  onRemove,
+  uploadPrefix = '',
+  editorPassword = '',
+}) {
   const [draft, setDraft] = useState(() => normalizeUnitData(unit));
   const draftRef = useRef(draft);
 
@@ -85,6 +91,8 @@ export default function SectionUnitEditor({ unit, onCommit, onRemove }) {
           type={unit.type}
           draft={draft}
           onChange={(nextDraft) => updateDraft(nextDraft)}
+          uploadPrefix={uploadPrefix}
+          editorPassword={editorPassword}
         />
       );
     }

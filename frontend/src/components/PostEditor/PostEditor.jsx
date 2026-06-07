@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import EditorActionButton from '../EditorActionButton';
 import { UI_FIELD_CLASS } from '../../lib/uiClasses';
 import EditorStatusNotice from '../EditorStatusNotice';
@@ -178,6 +178,7 @@ export default function PostEditor() {
   const [previewModalOpen, setPreviewModalOpen] = useState(false);
   const [deleteSectionId, setDeleteSectionId] = useState(null);
   const [deleteSectionInput, setDeleteSectionInput] = useState('');
+  const editorPasswordRef = useRef('');
 
   const showNotice = useCallback((variant, message) => {
     if (!message?.trim()) {
@@ -216,6 +217,13 @@ export default function PostEditor() {
 
   const effectiveSerie = useMemo(() => getEffectiveSerie(form), [form]);
   const effectiveChapter = useMemo(() => getEffectiveChapter(form), [form]);
+  const mediaUploadPrefix = useMemo(() => {
+    const serie = getEffectiveSerie(form);
+    const chapter = getEffectiveChapter(form);
+    const folder = normalizeFolderName(form.folderName || form.articleId);
+    if (!serie || !chapter || !folder) return '';
+    return `series/${serie}/${chapter}/${folder}`;
+  }, [form]);
 
   const seriesOptions = useMemo(
     () => mergeSeriesOptions(catalog, form),
@@ -716,7 +724,7 @@ export default function PostEditor() {
     setIsGeneratingPdf(true);
     try {
       await downloadArticlePdf(payload);
-      showNotice('success', 'PDF descargado.');
+      showNotice('success', 'PDF guardado en S3 y abierto para imprimir.');
     } catch (error) {
       console.error('PostEditor PDF failed:', error);
       showNotice(
@@ -758,6 +766,7 @@ export default function PostEditor() {
         return;
       }
 
+      editorPasswordRef.current = password;
       setModalOpen(false);
       showNotice('success', 'Artículo guardado correctamente.');
 
@@ -1099,6 +1108,8 @@ export default function PostEditor() {
       {editingSection ? (
         <SectionEditModal
           section={editingSection}
+          uploadPrefix={mediaUploadPrefix}
+          editorPassword={editorPasswordRef.current}
           onSave={(updatedSection) => {
             updateSection(updatedSection.id, {
               heading: updatedSection.heading,

@@ -6,7 +6,13 @@ import SectionUnitEditor from './SectionUnitEditor';
 import UnitTypeTray from './UnitTypeTray';
 import { inputClassName } from './editorInputStyles';
 
-export default function SectionEditModal({ section, onSave, onClose }) {
+export default function SectionEditModal({
+  section,
+  onSave,
+  onClose,
+  uploadPrefix = '',
+  editorPassword = '',
+}) {
   const [draftSection, setDraftSection] = useState(section);
   const [typeTrayOpen, setTypeTrayOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -103,6 +109,8 @@ export default function SectionEditModal({ section, onSave, onClose }) {
                   unit={unit}
                   onCommit={updateUnitData}
                   onRemove={handleRemoveUnit}
+                  uploadPrefix={uploadPrefix}
+                  editorPassword={editorPassword}
                 />
               </li>
             ))}

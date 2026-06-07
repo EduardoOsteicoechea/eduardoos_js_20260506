@@ -26,29 +26,8 @@ export function buildPdfPayloadFromArticle(slug, article) {
   };
 }
 
-function filenameFromDisposition(disposition) {
-  const match = /filename\*?=(?:UTF-8''|")?([^";]+)/i.exec(disposition ?? '');
-  if (!match?.[1]) return 'document.pdf';
-  try {
-    return decodeURIComponent(match[1].replace(/"/g, '').trim());
-  } catch {
-    return match[1].replace(/"/g, '').trim() || 'document.pdf';
-  }
-}
-
-function filenameFromPayload(payload) {
-  const title = String(payload?.title ?? '').trim();
-  if (!title) return 'document.pdf';
-  const safe = title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 80);
-  return safe ? `${safe}.pdf` : 'document.pdf';
-}
-
 /**
- * POST article JSON to backend → documenter PDF → browser download.
+ * Generate article PDF in documenter, persist to S3, and open it for print/download.
  * @param {Record<string, unknown>} payload
  */
 export async function downloadArticlePdf(payload) {
@@ -58,30 +37,27 @@ export async function downloadArticlePdf(payload) {
     body: JSON.stringify(payload),
   });
 
+  const data = await response.json().catch(() => ({}));
+
   if (!response.ok) {
-    let message = `HTTP ${response.status}`;
-    try {
-      const data = await response.json();
-      if (typeof data?.error === 'string') message = data.error;
-    } catch {
-      // binary error body
-    }
-    throw new Error(message);
+    throw new Error(
+      typeof data?.error === 'string' ? data.error : `HTTP ${response.status}`,
+    );
   }
 
-  const blob = await response.blob();
-  const disposition = response.headers.get('Content-Disposition');
-  const filename = disposition
-    ? filenameFromDisposition(disposition)
-    : filenameFromPayload(payload);
+  const url = String(data?.url ?? data?.publicPath ?? '').trim();
+  if (!url) {
+    throw new Error('El documento se generó pero no se recibió la URL de S3');
+  }
 
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement('a');
-  anchor.href = url;
-  anchor.download = filename;
-  anchor.rel = 'noopener';
-  document.body.appendChild(anchor);
-  anchor.click();
-  anchor.remove();
-  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  const opened = window.open(url, '_blank', 'noopener,noreferrer');
+  if (!opened) {
+    window.location.assign(url);
+  }
+
+  return {
+    url,
+    key: data.key,
+    bytes: data.bytes,
+  };
 }

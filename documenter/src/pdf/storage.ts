@@ -1,6 +1,5 @@
-import { mkdir, writeFile } from 'node:fs/promises';
-import { basename, join } from 'node:path';
 import { z } from 'zod';
+import { uploadS3Buffer, isS3Configured } from '../s3Client.js';
 import { generateArticlePdf } from './generatePdf.js';
 import type {
   ArticlePayload,
@@ -54,8 +53,11 @@ function normalizePayload(payloadInput: unknown): ArticlePayload {
 
 export async function persistArticlePdf(
   payloadInput: unknown,
-  root = join(process.cwd(), 'public/data/series'),
 ): Promise<PersistedPdfResult> {
+  if (!isS3Configured()) {
+    throw new Error('S3 service is not configured for documenter');
+  }
+
   const payload = normalizePayload(payloadInput);
 
   const serie = requireSegment(payload.serie ?? payload.series, 'serie');
@@ -65,18 +67,20 @@ export async function persistArticlePdf(
     'folder_name',
   );
 
-  const articleDir = join(root, serie, chapter, folder);
-  await mkdir(articleDir, { recursive: true });
-
   const pdfBuffer = await generateArticlePdf(payload);
-  const filename = 'document.pdf';
-  const absolutePath = join(articleDir, basename(filename));
-  await writeFile(absolutePath, pdfBuffer);
+  const prefix = `documents/${serie}/${chapter}/${folder}`;
+  const uploaded = await uploadS3Buffer(
+    pdfBuffer,
+    'document.pdf',
+    prefix,
+    'application/pdf',
+  );
 
   return {
     storagePath: `${serie}/${chapter}/${folder}`,
-    absolutePath,
-    publicPath: `/data/series/${serie}/${chapter}/${folder}/${filename}`,
-    bytes: pdfBuffer.length,
+    key: uploaded.key,
+    url: uploaded.url,
+    publicPath: uploaded.url,
+    bytes: uploaded.size,
   };
 }

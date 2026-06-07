@@ -168,13 +168,18 @@ func (c *Client) objectEntry(key string, object types.Object) ObjectEntry {
 
 func (c *Client) objectURL(key string) string {
 	if c.cfg.PublicBaseURL != "" {
-		return c.cfg.PublicBaseURL + "/" + c.publicKey(key)
+		base := strings.TrimRight(c.cfg.PublicBaseURL, "/")
+		root := strings.Trim(strings.TrimSuffix(c.cfg.RootPrefix, "/"), "/")
+		if root != "" && strings.HasSuffix(base, "/"+root) {
+			return base + "/" + strings.TrimPrefix(c.publicKey(key), "/")
+		}
+		return base + "/" + strings.TrimPrefix(key, "/")
 	}
 	return fmt.Sprintf(
 		"https://%s.s3.%s.amazonaws.com/%s",
 		c.cfg.Bucket,
 		c.cfg.AWSRegion,
-		c.publicKey(key),
+		key,
 	)
 }
 

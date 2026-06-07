@@ -7,7 +7,7 @@ async function generateArticlePdfHandler(req, res) {
         const result = await (0, storage_js_1.persistArticlePdf)(req.body);
         return res.json({
             ok: true,
-            message: 'PDF generado',
+            message: 'PDF guardado en S3',
             ...result,
         });
     }

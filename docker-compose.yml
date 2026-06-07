@@ -89,10 +89,14 @@ services:
     container_name: eduardoos-documenter
     environment:
       PORT: 8090
+      S3_URL: http://s3api:8130
+      S3_INTERNAL_TOKEN: dev-internal-s3-token
     volumes:
       - ./documenter/public/data:/app/public/data
     ports:
       - "8090:8090"
+    depends_on:
+      - s3api
     restart: unless-stopped
 
   telemetry:
@@ -143,6 +147,7 @@ services:
       - documenter
       - chatbot
       - telemetry
+      - s3api
     ports:
       - "4321:4321"
     restart: unless-stopped

@@ -1,3 +1,6 @@
+import { useRef, useState } from 'react';
+import { uploadMedia, listMedia } from '../../../lib/mediaApi';
+import { resolveMediaUrl } from '../../../lib/mediaUrl';
 import { inputClassName } from './editorInputStyles';
 
 const MEDIA_LABEL_BY_TYPE = {
@@ -6,25 +9,106 @@ const MEDIA_LABEL_BY_TYPE = {
   audio: 'Audio',
 };
 
-function resolvePreviewSrc(savedSrc) {
-  const value = String(savedSrc ?? '').trim();
-  if (
-    value.startsWith('http://') ||
-    value.startsWith('https://') ||
-    value.startsWith('blob:') ||
-    value.startsWith('data:') ||
-    value.startsWith('/')
-  ) {
-    return value;
-  }
-  return '';
-}
+export default function MediaUnitEditor({
+  type,
+  draft,
+  onChange,
+  uploadPrefix = '',
+  editorPassword = '',
+}) {
+  const fileInputRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const [libraryOpen, setLibraryOpen] = useState(false);
+  const [libraryLoading, setLibraryLoading] = useState(false);
+  const [libraryObjects, setLibraryObjects] = useState([]);
 
-export default function MediaUnitEditor({ type, draft, onChange }) {
-  const previewSrc = resolvePreviewSrc(draft.src);
+  const previewSrc = resolveMediaUrl(draft.src);
+
+  const handleUpload = async (file) => {
+    if (!file) return;
+    if (!editorPassword.trim()) {
+      setUploadError('Guarda el artículo una vez con tu contraseña para habilitar subidas a S3.');
+      return;
+    }
+
+    setUploading(true);
+    setUploadError('');
+
+    try {
+      const result = await uploadMedia(file, {
+        prefix: uploadPrefix,
+        password: editorPassword,
+      });
+      onChange({
+        ...draft,
+        src: result.url,
+        name: draft.name?.trim() ? draft.name : file.name,
+      });
+    } catch (error) {
+      setUploadError(
+        error instanceof Error ? error.message : 'No se pudo subir el archivo',
+      );
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const loadLibrary = async () => {
+    setLibraryOpen(true);
+    setLibraryLoading(true);
+    setUploadError('');
+
+    try {
+      const result = await listMedia(uploadPrefix);
+      setLibraryObjects(result.objects ?? []);
+    } catch (error) {
+      setUploadError(
+        error instanceof Error ? error.message : 'No se pudo cargar la biblioteca S3',
+      );
+      setLibraryObjects([]);
+    } finally {
+      setLibraryLoading(false);
+    }
+  };
 
   return (
     <div className="media-unit-editor">
+      <div className="media-unit-editor__toolbar">
+        <button
+          type="button"
+          className="theme-toolbar-btn"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={uploading}
+        >
+          {uploading ? 'Subiendo…' : 'Subir a S3'}
+        </button>
+        <button
+          type="button"
+          className="theme-toolbar-btn"
+          onClick={loadLibrary}
+          disabled={libraryLoading}
+        >
+          {libraryLoading ? 'Cargando…' : 'Biblioteca S3'}
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept={
+            type === 'image'
+              ? 'image/*'
+              : type === 'video'
+                ? 'video/*'
+                : 'audio/*'
+          }
+          hidden
+          onChange={(event) => handleUpload(event.target.files?.[0])}
+        />
+      </div>
+
       <input
         id={`${type}-url`}
         type="url"
@@ -54,6 +138,37 @@ export default function MediaUnitEditor({ type, draft, onChange }) {
         aria-label="Etiqueta accesible"
         className={inputClassName}
       />
+
+      {uploadError ? (
+        <p className="media-unit-editor__error theme-muted">{uploadError}</p>
+      ) : null}
+
+      {libraryOpen ? (
+        <ul className="media-unit-editor__library">
+          {libraryObjects.length === 0 ? (
+            <li className="theme-muted">No hay archivos en esta carpeta.</li>
+          ) : (
+            libraryObjects.map((item) => (
+              <li key={item.key}>
+                <button
+                  type="button"
+                  className="media-unit-editor__library-item"
+                  onClick={() => {
+                    onChange({
+                      ...draft,
+                      src: item.url,
+                      name: draft.name?.trim() ? draft.name : item.name,
+                    });
+                    setLibraryOpen(false);
+                  }}
+                >
+                  {item.name}
+                </button>
+              </li>
+            ))
+          )}
+        </ul>
+      ) : null}
 
       {type === 'image' && previewSrc ? (
         <img

@@ -1,3 +1,4 @@
+import { resolveMediaUrl } from '../../../lib/mediaUrl';
 import EmphasizedTextPreview from './EmphasizedTextPreview';
 import {
   normalizeListItems,
@@ -23,18 +24,7 @@ export function getUnitPreviewClassName(type) {
 }
 
 function mediaPreviewSrc(src) {
-  const value = String(src ?? '').trim();
-  if (!value) return '';
-  if (
-    value.startsWith('http://') ||
-    value.startsWith('https://') ||
-    value.startsWith('blob:') ||
-    value.startsWith('data:') ||
-    value.startsWith('/')
-  ) {
-    return value;
-  }
-  return '';
+  return resolveMediaUrl(src);
 }
 
 export function UnitPreviewBody({ unit }) {

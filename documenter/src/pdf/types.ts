@@ -17,7 +17,8 @@ export interface ArticlePayload {
 
 export interface PersistedPdfResult {
   storagePath: string;
-  absolutePath: string;
+  key: string;
+  url: string;
   publicPath: string;
   bytes: number;
 }

@@ -1,10 +1,13 @@
+import { resolveMediaUrl } from '../../lib/mediaUrl';
+
 export default function Image({ src, alt = '' }) {
-  if (!src) return null;
+  const resolvedSrc = resolveMediaUrl(src);
+  if (!resolvedSrc) return null;
 
   return (
     <figure className="article-image">
       <img
-        src={src}
+        src={resolvedSrc}
         alt={alt}
         className="article-image__img theme-border"
         loading="lazy"

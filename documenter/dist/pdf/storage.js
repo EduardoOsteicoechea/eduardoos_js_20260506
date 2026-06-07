@@ -1,9 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.persistArticlePdf = persistArticlePdf;
-const promises_1 = require("node:fs/promises");
-const node_path_1 = require("node:path");
 const zod_1 = require("zod");
+const s3Client_js_1 = require("../s3Client.js");
 const generatePdf_js_1 = require("./generatePdf.js");
 const articlePayloadSchema = zod_1.z.object({
     serie: zod_1.z.string().optional(),
@@ -45,21 +44,22 @@ function normalizePayload(payloadInput) {
         sections,
     };
 }
-async function persistArticlePdf(payloadInput, root = (0, node_path_1.join)(process.cwd(), 'public/data/series')) {
+async function persistArticlePdf(payloadInput) {
+    if (!(0, s3Client_js_1.isS3Configured)()) {
+        throw new Error('S3 service is not configured for documenter');
+    }
     const payload = normalizePayload(payloadInput);
     const serie = requireSegment(payload.serie ?? payload.series, 'serie');
     const chapter = requireSegment(payload.chapter ?? payload.section, 'chapter');
     const folder = requireSegment(payload.folder_name ?? payload.article_id, 'folder_name');
-    const articleDir = (0, node_path_1.join)(root, serie, chapter, folder);
-    await (0, promises_1.mkdir)(articleDir, { recursive: true });
     const pdfBuffer = await (0, generatePdf_js_1.generateArticlePdf)(payload);
-    const filename = 'document.pdf';
-    const absolutePath = (0, node_path_1.join)(articleDir, (0, node_path_1.basename)(filename));
-    await (0, promises_1.writeFile)(absolutePath, pdfBuffer);
+    const prefix = `documents/${serie}/${chapter}/${folder}`;
+    const uploaded = await (0, s3Client_js_1.uploadS3Buffer)(pdfBuffer, 'document.pdf', prefix, 'application/pdf');
     return {
         storagePath: `${serie}/${chapter}/${folder}`,
-        absolutePath,
-        publicPath: `/data/series/${serie}/${chapter}/${folder}/${filename}`,
-        bytes: pdfBuffer.length,
+        key: uploaded.key,
+        url: uploaded.url,
+        publicPath: uploaded.url,
+        bytes: uploaded.size,
     };
 }
