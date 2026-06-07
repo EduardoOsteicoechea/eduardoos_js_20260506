@@ -658,9 +658,39 @@ html.dark .section-unit {
   padding: 0;
 }
 
-.section-unit__type-btn:disabled {
-  cursor: default;
-  opacity: 1;
+.section-unit__type-btn--open {
+  box-shadow: 0 0 0 2px rgb(0 0 0 / 0.2);
+}
+
+html[data-theme='dark'] .section-unit__type-btn--open,
+html.dark .section-unit__type-btn--open {
+  box-shadow: 0 0 0 2px rgb(255 255 255 / 0.25);
+}
+
+.unit-type-selector {
+  position: relative;
+}
+
+.unit-type-selector__menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.35rem);
+  z-index: 60;
+  min-width: 12rem;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  box-shadow: 0 16px 32px rgb(0 0 0 / 0.2);
+}
+
+.unit-type-selector__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.unit-type-selector__option.ui-control--active,
+.unit-type-selector__option.ui-control--primary {
+  box-shadow: 0 0 0 2px currentColor;
 }
 
 .section-unit__unsupported {

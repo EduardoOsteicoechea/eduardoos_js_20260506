@@ -10,23 +10,14 @@ import {
   unitSupportsEditor,
   unitSupportsTextEmphasis,
 } from './unitContentModel';
-import { renderUnitTypeIcon, TrashIcon } from './UnitTypeIcons';
-import { getUnitTypeLabel } from './unitTypes';
+import { TrashIcon } from './UnitTypeIcons';
+import UnitTypeSelector from './UnitTypeSelector';
 import { inputClassName } from './editorInputStyles';
 
-function UnitEditorSidebar({ unit, onRemove }) {
+function UnitEditorSidebar({ unit, onRemove, onChangeType }) {
   return (
     <div className="section-unit__actions">
-      <SiteControlButton
-        size="bar"
-        variant="default"
-        className="section-unit__type-btn"
-        title={getUnitTypeLabel(unit.type)}
-        aria-label={getUnitTypeLabel(unit.type)}
-        tabIndex={-1}
-        disabled
-        icon={renderUnitTypeIcon(unit.type)}
-      />
+      <UnitTypeSelector value={unit.type} onChange={onChangeType} />
       <SiteControlButton
         size="bar"
         variant="danger"
@@ -43,6 +34,7 @@ export default function SectionUnitEditor({
   unit,
   onCommit,
   onRemove,
+  onChangeType,
   uploadPrefix = '',
   editorPassword = '',
   onRememberPassword,
@@ -54,7 +46,7 @@ export default function SectionUnitEditor({
     const next = normalizeUnitData(unit);
     draftRef.current = next;
     setDraft(next);
-  }, [unit.id]);
+  }, [unit.id, unit.type]);
 
   const updateDraft = useCallback(
     (updater) => {
@@ -162,7 +154,11 @@ export default function SectionUnitEditor({
           <p className="section-unit__unsupported theme-muted">
             Tipo de unidad no editable en el editor.
           </p>
-          <UnitEditorSidebar unit={unit} onRemove={onRemove} />
+          <UnitEditorSidebar
+            unit={unit}
+            onRemove={onRemove}
+            onChangeType={onChangeType}
+          />
         </div>
       </article>
     );
@@ -172,7 +168,11 @@ export default function SectionUnitEditor({
     <article className="section-unit theme-border">
       <div className="section-unit__layout">
         <div className="section-unit__fields">{renderEditorFields()}</div>
-        <UnitEditorSidebar unit={unit} onRemove={onRemove} />
+        <UnitEditorSidebar
+          unit={unit}
+          onRemove={onRemove}
+          onChangeType={onChangeType}
+        />
       </div>
     </article>
   );

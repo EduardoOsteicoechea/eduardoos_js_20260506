@@ -26,6 +26,7 @@ import {
   normalizeFolderName,
 } from './buildPostPayload';
 import { normalizeKebabInput } from './slugify';
+import { createUnitFromBlock } from './sections/unitFromBlock';
 import { SectionEditModal } from './sections';
 import SectionUnitsPreview from './sections/SectionUnitsPreview';
 import { SectionMoveDownIcon, SectionMoveUpIcon } from './SectionMoveIcons';
@@ -49,104 +50,6 @@ const labelClassName = 'post-editor__label';
 const sectionHeadingInputClassName = 'post-editor__field post-editor__field--heading';
 const NEW_TITLE_OPTION = '__new_title__';
 const CUSTOM_TITLE_OPTION = '__custom_title__';
-
-function createUnitFromBlock(block) {
-  const id = crypto.randomUUID();
-
-  if (Array.isArray(block.list)) {
-    const list = block.list.map((item) => {
-      if (typeof item === 'string') {
-        return { content: item, emphasized: '' };
-      }
-      if (item && typeof item === 'object') {
-        const content = String(item.text ?? '');
-        const emphasized = Array.isArray(item.emphasized_phrases)
-          ? String(item.emphasized_phrases[0] ?? '')
-          : '';
-        return { content, emphasized };
-      }
-      return { content: '', emphasized: '' };
-    });
-
-    return {
-      id,
-      type: 'list',
-      data: { list: list.length ? list : [{ content: '', emphasized: '' }] },
-    };
-  }
-
-  if (block.biblical_reference != null) {
-    return {
-      id,
-      type: 'biblical_quote',
-      data: {
-        content: String(block.text ?? ''),
-        emphasized: Array.isArray(block.emphasized_phrases)
-          ? String(block.emphasized_phrases[0] ?? '')
-          : '',
-        reference: String(block.biblical_reference ?? ''),
-      },
-    };
-  }
-
-  if (block.image != null || block.name != null || block.fileName != null) {
-    return {
-      id,
-      type: 'image',
-      data: {
-        image: String(block.image ?? ''),
-        alt: String(block.alt ?? ''),
-        name: String(block.name ?? block.fileName ?? ''),
-      },
-    };
-  }
-
-  if (block.video != null || block.caption != null || block.name != null || block.fileName != null) {
-    return {
-      id,
-      type: 'video',
-      data: {
-        video: String(block.video ?? ''),
-        alt: String(block.text ?? block.caption ?? ''),
-        name: String(block.name ?? block.fileName ?? ''),
-      },
-    };
-  }
-
-  if (block.audio != null || block.label != null || block.name != null || block.fileName != null) {
-    return {
-      id,
-      type: 'audio',
-      data: {
-        audio: String(block.audio ?? ''),
-        text: String(block.text ?? block.label ?? ''),
-        name: String(block.name ?? block.fileName ?? ''),
-      },
-    };
-  }
-
-  if (block.href != null) {
-    return {
-      id,
-      type: 'link',
-      data: {
-        href: String(block.href ?? ''),
-        text: String(block.text ?? ''),
-      },
-    };
-  }
-
-  return {
-    id,
-    type: 'paragraph',
-    data: {
-      content: String(block.text ?? ''),
-      emphasized: Array.isArray(block.emphasized_phrases)
-        ? String(block.emphasized_phrases[0] ?? '')
-        : '',
-    },
-  };
-}
 
 function buildEditorSectionsFromArticle(article) {
   if (!article || typeof article !== 'object') return [createEmptySection()];

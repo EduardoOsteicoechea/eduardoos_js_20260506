@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { addUnitToSection } from './actions/addUnitToSection';
+import { changeUnitType } from './actions/changeUnitType';
 import SectionEditActivityBar from './SectionEditActivityBar';
 import SectionUnitEditor from './SectionUnitEditor';
 import UnitTypeTray from './UnitTypeTray';
@@ -68,6 +69,15 @@ export default function SectionEditModal({
     }));
   };
 
+  const handleChangeUnitType = useCallback((unitId, nextType) => {
+    setDraftSection((previous) => ({
+      ...previous,
+      content: (previous.content ?? []).map((unit) =>
+        unit.id === unitId ? changeUnitType(unit, nextType) : unit,
+      ),
+    }));
+  }, []);
+
   const handleDone = () => {
     onSave(draftSection);
   };
@@ -117,6 +127,7 @@ export default function SectionEditModal({
                   unit={unit}
                   onCommit={updateUnitData}
                   onRemove={handleRemoveUnit}
+                  onChangeType={(nextType) => handleChangeUnitType(unit.id, nextType)}
                   uploadPrefix={uploadPrefix}
                   editorPassword={editorPassword}
                   onRememberPassword={onRememberPassword}

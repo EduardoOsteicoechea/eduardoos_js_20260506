@@ -66,7 +66,11 @@ export function buildPostPayload(form, options = {}) {
       .map((section) => {
         const heading = section.heading.trim();
         const content = (section.content ?? [])
-          .map((unit) => mapUnit(unit))
+          .map((unit) => {
+            const block = mapUnit(unit);
+            if (!block) return null;
+            return { type: unit.type, ...block };
+          })
           .filter(Boolean);
 
         return { heading, content };

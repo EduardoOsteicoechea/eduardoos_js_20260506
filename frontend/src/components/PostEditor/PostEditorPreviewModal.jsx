@@ -1,8 +1,10 @@
 import { useMemo, useState } from 'react';
 import ArticleGenerator from '../ArticleGenerator/ArticleGenerator';
+import { useSiteReadingPreferences } from '../../hooks/useSiteReadingPreferences';
 import { VIEW_MODES } from '../../lib/viewModes';
 
 export default function PostEditorPreviewModal({ open, article, onClose }) {
+  const { baseFontSize } = useSiteReadingPreferences();
   const [expandedSections, setExpandedSections] = useState(() => new Set());
   const previewArticle = useMemo(() => {
     if (!article || typeof article !== 'object') return null;
@@ -34,6 +36,7 @@ export default function PostEditorPreviewModal({ open, article, onClose }) {
             <ArticleGenerator
               article={previewArticle}
               slug=""
+              baseFontSize={baseFontSize}
               viewMode={VIEW_MODES.regular}
               expandedSections={expandedSections}
               onToggleSection={(index) => {

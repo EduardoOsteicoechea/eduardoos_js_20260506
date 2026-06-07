@@ -5,6 +5,56 @@ import (
 	"strings"
 )
 
+var allowedUnitTypes = map[string]bool{
+	"paragraph":      true,
+	"list":           true,
+	"key_idea":       true,
+	"biblical_quote": true,
+	"image":          true,
+	"video":          true,
+	"audio":          true,
+	"link":           true,
+}
+
+func isAllowedUnitType(unitType string) bool {
+	return allowedUnitTypes[strings.ToLower(strings.TrimSpace(unitType))]
+}
+
+func resolveUnitType(block map[string]any) string {
+	if block == nil {
+		return "paragraph"
+	}
+	explicit := strings.ToLower(strings.TrimSpace(fmtAny(block["type"])))
+	if isAllowedUnitType(explicit) {
+		return explicit
+	}
+	return detectUnitType(block)
+}
+
+func stripTypeField(block map[string]any) map[string]any {
+	if block == nil {
+		return map[string]any{}
+	}
+	out := make(map[string]any, len(block))
+	for key, value := range block {
+		if key == "type" {
+			continue
+		}
+		out[key] = value
+	}
+	return out
+}
+
+func contentBlockForStorage(unitType string, block map[string]any) map[string]any {
+	stripped := stripTypeField(block)
+	switch unitType {
+	case "image", "video", "audio":
+		return normalizeMediaBlock(stripped)
+	default:
+		return stripped
+	}
+}
+
 func detectUnitType(block map[string]any) string {
 	if block == nil {
 		return "paragraph"

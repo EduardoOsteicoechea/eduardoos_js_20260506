@@ -83,3 +83,10 @@ export function isUnitType(type) {
 export function getUnitTypeLabel(type) {
   return UNIT_TYPES.find((entry) => entry.id === type)?.label ?? type;
 }
+
+/**
+ * @param {string} type
+ */
+export function isEditorAddableUnitType(type) {
+  return EDITOR_UNIT_TYPE_ORDER.includes(type);
+}

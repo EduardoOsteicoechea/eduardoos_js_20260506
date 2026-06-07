@@ -258,6 +258,7 @@ ORDER BY sort_order ASC, id ASC`, sectionID)
 			return nil, err
 		}
 		if len(block) > 0 {
+			block["type"] = unitType
 			blocks = append(blocks, block)
 		}
 	}
@@ -618,11 +619,8 @@ func ParseSaveArticlePayload(raw map[string]any) (SaveArticleInput, error) {
 			if !ok {
 				continue
 			}
-			unitType := detectUnitType(block)
-			content := normalizeMediaBlock(block)
-			if unitType == "paragraph" || unitType == "biblical_quote" || unitType == "list" || unitType == "link" {
-				content = block
-			}
+			unitType := resolveUnitType(block)
+			content := contentBlockForStorage(unitType, block)
 			units = append(units, SaveUnitInput{
 				Type:      unitType,
 				Content:   content,

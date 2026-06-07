@@ -49,6 +49,8 @@ function normalizeMediaUrls(payload: Record<string, unknown>): Record<string, un
     const normalizedContent = content.map((block) => {
       if (!block || typeof block !== 'object') return block;
       const record = { ...(block as Record<string, unknown>) };
+      const unitType =
+        typeof record.type === 'string' ? record.type.trim() : '';
 
       for (const key of ['image', 'video', 'audio'] as const) {
         if (typeof record[key] !== 'string') continue;
@@ -68,6 +70,10 @@ function normalizeMediaUrls(payload: Record<string, unknown>): Record<string, un
           record.name = name;
         }
         delete record.fileName;
+      }
+
+      if (unitType) {
+        record.type = unitType;
       }
 
       return record;
