@@ -8,16 +8,11 @@ import (
 	"github.com/eduardoos/chatbot/internal/config"
 	"github.com/eduardoos/chatbot/internal/guidelines"
 	"github.com/eduardoos/chatbot/internal/handler"
-	"github.com/eduardoos/chatbot/internal/logship"
 )
 
 func main() {
 	cfg := config.Load()
-	logship.Install(logship.Config{
-		Service: "chatbot",
-		URL:     cfg.PostsDBURL,
-		Token:   cfg.PostsDBInternalToken,
-	})
+	config.InstallLogShip(cfg)
 	guide := guidelines.Load(cfg)
 
 	mux := http.NewServeMux()

@@ -1,4 +1,4 @@
-package logship
+package config
 
 import (
 	"bytes"
@@ -12,52 +12,46 @@ import (
 	"time"
 )
 
-type Config struct {
-	Service string
-	URL     string
-	Token   string
-}
-
-type appendInput struct {
+type appendLogInput struct {
 	Service string         `json:"service"`
 	Level   string         `json:"level"`
 	Message string         `json:"message"`
 	Context map[string]any `json:"context,omitempty"`
 }
 
-type shipWriter struct {
+type logShipWriter struct {
 	service string
 	url     string
 	token   string
 	stderr  io.Writer
-	queue   chan appendInput
+	queue   chan appendLogInput
 	once    sync.Once
 }
 
-func Install(cfg Config) {
-	service := strings.ToLower(strings.TrimSpace(cfg.Service))
-	url := strings.TrimRight(strings.TrimSpace(cfg.URL), "/")
-	token := strings.TrimSpace(cfg.Token)
+func InstallLogShip(cfg Config) {
+	service := "chatbot"
+	url := strings.TrimRight(strings.TrimSpace(cfg.PostsDBURL), "/")
+	token := strings.TrimSpace(cfg.PostsDBInternalToken)
 	if service == "" || url == "" || token == "" {
 		return
 	}
 
-	writer := &shipWriter{
+	writer := &logShipWriter{
 		service: service,
 		url:     url,
 		token:   token,
 		stderr:  os.Stderr,
-		queue:   make(chan appendInput, 256),
+		queue:   make(chan appendLogInput, 256),
 	}
 	writer.once.Do(writer.runWorker)
 	log.SetOutput(io.MultiWriter(writer.stderr, writer))
 	log.SetFlags(log.LstdFlags)
 }
 
-func (w *shipWriter) Write(p []byte) (int, error) {
+func (w *logShipWriter) Write(p []byte) (int, error) {
 	message := strings.TrimSpace(string(p))
 	if message != "" {
-		w.enqueue(appendInput{
+		w.enqueue(appendLogInput{
 			Service: w.service,
 			Level:   "info",
 			Message: message,
@@ -66,14 +60,14 @@ func (w *shipWriter) Write(p []byte) (int, error) {
 	return len(p), nil
 }
 
-func (w *shipWriter) enqueue(input appendInput) {
+func (w *logShipWriter) enqueue(input appendLogInput) {
 	select {
 	case w.queue <- input:
 	default:
 	}
 }
 
-func (w *shipWriter) runWorker() {
+func (w *logShipWriter) runWorker() {
 	go func() {
 		for input := range w.queue {
 			w.persist(input)
@@ -81,7 +75,7 @@ func (w *shipWriter) runWorker() {
 	}()
 }
 
-func (w *shipWriter) persist(input appendInput) {
+func (w *logShipWriter) persist(input appendLogInput) {
 	payload, err := json.Marshal(input)
 	if err != nil {
 		return
