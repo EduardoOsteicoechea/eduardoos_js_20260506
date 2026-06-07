@@ -64,7 +64,8 @@ database/import
 s3/s3api.exe
 s3/s3api
 
-# SQLite WAL sidecars (commit posts.db, not these)
+# SQLite: production EC2 posts.db is source of truth (not committed)
+database/posts.db
 database/*.db-wal
 database/*.db-shm
 database/posts.db-journal
