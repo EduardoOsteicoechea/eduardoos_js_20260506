@@ -42,6 +42,16 @@
   line-height: 1.625;
 }
 
+.series-page__catalog-link {
+  margin-bottom: 1.25rem;
+  font-size: 0.95rem;
+}
+
+.series-page__catalog-link a {
+  font-weight: 600;
+  text-decoration: underline;
+}
+
 .series-page__purpose {
   margin-top: 1rem;
   line-height: 1.625;

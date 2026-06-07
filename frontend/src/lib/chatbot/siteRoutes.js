@@ -15,6 +15,11 @@ export const CHATBOT_NAV_ROUTES = [
     description: 'Posts and series index',
   },
   {
+    path: '/catalog',
+    label: 'Editor de catálogo',
+    description: 'Edit series names and section metadata (authenticated)',
+  },
+  {
     path: '/post/editor',
     label: 'Editor de posts',
     description: 'Create and edit articles (authenticated)',

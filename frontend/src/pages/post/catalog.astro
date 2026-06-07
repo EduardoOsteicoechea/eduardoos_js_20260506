@@ -1,13 +1,3 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import CatalogEditor from "../../components/PostEditor/CatalogEditor.jsx";
+return Astro.redirect("/catalog", 301);
 ---
-
-<Layout
-  title="Editor de catálogo | Eduardo Osteicoechea"
-  activityBarMode="editor"
->
-  <main class="post-editor-page">
-    <CatalogEditor client:load />
-  </main>
-</Layout>

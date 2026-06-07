@@ -71,8 +71,8 @@ export function resolveActivityBarLayout(pathname, pageMode = 'default') {
     pageMode === 'editor' ||
     path === '/post/editor' ||
     path.startsWith('/post/editor/') ||
-    path === '/post/catalog' ||
-    path.startsWith('/post/catalog/')
+    path === '/catalog' ||
+    path.startsWith('/catalog/')
   ) {
     return {
       variant: 'editor',

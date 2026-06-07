@@ -16,6 +16,14 @@ export default function SeriesIndexPage() {
         </p>
       </header>
 
+      <p className="series-page__catalog-link theme-muted">
+        <a href="/catalog">{getSiteLabel('catalog', lang)}</a>
+        {' — '}
+        {lang === 'es'
+          ? 'editar nombres de series y metadatos de secciones.'
+          : 'edit series names and section metadata.'}
+      </p>
+
       <section>
         <h2 className="series-posts-heading">
           {getSiteLabel('seriesSection', lang)}

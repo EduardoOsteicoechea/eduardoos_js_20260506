@@ -836,7 +836,7 @@ export default function PostEditor() {
   return (
     <div className="post-editor">
       <p className="post-editor__catalog-link theme-muted">
-        <a href="/post/catalog">Editor de catálogo</a> — nombres de series y metadatos de secciones.
+        <a href="/catalog">Editor de catálogo</a> — nombres de series y metadatos de secciones.
       </p>
 
       <section className="post-editor-metadata" aria-label="Metadatos del artículo">

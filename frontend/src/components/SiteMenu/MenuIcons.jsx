@@ -87,12 +87,24 @@ export function EditorIcon() {
   );
 }
 
+export function CatalogIcon() {
+  return (
+    <svg {...navIconProps}>
+      <path d="M4 6h16M4 12h16M4 18h16" />
+      <circle cx="7" cy="6" r="1" fill="currentColor" stroke="none" />
+      <circle cx="7" cy="12" r="1" fill="currentColor" stroke="none" />
+      <circle cx="7" cy="18" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
 /**
  * @param {import('../../lib/siteNav').NavLinkIconId | string} iconId
  */
 export function renderNavLinkIcon(iconId) {
   if (iconId === 'home') return <HomeIcon />;
   if (iconId === 'posts') return <PostsIcon />;
+  if (iconId === 'catalog') return <CatalogIcon />;
   if (iconId === 'editor') return <EditorIcon />;
   return null;
 }

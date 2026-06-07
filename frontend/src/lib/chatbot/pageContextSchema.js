@@ -31,6 +31,7 @@ export function inferPageType(pathname) {
   if (path === '/') return 'home';
   if (path === '/profile' || path.startsWith('/profile/')) return 'profile';
   if (path === '/post/editor') return 'post-editor';
+  if (path === '/catalog') return 'post-editor';
   if (path === '/post/creator') return 'post-creator';
   if (path === '/server/health') return 'server-health';
   if (path === '/series') return 'series';

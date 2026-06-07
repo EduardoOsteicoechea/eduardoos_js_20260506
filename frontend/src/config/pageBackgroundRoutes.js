@@ -58,7 +58,7 @@ export const PAGE_BACKGROUND_ROUTES = [
     show: false,
   },
   {
-    patterns: ['/post/editor', '/post/catalog', '/post/creator'],
+    patterns: ['/post/editor', '/catalog', '/post/creator'],
     show: false,
   },
   {
