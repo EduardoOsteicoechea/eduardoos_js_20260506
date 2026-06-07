@@ -76,11 +76,13 @@ export function UnitPreviewBody({ unit }) {
     return (
       <figure className="unit-preview__media">
         {src ? (
-          <img
-            src={src}
-            alt={normalized.label || normalized.name || ''}
-            className="unit-preview__image"
-          />
+          <div className="unit-preview__image-frame">
+            <img
+              src={src}
+              alt={normalized.label || normalized.name || ''}
+              className="unit-preview__image"
+            />
+          </div>
         ) : (
           <p className={`${previewClassName} unit-preview__text--italic`}>
             {normalized.name ? `Imagen: ${normalized.name}` : 'Imagen sin URL'}

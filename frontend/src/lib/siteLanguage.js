@@ -17,6 +17,7 @@ export const SITE_LABELS = {
   },
   home: { en: 'Home', es: 'Inicio' },
   editor: { en: 'Editor', es: 'Editor' },
+  catalog: { en: 'Catalog', es: 'Catálogo' },
   settings: { en: 'Settings', es: 'Ajustes' },
   menu: { en: 'Menu', es: 'Menú' },
   closeMenu: { en: 'Close menu', es: 'Cerrar menú' },

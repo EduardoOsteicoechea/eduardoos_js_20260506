@@ -226,6 +226,49 @@ func (a *API) SaveArticle(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+func (a *API) SaveCatalog(w http.ResponseWriter, r *http.Request) {
+	body, err := io.ReadAll(io.LimitReader(r.Body, 2<<20))
+	if err != nil {
+		writeError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+
+	var raw map[string]any
+	if err := json.Unmarshal(body, &raw); err != nil {
+		writeError(w, http.StatusBadRequest, "invalid json payload")
+		return
+	}
+
+	seriesSlug := strings.TrimSpace(fmtAny(raw["series_slug"]))
+	if seriesSlug == "" {
+		seriesSlug = strings.TrimSpace(fmtAny(raw["serie"]))
+	}
+	seriesName := strings.TrimSpace(fmtAny(raw["series_name"]))
+	chapter := strings.TrimSpace(fmtAny(raw["chapter"]))
+
+	var hub map[string]any
+	if hubRaw, ok := raw["hub"].(map[string]any); ok && hubRaw != nil {
+		hub = hubRaw
+	}
+
+	if seriesSlug == "" {
+		writeError(w, http.StatusBadRequest, "series_slug is required")
+		return
+	}
+
+	if err := a.Store.SaveCatalogEntry(seriesSlug, seriesName, chapter, hub); err != nil {
+		log.Printf("[posts-db] save catalog: %v", err)
+		writeError(w, http.StatusInternalServerError, "could not save catalog metadata")
+		return
+	}
+
+	writeJSON(w, http.StatusOK, map[string]any{
+		"ok":          true,
+		"series_slug": seriesSlug,
+		"chapter":     chapter,
+	})
+}
+
 func fmtAny(value any) string {
 	if value == nil {
 		return ""

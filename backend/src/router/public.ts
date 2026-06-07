@@ -4,6 +4,7 @@ import {
   proxyChatbot,
 } from '../handlers/chatbotHandlers.js';
 import { downloadArticlePdf } from '../handlers/documentHandlers.js';
+import { saveCatalogMetadata } from '../handlers/catalogHandlers.js';
 import {
   savePostEditorArticle,
   validatePostEditorPassword,
@@ -33,6 +34,7 @@ publicRouter.get('/series/articles', getSeriesArticles);
 publicRouter.get('/series/article', getSeriesArticle);
 publicRouter.post('/auth/post/editor/', validatePostEditorPassword);
 publicRouter.post('/post/editor/', savePostEditorArticle);
+publicRouter.post('/catalog/save', saveCatalogMetadata);
 publicRouter.get('/media/list', listMedia);
 publicRouter.get('/media/object', serveMediaObject);
 publicRouter.post('/media/upload', ...uploadMedia);

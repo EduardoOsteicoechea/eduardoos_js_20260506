@@ -21,9 +21,14 @@ type Post struct {
 	UpdatedAt  string `json:"updated_at"`
 }
 
+type SeriesMeta struct {
+	Name string `json:"name"`
+}
+
 type Catalog struct {
-	Series   []string            `json:"series"`
-	Chapters map[string][]string `json:"chapters"`
+	Series     []string               `json:"series"`
+	SeriesMeta map[string]SeriesMeta  `json:"series_meta"`
+	Chapters   map[string][]string    `json:"chapters"`
 }
 
 type ArticleOption struct {

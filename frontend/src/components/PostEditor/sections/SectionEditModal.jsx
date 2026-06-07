@@ -94,7 +94,14 @@ export default function SectionEditModal({
             aria-label="Encabezado de la sección"
           />
         </div>
+        <SectionEditActivityBar
+          typeTrayOpen={typeTrayOpen}
+          onToggleTypeTray={() => setTypeTrayOpen((open) => !open)}
+          onClose={handleDone}
+        />
       </header>
+
+      <UnitTypeTray open={typeTrayOpen} onSelect={handleAddUnit} />
 
       <div className="section-edit-modal__body">
         {(draftSection.content ?? []).length === 0 ? (
@@ -118,14 +125,6 @@ export default function SectionEditModal({
         )}
       </div>
 
-      <div className="section-edit-modal__footer">
-        <UnitTypeTray open={typeTrayOpen} onSelect={handleAddUnit} />
-        <SectionEditActivityBar
-          typeTrayOpen={typeTrayOpen}
-          onToggleTypeTray={() => setTypeTrayOpen((open) => !open)}
-          onClose={handleDone}
-        />
-      </div>
     </div>,
     document.body,
   );

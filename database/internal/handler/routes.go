@@ -26,4 +26,5 @@ func Register(mux *http.ServeMux, cfg config.Config, store *db.Store) {
 	registerProtected("GET /discover", api.Discover)
 	registerProtected("GET /posts/next-id", api.NextArticleID)
 	registerProtected("POST /article/save", api.SaveArticle)
+	registerProtected("POST /catalog/save", api.SaveCatalog)
 }

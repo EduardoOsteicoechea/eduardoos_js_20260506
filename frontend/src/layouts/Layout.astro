@@ -19,6 +19,8 @@ const {
   activityBarMode = "default",
 } = Astro.props;
 
+const isEditorPage = activityBarMode === "editor";
+
 const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
 ---
 
@@ -155,6 +157,7 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
     <body
       class:list={{
         "has-page-background": pageBackground.show,
+        "page-editor": isEditorPage,
       }}
     >
       <PageBackground pathname={pathname} />

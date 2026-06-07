@@ -11,7 +11,12 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  padding-bottom: calc(var(--activity-bar-height) + 1.25rem);
+  padding-bottom: 1.25rem;
+}
+
+body.page-editor .post-editor {
+  padding-top: calc(var(--activity-bar-height) + 0.75rem);
+  padding-bottom: 1.25rem;
 }
 
 /* ── Form fields ───────────────────────────────────────────────── */
@@ -102,6 +107,15 @@ html.dark .post-editor__field:focus {
 .post-editor__hint {
   margin-top: 0.25rem;
   font-size: 0.75rem;
+}
+
+.post-editor__catalog-link {
+  padding: 0 1.25rem;
+  font-size: 0.875rem;
+}
+
+.post-editor__catalog-link a {
+  text-decoration: underline;
 }
 
 /* ── Metadata bar ──────────────────────────────────────────────── */
@@ -219,6 +233,7 @@ html.dark .post-editor-metadata__field {
   gap: 0.5rem;
   border-radius: 0.75rem;
   border: 1px solid rgb(0 0 0 / 0.15);
+  background-color: var(--site-body-bg);
   padding: 0.75rem;
 }
 
@@ -530,10 +545,13 @@ html.dark .section-edit-modal {
 .section-edit-modal__header {
   display: flex;
   flex-shrink: 0;
-  align-items: center;
+  flex-wrap: wrap;
+  align-items: flex-end;
   gap: 0.75rem;
   border-bottom: 1px solid rgb(0 0 0 / 0.15);
   padding: 1rem;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 0.75rem);
+  background-color: var(--site-body-bg);
 }
 
 html[data-theme='dark'] .section-edit-modal__header,
@@ -582,15 +600,12 @@ html.dark .section-edit-modal__empty {
   padding: 0;
 }
 
-.section-edit-modal__footer {
-  flex-shrink: 0;
-}
-
 /* ── Section unit editor ───────────────────────────────────────── */
 
 .section-unit {
   border-radius: 0.75rem;
   border: 1px solid rgb(0 0 0 / 0.15);
+  background-color: var(--site-body-bg);
 }
 
 html[data-theme='dark'] .section-unit,
@@ -645,14 +660,13 @@ html.dark .section-unit {
 
 .section-edit-bar {
   display: flex;
-  height: var(--activity-bar-height);
+  min-height: var(--activity-bar-height);
   flex-shrink: 0;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 0.5rem;
-  border-top: 1px solid rgb(0 0 0 / 0.15);
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
+  border: 0;
+  padding: 0;
 }
 
 html[data-theme='dark'] .section-edit-bar,
@@ -970,9 +984,23 @@ html.dark .section-content-list__item {
   gap: 0.25rem;
 }
 
+.unit-preview__image-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 8rem;
+  overflow: hidden;
+  border-radius: 0.25rem;
+  background-color: var(--site-body-bg);
+}
+
 .unit-preview__image {
-  max-height: 8rem;
+  max-height: 100%;
+  max-width: 100%;
   width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
   border-radius: 0.25rem;
 }
 
@@ -992,15 +1020,31 @@ html.dark .section-content-list__item {
 
 /* ── Media unit editor ─────────────────────────────────────────── */
 
-.media-unit-editor__preview-image,
+.media-unit-editor__preview-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 12rem;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(0 0 0 / 0.1);
+  background-color: var(--site-body-bg);
+}
+
+.media-unit-editor__preview-image {
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+  border: 0;
+}
+
 .media-unit-editor__preview-video {
   max-height: 12rem;
   border-radius: 0.5rem;
   border: 1px solid rgb(0 0 0 / 0.1);
-}
-
-.media-unit-editor__preview-image {
-  width: auto;
 }
 
 .media-unit-editor__preview-video {
@@ -1128,6 +1172,43 @@ html.dark .list-unit-editor__item {
 
 .unit-preview__text--italic {
   font-style: italic;
+}
+
+/* ── Catalog editor ────────────────────────────────────────────── */
+
+.catalog-editor__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 1.25rem;
+}
+
+.catalog-editor__title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.catalog-editor__intro {
+  font-size: 0.9rem;
+}
+
+.catalog-editor__hub-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 1.25rem 1.5rem;
+}
+
+.catalog-editor__section-title {
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.catalog-editor__loading,
+.catalog-editor__hint {
+  padding: 0 1.25rem;
+  font-size: 0.9rem;
 }
 
 .unit-preview__list {

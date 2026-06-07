@@ -8,6 +8,10 @@ export async function fetchSeriesCatalog() {
 
   return {
     series: Array.isArray(data.series) ? data.series : [],
+    series_meta:
+      data.series_meta && typeof data.series_meta === 'object'
+        ? data.series_meta
+        : {},
     chapters:
       data.chapters && typeof data.chapters === 'object' ? data.chapters : {},
   };

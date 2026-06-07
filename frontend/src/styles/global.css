@@ -465,6 +465,22 @@ html.dark .activity-bar .ui-control:hover {
   box-shadow: 0 -4px 24px rgb(0 0 0 / 0.08);
 }
 
+body.page-editor .site-chrome__bar {
+  top: calc(env(safe-area-inset-top, 0px) + var(--vv-offset-top, 0px));
+  bottom: auto;
+  border-top: 0;
+  border-bottom: 1px solid var(--site-chrome-bar-border);
+  box-shadow: 0 4px 24px rgb(0 0 0 / 0.08);
+}
+
+body.page-editor .site-chrome {
+  top: calc(
+    env(safe-area-inset-top, 0px) + var(--vv-offset-top, 0px) +
+      var(--activity-bar-height)
+  );
+  bottom: 0;
+}
+
 html[data-theme='dark'] .site-chrome__bar,
 html.dark .site-chrome__bar {
   box-shadow: 0 -4px 24px rgb(0 0 0 / 0.35);

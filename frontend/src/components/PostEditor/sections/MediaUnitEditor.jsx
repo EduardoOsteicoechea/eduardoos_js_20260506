@@ -171,11 +171,13 @@ export default function MediaUnitEditor({
       ) : null}
 
       {type === 'image' && previewSrc ? (
-        <img
-          src={previewSrc}
-          alt={draft.label || draft.name || 'Vista previa'}
-          className="media-unit-editor__preview-image"
-        />
+        <div className="media-unit-editor__preview-frame">
+          <img
+            src={previewSrc}
+            alt={draft.label || draft.name || 'Vista previa'}
+            className="media-unit-editor__preview-image"
+          />
+        </div>
       ) : null}
 
       {type === 'video' && previewSrc ? (

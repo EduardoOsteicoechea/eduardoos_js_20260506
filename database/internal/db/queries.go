@@ -34,12 +34,14 @@ func (s *Store) BuildCatalog() (Catalog, error) {
 	}
 
 	catalog := Catalog{
-		Series:   make([]string, 0, len(seriesRows)),
-		Chapters: make(map[string][]string),
+		Series:     make([]string, 0, len(seriesRows)),
+		SeriesMeta: make(map[string]SeriesMeta),
+		Chapters:   make(map[string][]string),
 	}
 
 	for _, serie := range seriesRows {
 		catalog.Series = append(catalog.Series, serie.Slug)
+		catalog.SeriesMeta[serie.Slug] = SeriesMeta{Name: serie.Name}
 		chapters, err := s.listChaptersForSeriesID(serie.ID)
 		if err != nil {
 			return Catalog{}, err
@@ -131,6 +133,31 @@ ON CONFLICT(slug) DO UPDATE SET
 	var id int64
 	err = s.DB.QueryRow(`SELECT id FROM series WHERE slug = ?`, slug).Scan(&id)
 	return id, err
+}
+
+func (s *Store) SaveCatalogEntry(seriesSlug, seriesName, chapter string, hub map[string]any) error {
+	seriesSlug = strings.TrimSpace(seriesSlug)
+	seriesName = strings.TrimSpace(seriesName)
+	chapter = strings.TrimSpace(chapter)
+
+	if seriesSlug == "" {
+		return fmt.Errorf("series slug is required")
+	}
+
+	seriesID, err := s.UpsertSeries(seriesSlug, seriesName)
+	if err != nil {
+		return err
+	}
+
+	if chapter == "" {
+		return nil
+	}
+
+	if hub == nil {
+		hub = map[string]any{}
+	}
+
+	return s.UpsertChapter(seriesID, chapter, hub)
 }
 
 func (s *Store) UpsertPost(seriesID int64, chapter, slug, title, author string, sortOrder int) error {

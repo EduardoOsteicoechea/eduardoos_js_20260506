@@ -67,7 +67,13 @@ export function resolveActivityBarLayout(pathname, pageMode = 'default') {
     };
   }
 
-  if (pageMode === 'editor' || path === '/post/editor' || path.startsWith('/post/editor/')) {
+  if (
+    pageMode === 'editor' ||
+    path === '/post/editor' ||
+    path.startsWith('/post/editor/') ||
+    path === '/post/catalog' ||
+    path.startsWith('/post/catalog/')
+  ) {
     return {
       variant: 'editor',
       ariaLabel: 'Controles del editor de artículos',

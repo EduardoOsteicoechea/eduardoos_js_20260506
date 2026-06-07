@@ -5,8 +5,13 @@ import {
 
 const INTERNAL_HEADER = 'X-Posts-Db-Internal-Token';
 
+export interface PostsDbSeriesMeta {
+  name: string;
+}
+
 export interface PostsDbCatalog {
   series: string[];
+  series_meta?: Record<string, PostsDbSeriesMeta>;
   chapters: Record<string, string[]>;
 }
 
@@ -138,6 +143,18 @@ export async function savePostsDbArticle(
   path: string;
 }> {
   return postsDbFetch('/article/save', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function savePostsDbCatalogEntry(payload: {
+  series_slug: string;
+  series_name?: string;
+  chapter?: string;
+  hub?: Record<string, unknown>;
+}): Promise<{ ok: boolean; series_slug: string; chapter?: string }> {
+  return postsDbFetch('/catalog/save', {
     method: 'POST',
     body: JSON.stringify(payload),
   });

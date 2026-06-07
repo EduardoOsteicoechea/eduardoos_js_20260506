@@ -11,6 +11,7 @@ import SeriesChildCards from "../../components/series/SeriesChildCards.astro";
 
 import SeriesHubPostsLive from "../../components/series/SeriesHubPostsLive.jsx";
 
+import { collectSeriesBuildSlugs } from "../../lib/articles/buildStaticSlugs";
 import { loadDiscoverSnapshot } from "../../lib/articles/discover";
 import {
   resolveSeriesRoute,
@@ -25,9 +26,10 @@ export const prerender = import.meta.env.PROD;
 
 export async function getStaticPaths() {
   const { slugs } = await loadDiscoverSnapshot();
+  const buildSlugs = await collectSeriesBuildSlugs(slugs);
 
   return Promise.all(
-    slugs.map(async (slug) => ({
+    buildSlugs.map(async (slug) => ({
       params: { slug },
       props: (await resolveSeriesRoute(slug)) as PageProps,
     })),
