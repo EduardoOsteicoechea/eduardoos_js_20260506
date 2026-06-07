@@ -15,7 +15,6 @@ export default function MediaUnitEditor({
   type,
   draft,
   onChange,
-  uploadPrefix = '',
   editorPassword = '',
   onRememberPassword,
 }) {
@@ -39,10 +38,7 @@ export default function MediaUnitEditor({
     setPreviewError(false);
 
     try {
-      const result = await uploadMedia(file, {
-        prefix: uploadPrefix,
-        password,
-      });
+      const result = await uploadMedia(file, { password });
       const nextUrl = String(result.url ?? result.key ?? '').trim();
       onChange({
         ...draft,
@@ -65,13 +61,6 @@ export default function MediaUnitEditor({
 
   const handleUpload = async (file) => {
     if (!file) return;
-
-    if (!uploadPrefix.trim()) {
-      setUploadError(
-        'Completa serie, sección y nombre de carpeta en el editor del artículo antes de subir.',
-      );
-      return;
-    }
 
     const password = String(editorPassword ?? '').trim();
     if (!password) {
@@ -96,7 +85,6 @@ export default function MediaUnitEditor({
       }
 
       onRememberPassword?.(password);
-      setPasswordModalOpen(false);
 
       const pendingFile = pendingFileRef.current;
       pendingFileRef.current = null;
@@ -116,7 +104,7 @@ export default function MediaUnitEditor({
     setUploadError('');
 
     try {
-      const result = await listMedia(uploadPrefix);
+      const result = await listMedia();
       setLibraryObjects(result.objects ?? []);
     } catch (error) {
       setUploadError(
@@ -162,15 +150,10 @@ export default function MediaUnitEditor({
         />
       </div>
 
-      {uploadPrefix ? (
-        <p className="media-unit-editor__prefix theme-muted">
-          Carpeta S3: <code>{uploadPrefix}</code>
-        </p>
-      ) : (
-        <p className="media-unit-editor__error">
-          Define serie, sección y carpeta del artículo para subir archivos.
-        </p>
-      )}
+      <p className="media-unit-editor__prefix theme-muted">
+        Los archivos se guardan en el bucket bajo <code>media/</code>. La asociación
+        con cada artículo vive en los datos del post.
+      </p>
 
       <input
         id={`${type}-url`}
@@ -214,11 +197,7 @@ export default function MediaUnitEditor({
       {libraryOpen ? (
         <ul className="media-unit-editor__library">
           {libraryObjects.length === 0 ? (
-            <li className="theme-muted">
-              {uploadPrefix
-                ? 'No hay archivos en esta carpeta.'
-                : 'Selecciona una carpeta de artículo para ver su biblioteca.'}
-            </li>
+            <li className="theme-muted">No hay archivos en media/.</li>
           ) : (
             libraryObjects.map((item) => (
               <li key={item.key}>
@@ -229,7 +208,7 @@ export default function MediaUnitEditor({
                     setPreviewError(false);
                     onChange({
                       ...draft,
-                      src: item.url,
+                      src: resolveMediaUrl(item.url ?? item.key),
                       name: draft.name?.trim() ? draft.name : item.name,
                     });
                     setLibraryOpen(false);
@@ -243,44 +222,41 @@ export default function MediaUnitEditor({
         </ul>
       ) : null}
 
-      {type === 'image' && previewSrc ? (
-        <div className="media-unit-editor__preview-frame">
-          {previewError ? (
-            <p className="media-unit-editor__preview-error theme-muted">
-              No se pudo cargar la vista previa. Comprueba la URL o sube de nuevo.
-            </p>
-          ) : (
+      {previewSrc && !previewError ? (
+        <div className="media-unit-editor__preview">
+          {type === 'image' ? (
             <img
               src={previewSrc}
               alt={draft.label || draft.name || 'Vista previa'}
               className="media-unit-editor__preview-image"
               onError={() => setPreviewError(true)}
-              onLoad={() => setPreviewError(false)}
+            />
+          ) : type === 'video' ? (
+            <video
+              src={previewSrc}
+              controls
+              className="media-unit-editor__preview-video"
+              onError={() => setPreviewError(true)}
+            />
+          ) : (
+            <audio
+              src={previewSrc}
+              controls
+              className="media-unit-editor__preview-audio"
+              onError={() => setPreviewError(true)}
             />
           )}
         </div>
       ) : null}
 
-      {type === 'video' && previewSrc ? (
-        <video
-          src={previewSrc}
-          controls
-          className="media-unit-editor__preview-video"
-        />
-      ) : null}
-
-      {type === 'audio' && previewSrc ? (
-        <audio src={previewSrc} controls className="media-unit-editor__preview-audio" />
+      {previewError ? (
+        <p className="media-unit-editor__error">No se pudo cargar la vista previa.</p>
       ) : null}
 
       <SavePasswordModal
         open={passwordModalOpen}
         isSubmitting={passwordSubmitting}
         error={passwordModalError}
-        title="Contraseña para subir a S3"
-        intro="Introduce la contraseña del editor para subir archivos al almacenamiento."
-        submitLabel="Continuar"
-        submittingLabel="Validando…"
         onClose={() => {
           if (!passwordSubmitting) {
             setPasswordModalOpen(false);

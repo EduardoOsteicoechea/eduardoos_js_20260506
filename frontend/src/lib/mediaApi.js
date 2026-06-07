@@ -1,9 +1,5 @@
-export async function listMedia(prefix = '') {
-  const params = new URLSearchParams();
-  if (prefix.trim()) params.set('prefix', prefix.trim());
-
-  const query = params.toString();
-  const response = await fetch(query ? `/api/media/list?${query}` : '/api/media/list');
+export async function listMedia() {
+  const response = await fetch('/api/media/list');
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
@@ -13,7 +9,7 @@ export async function listMedia(prefix = '') {
   return data;
 }
 
-export async function uploadMedia(file, { prefix = '', password = '' } = {}) {
+export async function uploadMedia(file, { password = '' } = {}) {
   if (!password.trim()) {
     throw new Error('Se requiere la contraseña del editor para subir archivos');
   }
@@ -21,7 +17,6 @@ export async function uploadMedia(file, { prefix = '', password = '' } = {}) {
   const form = new FormData();
   form.append('file', file);
   form.append('password', password.trim());
-  if (prefix.trim()) form.append('prefix', prefix.trim());
 
   const response = await fetch('/api/media/upload', {
     method: 'POST',

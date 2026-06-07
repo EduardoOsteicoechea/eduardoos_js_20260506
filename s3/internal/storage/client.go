@@ -69,13 +69,14 @@ func New(ctx context.Context, cfg appconfig.Config) (*Client, error) {
 	}, nil
 }
 
-func (c *Client) List(ctx context.Context, prefix string) (ListResult, error) {
-	resolvedPrefix := c.resolvePrefix(prefix)
+func (c *Client) List(ctx context.Context, _ string) (ListResult, error) {
+	// All media objects live flat under S3_ROOT_PREFIX (e.g. media/).
+	// Post/series grouping is stored in posts-db, not as S3 folders.
+	resolvedPrefix := c.cfg.RootPrefix
 
 	output, err := c.client.ListObjectsV2(ctx, &s3.ListObjectsV2Input{
-		Bucket:    aws.String(c.cfg.Bucket),
-		Prefix:    aws.String(resolvedPrefix),
-		Delimiter: aws.String("/"),
+		Bucket: aws.String(c.cfg.Bucket),
+		Prefix: aws.String(resolvedPrefix),
 	})
 	if err != nil {
 		return ListResult{}, err
@@ -87,21 +88,9 @@ func (c *Client) List(ctx context.Context, prefix string) (ListResult, error) {
 		Objects: []ObjectEntry{},
 	}
 
-	for _, commonPrefix := range output.CommonPrefixes {
-		folderPrefix := aws.ToString(commonPrefix.Prefix)
-		name := strings.TrimSuffix(strings.TrimPrefix(folderPrefix, resolvedPrefix), "/")
-		if name == "" {
-			continue
-		}
-		result.Folders = append(result.Folders, FolderEntry{
-			Name:   name,
-			Prefix: c.publicPrefix(folderPrefix),
-		})
-	}
-
 	for _, object := range output.Contents {
 		key := aws.ToString(object.Key)
-		if key == "" || key == resolvedPrefix {
+		if key == "" || key == resolvedPrefix || !c.isFlatMediaKey(key) {
 			continue
 		}
 		result.Objects = append(result.Objects, c.objectEntry(key, object))
@@ -220,13 +209,20 @@ func (c *Client) resolvePrefix(prefix string) string {
 	return c.cfg.RootPrefix + clean
 }
 
-func (c *Client) buildObjectKey(relativePrefix, filename string) (string, error) {
-	cleanPrefix := sanitizeRelativePrefix(relativePrefix)
+func (c *Client) buildObjectKey(_ string, filename string) (string, error) {
 	cleanName := sanitizeFilename(filename)
 	if cleanName == "" {
 		return "", fmt.Errorf("filename is required")
 	}
-	return c.cfg.RootPrefix + cleanPrefix + cleanName, nil
+	// Unique flat key under media/ — series/post association lives in posts-db.
+	storedName := fmt.Sprintf("%d_%s", time.Now().UnixNano(), cleanName)
+	return c.cfg.RootPrefix + storedName, nil
+}
+
+func (c *Client) isFlatMediaKey(key string) bool {
+	relative := strings.TrimPrefix(key, c.cfg.RootPrefix)
+	relative = strings.Trim(strings.TrimPrefix(relative, "/"), "/")
+	return relative != "" && !strings.Contains(relative, "/")
 }
 
 func (c *Client) resolveObjectKey(relativeKey string) (string, error) {

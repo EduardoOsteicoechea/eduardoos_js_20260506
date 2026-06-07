@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { listMedia } from '../../lib/mediaApi';
 import './S3MediaBrowser.css';
 
@@ -20,57 +20,29 @@ function isImageType(contentType, name) {
   return /\.(png|jpe?g|gif|webp|svg|avif)$/i.test(String(name ?? ''));
 }
 
-function splitPrefix(prefix) {
-  const clean = String(prefix ?? '').trim().replace(/^\/+/, '');
-  if (!clean) return [];
-  return clean.split('/').filter(Boolean);
-}
-
-function parentPrefix(prefix) {
-  const parts = splitPrefix(prefix);
-  if (parts.length === 0) return '';
-  return `${parts.slice(0, -1).join('/')}/`;
-}
-
 export default function S3MediaBrowser() {
-  const [prefix, setPrefix] = useState('');
-  const [folders, setFolders] = useState([]);
   const [objects, setObjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [previewKey, setPreviewKey] = useState('');
 
-  const crumbs = useMemo(() => {
-    const parts = splitPrefix(prefix);
-    const items = [{ label: 'media', prefix: '' }];
-    let current = '';
-    for (const part of parts) {
-      current = current ? `${current}${part}/` : `${part}/`;
-      items.push({ label: part, prefix: current });
-    }
-    return items;
-  }, [prefix]);
-
-  const load = useCallback(async (nextPrefix = prefix) => {
+  const load = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
-      const data = await listMedia(nextPrefix);
-      setPrefix(String(data.prefix ?? nextPrefix ?? ''));
-      setFolders(Array.isArray(data.folders) ? data.folders : []);
+      const data = await listMedia();
       setObjects(Array.isArray(data.objects) ? data.objects : []);
     } catch (fetchError) {
       setError(fetchError instanceof Error ? fetchError.message : 'Error de red');
-      setFolders([]);
       setObjects([]);
     } finally {
       setLoading(false);
     }
-  }, [prefix]);
+  }, []);
 
   useEffect(() => {
-    load(prefix);
-  }, []);
+    load();
+  }, [load]);
 
   const previewObject = objects.find((item) => item.key === previewKey) ?? null;
 
@@ -80,12 +52,13 @@ export default function S3MediaBrowser() {
         <div>
           <h1 className="s3-media-browser__title">Media S3</h1>
           <p className="s3-media-browser__subtitle theme-muted">
-            Explorador del bucket privado servido vía backend.
+            Archivos planos en <code>media/</code>. La organización por serie y
+            artículo está en posts-db.
           </p>
         </div>
         <button
           type="button"
-          onClick={() => load(prefix)}
+          onClick={load}
           disabled={loading}
           className="theme-toolbar-btn s3-media-browser__refresh"
         >
@@ -93,72 +66,13 @@ export default function S3MediaBrowser() {
         </button>
       </div>
 
-      <nav className="s3-media-browser__crumbs theme-border" aria-label="Ruta">
-        {crumbs.map((crumb, index) => (
-          <span key={crumb.prefix || 'root'} className="s3-media-browser__crumb">
-            {index > 0 ? <span className="s3-media-browser__crumb-sep">/</span> : null}
-            <button
-              type="button"
-              className="s3-media-browser__crumb-btn"
-              onClick={() => {
-                setPreviewKey('');
-                setPrefix(crumb.prefix);
-                load(crumb.prefix);
-              }}
-            >
-              {crumb.label}
-            </button>
-          </span>
-        ))}
-      </nav>
-
-      {prefix ? (
-        <button
-          type="button"
-          className="theme-toolbar-btn s3-media-browser__up"
-          onClick={() => {
-            const parent = parentPrefix(prefix);
-            setPreviewKey('');
-            setPrefix(parent);
-            load(parent);
-          }}
-        >
-          Subir a {parentPrefix(prefix) || 'media'}
-        </button>
-      ) : null}
-
       {error ? <p className="s3-media-browser__error">{error}</p> : null}
 
       <div className="s3-media-browser__layout">
         <section className="s3-media-browser__panel theme-border">
-          <h2 className="s3-media-browser__panel-title">Carpetas</h2>
-          {folders.length === 0 ? (
-            <p className="theme-muted">Sin subcarpetas</p>
-          ) : (
-            <ul className="s3-media-browser__list">
-              {folders.map((folder) => (
-                <li key={folder.prefix}>
-                  <button
-                    type="button"
-                    className="s3-media-browser__folder-btn"
-                    onClick={() => {
-                      setPreviewKey('');
-                      setPrefix(folder.prefix);
-                      load(folder.prefix);
-                    }}
-                  >
-                    {folder.name}/
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
-        <section className="s3-media-browser__panel theme-border">
-          <h2 className="s3-media-browser__panel-title">Archivos</h2>
+          <h2 className="s3-media-browser__panel-title">Archivos en media/</h2>
           {objects.length === 0 ? (
-            <p className="theme-muted">{loading ? 'Cargando…' : 'Sin archivos en esta carpeta'}</p>
+            <p className="theme-muted">{loading ? 'Cargando…' : 'Sin archivos'}</p>
           ) : (
             <ul className="s3-media-browser__list s3-media-browser__list--objects">
               {objects.map((object) => (

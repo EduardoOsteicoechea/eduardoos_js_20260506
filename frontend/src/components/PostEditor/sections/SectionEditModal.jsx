@@ -11,7 +11,6 @@ export default function SectionEditModal({
   section,
   onSave,
   onClose,
-  uploadPrefix = '',
   editorPassword = '',
   onRememberPassword,
 }) {
@@ -128,7 +127,6 @@ export default function SectionEditModal({
                   onCommit={updateUnitData}
                   onRemove={handleRemoveUnit}
                   onChangeType={(nextType) => handleChangeUnitType(unit.id, nextType)}
-                  uploadPrefix={uploadPrefix}
                   editorPassword={editorPassword}
                   onRememberPassword={onRememberPassword}
                 />

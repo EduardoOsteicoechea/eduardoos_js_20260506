@@ -85,7 +85,6 @@ func (a *API) Upload(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	prefix := strings.TrimSpace(r.FormValue("prefix"))
 	contentType := strings.TrimSpace(header.Header.Get("Content-Type"))
 	if contentType == "" {
 		contentType = "application/octet-stream"
@@ -98,7 +97,7 @@ func (a *API) Upload(w http.ResponseWriter, r *http.Request) {
 
 	result, err := a.Store.Upload(
 		r.Context(),
-		prefix,
+		"",
 		header.Filename,
 		contentType,
 		io.LimitReader(file, limit),

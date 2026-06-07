@@ -97,7 +97,6 @@ export async function uploadS3File(
   file: Buffer,
   filename: string,
   contentType: string,
-  prefix = '',
 ): Promise<{
   ok: boolean;
   key: string;
@@ -116,10 +115,6 @@ export async function uploadS3File(
     new Blob([Uint8Array.from(file)], { type: contentType }),
     filename,
   );
-  if (prefix.trim()) {
-    form.append('prefix', prefix.trim());
-  }
-
   const response = await fetch(`${base}/upload`, {
     method: 'POST',
     headers: {

@@ -134,13 +134,6 @@ export default function PostEditor() {
 
   const effectiveSerie = useMemo(() => getEffectiveSerie(form), [form]);
   const effectiveChapter = useMemo(() => getEffectiveChapter(form), [form]);
-  const mediaUploadPrefix = useMemo(() => {
-    const serie = getEffectiveSerie(form);
-    const chapter = getEffectiveChapter(form);
-    const folder = normalizeFolderName(form.folderName || form.articleId);
-    if (!serie || !chapter || !folder) return '';
-    return `series/${serie}/${chapter}/${folder}`;
-  }, [form]);
 
   const seriesOptions = useMemo(
     () => mergeSeriesOptions(catalog, form),
@@ -1072,7 +1065,6 @@ export default function PostEditor() {
       {editingSection ? (
         <SectionEditModal
           section={editingSection}
-          uploadPrefix={mediaUploadPrefix}
           editorPassword={editorPassword}
           onRememberPassword={storeEditorPassword}
           onSave={(updatedSection) => {

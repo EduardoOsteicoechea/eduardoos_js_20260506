@@ -38,8 +38,7 @@ export async function listMedia(req: Request, res: Response) {
   if (!ensureConfigured(res)) return;
 
   try {
-    const prefix = String(req.query.prefix ?? '').trim();
-    const result = proxyUrlForS3List(await fetchS3List(prefix));
+    const result = proxyUrlForS3List(await fetchS3List());
     return res.json(result);
   } catch (error) {
     console.error('[media/list]', error);
@@ -103,12 +102,10 @@ export const uploadMedia = [
     }
 
     try {
-      const prefix = String(req.body.prefix ?? '').trim();
       const result = await uploadS3File(
         req.file.buffer,
         req.file.originalname,
         req.file.mimetype || 'application/octet-stream',
-        prefix,
       );
 
       return res.json({

@@ -35,7 +35,6 @@ export default function SectionUnitEditor({
   onCommit,
   onRemove,
   onChangeType,
-  uploadPrefix = '',
   editorPassword = '',
   onRememberPassword,
 }) {
@@ -84,7 +83,6 @@ export default function SectionUnitEditor({
           type={unit.type}
           draft={draft}
           onChange={(nextDraft) => updateDraft(nextDraft)}
-          uploadPrefix={uploadPrefix}
           editorPassword={editorPassword}
           onRememberPassword={onRememberPassword}
         />
