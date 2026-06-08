@@ -7,7 +7,7 @@ import { WHATSAPP_URL } from "../lib/contactLinks";
 
 <Layout>
   <main class="outer_container">
-    <h1 class="main_heading">BIM Software Development and Consulting</h1>
+    <h1 class="main_heading">BIM Software<br /> Development and Consulting</h1>
     <p class="main_paragraph">
       I'm a Licensed
       <span>Architect</span> &
@@ -21,9 +21,9 @@ import { WHATSAPP_URL } from "../lib/contactLinks";
     </p>
 
     <div class="action_buttons_container">
-      <button class="action_button action_button_action_level_2"
-        >Ask Anything</button
-      >
+      <button class="action_button action_button_action_level_2">
+        View Profile
+      </button>
       <button class="action_button action_button_action_level_1">
         <a
           href={WHATSAPP_URL}
@@ -78,7 +78,7 @@ import { WHATSAPP_URL } from "../lib/contactLinks";
   .action_buttons_container {
     display: flex;
     gap: 10px;
-    margin-top: 5px;
+    margin-top: 25px;
   }
 
   .action_button {
@@ -95,7 +95,6 @@ import { WHATSAPP_URL } from "../lib/contactLinks";
     font-size: 1rem;
     text-decoration: none;
     font-weight: 700;
-    margin-top: 20px;
     background: var(--site-body-fg);
     color: var(--site-body-bg);
   }
@@ -120,12 +119,28 @@ import { WHATSAPP_URL } from "../lib/contactLinks";
 
   @media (min-width: 1024px) {
     .outer_container {
-      position: fixed;
-      top: 200px;
+      position: relative;
+      top: 140px;
       bottom: auto;
-      margin: 0 25% 0 25%;
-      width: auto;
-      box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+      margin: 0 auto;
+      width: 550px;
+      background: none !important;
+      /* box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2); */
+    }
+
+    .main_heading {
+      margin-bottom: 30px;
+      font-size: 2.5rem;
+      line-height: 2.3rem;
+    }
+
+    .action_buttons_container {
+      gap: 10px;
+      width: 300px;
+      margin-top: 40px;
+    }
+
+    .action_button {
     }
   }
 </style>
