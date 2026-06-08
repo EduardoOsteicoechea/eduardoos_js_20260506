@@ -1,29 +1,25 @@
-<div class="page-background" aria-hidden="true">
-    <div class="page_background_image_container"></div>
+<div class="page_background" aria-hidden="true">
+    <img 
+    src="personal_photo_1080x1920_side_placed.webp" 
+    alt=""
+    height="100%"
+    >
 </div>
 
 <style>
-  .page-background {
+  .page_background {
     position: fixed;
     top:0;
     left: 0;
     z-index: 0;
-    height: 720px;
+    height: 100%;
     width: 100dvw;
-    overflow: hidden;
+    overflow: visible;
     pointer-events: none;
     /* border: solid 5px rgb(0, 17, 255); */
   }
 
-  .page_background_image_container{
-    height: 100%;
-    width: 100%;
-    top: 0px;
-    display: flex;
-    align-items: center;
-    background-image: url("/personal_photo_1080x1920_side_placed.webp");
-    background-size: contain;
-    background-repeat: no-repeat;
+  .page_background > img {
   }
 
   @media (min-width: 768px) {
