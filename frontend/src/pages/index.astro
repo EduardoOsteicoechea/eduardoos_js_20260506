@@ -18,6 +18,11 @@ import HomeSkillsGrid from "../components/HomeSkills/HomeSkillsGrid.jsx";
       <span>BIM</span> collaboration, and 
       <span>problem solving</span>
     </p>
+
+    <div class="action_buttons_container">
+      <button class="action_button action_button_action_level_1">Let's Talk</button>
+      <button class="action_button action_button_action_level_2">Ask Anything</button>
+    </div>
   </main>
 </Layout>
 
@@ -55,8 +60,39 @@ import HomeSkillsGrid from "../components/HomeSkills/HomeSkillsGrid.jsx";
     background:var(--site-body-bg);
     color:var(--site-body-fg);
     padding: 0px 5px;
-    border-radius:3px;
     height: 25px;
     box-shadow: 3px 3px 3px rgba(0,0,0,.4);
+  }
+
+  .action_buttons_container{
+    
+    display: flex;
+    gap: 5px;
+  }
+
+  .action_button{
+    
+    background: #fff;
+    color: #000;
+    height: var(--control_min_height);
+    min-width: var(--control_min_width);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    padding: 2px 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    text-decoration: none;
+    font-weight: 700;
+    margin-top: 20px;
+  }
+
+  .action_button_action_level_1{
+    background: orange;
+  }
+
+  .action_button_action_level_2{
+    background: orange;
   }
 </style>
