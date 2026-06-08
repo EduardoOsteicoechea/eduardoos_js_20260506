@@ -2,26 +2,38 @@
 import Layout from "../layouts/Layout.astro";
 import HomeCtaButtons from "../components/HomeCta/HomeCtaButtons.jsx";
 import HomeSkillsGrid from "../components/HomeSkills/HomeSkillsGrid.jsx";
+import { WHATSAPP_URL } from '../lib/contactLinks';
 ---
 
 <Layout>
   <main class="outer_container">
     <h1 class="main_heading">BIM Software Development and Consulting</h1>
     <p class="main_paragraph">
-      I'm a Licensed 
-      <span>Architect</span> & 
-      <span>Software Developer</span> 
-      focusing on full-stack 
-      <span>AEC</span> solutions, 
-      <span>Cloud</span> applications, 
-      <span>AI integration</span>, 
-      <span>BIM</span> collaboration, and 
+      I'm a Licensed
+      <span>Architect</span> &
+      <span>Software Developer</span>
+      focusing on full-stack
+      <span>AEC</span> solutions,
+      <span>Cloud</span> applications,
+      <span>AI integration</span>,
+      <span>BIM</span> collaboration, and
       <span>problem solving</span>
     </p>
 
     <div class="action_buttons_container">
-      <button class="action_button action_button_action_level_1">Let's Talk</button>
-      <button class="action_button action_button_action_level_2">Ask Anything</button>
+      <button class="action_button action_button_action_level_2"
+        >Ask Anything</button
+      >
+      <button class="action_button action_button_action_level_1">
+        <a
+          href={WHATSAPP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="action_button_link"
+        >
+          Let's Talk
+        </a>
+      </button>
     </div>
   </main>
 </Layout>
@@ -32,22 +44,21 @@ import HomeSkillsGrid from "../components/HomeSkills/HomeSkillsGrid.jsx";
     bottom: 0px;
     background: var(--glassed_background);
     backdrop-filter: blur(10px);
-    padding: 15px 10px 10px 10px;
+    padding: 15px 10px 20px 10px;
     width: 100%;
   }
 
-  .main_heading{
-
+  .main_heading {
     font-size: 1.65rem;
     line-height: 1.6rem;
     margin-bottom: 15px;
-    color:var(--site-body-fg);
+    color: var(--site-body-fg);
     font-weight: 800;
   }
 
   .main_paragraph {
     margin: 0px 0 0px 0;
-    color:var(--site-body-fg);
+    color: var(--site-body-fg);
     font-weight: 600;
     line-height: 1.85rem;
     font-size: 1rem;
@@ -57,23 +68,21 @@ import HomeSkillsGrid from "../components/HomeSkills/HomeSkillsGrid.jsx";
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    background:var(--site-body-bg);
-    color:var(--site-body-fg);
+    background: var(--site-body-bg);
+    color: var(--site-body-fg);
     padding: 0px 5px;
     height: 25px;
-    box-shadow: 3px 3px 3px rgba(0,0,0,.4);
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.4);
   }
 
-  .action_buttons_container{
-    
+  .action_buttons_container {
     display: flex;
-    gap: 5px;
+    gap: 10px;
   }
 
-  .action_button{
-    
-    background: #fff;
-    color: #000;
+  .action_button {
+    width: 130px;
+    color: #fff;
     height: var(--control_min_height);
     min-width: var(--control_min_width);
     display: flex;
@@ -86,13 +95,21 @@ import HomeSkillsGrid from "../components/HomeSkills/HomeSkillsGrid.jsx";
     text-decoration: none;
     font-weight: 700;
     margin-top: 20px;
+    background: rgb(0, 0, 0);
   }
 
-  .action_button_action_level_1{
-    background: orange;
+  .action_button_link {
+    display: flex;
+    align-items:center;
+    text-decoration: none;
+    color: inherit;
+    font-family: inherit;
+    height: 100%;
   }
 
-  .action_button_action_level_2{
-    background: orange;
+  .action_button_action_level_1 {
+  }
+
+  .action_button_action_level_2 {
   }
 </style>
