@@ -40,7 +40,7 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
 
       <meta
         name="description"
-        content="Architecturally trained BIM Modeler & Full Stack Developer. Bridging design and technology with custom Automations, AI integrations, and cloud solutions."
+        content="Licensed Architect & Software Developer focusing on full-stack AEC solutions, cloud applications, AI integration, BIM collaboration, and problem solving."
       />
       <link rel="icon" href="/media/favicon.ico" sizes="any" />
       <link
@@ -68,9 +68,6 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
         name="google-site-verification"
         content="RQdklgFawBo75p5tN7wranunENDjUu27gol9MENm-SM"
       />
-
-      <link rel="stylesheet" href="buttons.css">
-      <link rel="stylesheet" href="headings.css">
 
       <meta name="generator" content={Astro.generator} />
       <title>{title}</title>
@@ -118,58 +115,14 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
             document.documentElement.style.fontSize = fontSize + "px";
           }
           var siteLang = localStorage.getItem("eduardoos-chatbot-language");
-          if (siteLang === "es" || siteLang === "en") {
-            document.documentElement.lang = siteLang;
-            document.documentElement.dataset.siteLang = siteLang;
-          }
-          if (window.visualViewport) {
-            var vv = window.visualViewport;
-            var syncVv = function () {
-              var bottomInset = Math.max(
-                0,
-                window.innerHeight - vv.height - vv.offsetTop,
-              );
-              document.documentElement.style.setProperty(
-                "--vv-height",
-                vv.height + "px",
-              );
-              document.documentElement.style.setProperty(
-                "--vv-offset-top",
-                vv.offsetTop + "px",
-              );
-              document.documentElement.style.setProperty(
-                "--vv-offset-left",
-                vv.offsetLeft + "px",
-              );
-              document.documentElement.style.setProperty(
-                "--vv-width",
-                vv.width + "px",
-              );
-              document.documentElement.style.setProperty(
-                "--vv-bottom-inset",
-                bottomInset + "px",
-              );
-            };
-            syncVv();
-            vv.addEventListener("resize", syncVv);
-            vv.addEventListener("scroll", syncVv);
-          }
         } catch (_) {}
       </script> -->
     </head>
     <body
     
     >
-      <PageBackground pathname={pathname} />
+      <PageBackground />
 
         <slot />
-
-      <!-- <PageLanguageApplier client:load /> -->
-<!-- 
-      <SiteChrome
-        client:load
-        pathname={pathname}
-        activityBarMode={activityBarMode}
-      /> -->
     </body>
 </html>

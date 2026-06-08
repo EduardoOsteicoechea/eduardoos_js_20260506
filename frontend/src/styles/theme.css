@@ -1,0 +1,27 @@
+/* src/styles/theme.css */
+
+/* 1. Default (Light Mode) Variables */
+:root {
+  --site-body-bg: #ffffff;
+  --site-body-fg: #111111;
+  
+  --site-accent: #0011ff; /* Your primary brand color */
+  --site-border: #e2e8f0;
+
+  /* This tells the browser to use default light scrollbars and form inputs */
+  color-scheme: light; 
+}
+
+/* 2. OS Dark Mode Overrides */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --site-body-bg: #121212;
+    --site-body-fg: #f8fafc;
+    
+    --site-accent: #4d5cff; /* Slightly brighter accent for dark backgrounds */
+    --site-border: #334155;
+
+    /* This switches default browser UI elements to dark mode */
+    color-scheme: dark; 
+  }
+}
