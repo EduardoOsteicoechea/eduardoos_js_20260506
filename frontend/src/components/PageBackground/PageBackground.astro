@@ -1,138 +1,36 @@
----
-import {
-  getPageBackgroundConfig,
-  imagePositionStyleVars,
-  PAGE_BACKGROUND_IMAGE,
-} from '../../config/pageBackgroundRoutes';
-
-interface Props {
-  pathname: string;
-}
-
-const { pathname } = Astro.props;
-const config = getPageBackgroundConfig(pathname);
-
-if (!config.show) {
-  return;
-}
-
-const { blurPx, position } = config;
-const mobileVars = imagePositionStyleVars(position.mobile, '');
-const tabletVars = imagePositionStyleVars(position.tablet, 'tablet');
-const desktopVars = imagePositionStyleVars(position.desktop, 'desktop');
-const wrapStyle = { ...mobileVars, ...tabletVars, ...desktopVars };
----
-
 <div class="page-background" aria-hidden="true">
-  <div class="page-background__frame">
-    <div class="page-background__image-wrap" style={wrapStyle}>
-      <img
-        class="page-background__image"
-        src={PAGE_BACKGROUND_IMAGE}
-        alt=""
-        decoding="async"
-        fetchpriority="low"
-      />
-    </div>
-  </div>
-  <div
-    class="page-background__overlay"
-    style={{
-      backdropFilter: blurPx > 0 ? `blur(${blurPx}px)` : 'none',
-      WebkitBackdropFilter: blurPx > 0 ? `blur(${blurPx}px)` : 'none',
-    }}
-  />
+    <div class="page_background_image_container"></div>
 </div>
 
 <style>
   .page-background {
     position: fixed;
-    inset: 0;
+    bottom:0;
+    left: 0;
     z-index: 0;
-    height: 100vh;
-    height: 100dvh;
-    max-height: 100dvh;
-    width: 100%;
+    height: 660px;
+    width: 100dvw;
+    overflow: hidden;
     pointer-events: none;
-    overflow: hidden;
+    /* border: solid 5px rgb(0, 17, 255); */
   }
 
-  .page-background__frame {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-  }
-
-  /* Portrait slot: full viewport height, image fits inside vertically */
-  .page-background__image-wrap {
-    position: absolute;
-    top: var(--bg-top, 0);
-    left: var(--bg-left, 0);
-    height: calc(100vh - var(--bg-top, 0px));
-    height: calc(100dvh - var(--bg-top, 0px));
-    max-height: calc(100dvh - var(--bg-top, 0px));
-    width: auto;
-    max-width: min(58vw, 42rem);
-    transform: translate(var(--bg-translate-x, 0%), var(--bg-translate-y, 0%))
-      scale(var(--bg-scale, 1));
-    transform-origin: left center;
-  }
-
-  .page-background__image {
-    display: block;
+  .page_background_image_container{
     height: 100%;
-    width: auto;
-    max-width: 100%;
-    object-fit: contain;
-    object-position: var(--bg-object-position, left center);
+    width: 100%;
+    top: 30px;
+    display: flex;
+    align-items: center;
+    background-image: url("/personal_photo_1080x1920_side_placed.webp");
+    background-size: contain;
+    background-repeat: no-repeat;
   }
 
   @media (min-width: 768px) {
-    .page-background__image-wrap {
-      top: var(--bg-top-tablet, var(--bg-top, 0));
-      left: var(--bg-left-tablet, var(--bg-left, 0));
-      height: calc(100dvh - var(--bg-top-tablet, var(--bg-top, 0px)));
-      max-height: calc(100dvh - var(--bg-top-tablet, var(--bg-top, 0px)));
-      transform: translate(
-          var(--bg-translate-x-tablet, var(--bg-translate-x, 0%)),
-          var(--bg-translate-y-tablet, var(--bg-translate-y, 0%))
-        )
-        scale(var(--bg-scale-tablet, var(--bg-scale, 1)));
-    }
-
-    .page-background__image {
-      object-position: var(
-        --bg-object-position-tablet,
-        var(--bg-object-position, left center)
-      );
-    }
+    
   }
 
   @media (min-width: 1024px) {
-    .page-background__image-wrap {
-      top: var(--bg-top-desktop, var(--bg-top-tablet, 24px));
-      left: var(--bg-left-desktop, var(--bg-left-tablet, 40px));
-      height: calc(100dvh - var(--bg-top-desktop, var(--bg-top-tablet, 24px)));
-      max-height: calc(100dvh - var(--bg-top-desktop, var(--bg-top-tablet, 24px)));
-      max-width: min(52vw, 40rem);
-      transform: translate(
-          var(--bg-translate-x-desktop, var(--bg-translate-x-tablet, 0%)),
-          var(--bg-translate-y-desktop, var(--bg-translate-y-tablet, 0%))
-        )
-        scale(var(--bg-scale-desktop, var(--bg-scale-tablet, 1)));
-    }
-
-    .page-background__image {
-      object-position: var(
-        --bg-object-position-desktop,
-        var(--bg-object-position-tablet, left center)
-      );
-      height: 100%;
-    }
-  }
-
-  .page-background__overlay {
-    position: absolute;
-    inset: 0;
+    
   }
 </style>

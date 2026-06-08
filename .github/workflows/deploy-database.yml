@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
     inputs:
       sync_posts_db:
-        description: Overwrite EC2 posts.db from the repo copy
+        description: Legacy SQLite only — overwrite EC2 posts.db (DATA_STORE=sqlite)
         required: false
         default: false
         type: boolean
@@ -30,7 +30,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.22'
+          go-version: '1.24'
           cache-dependency-path: database/go.sum
 
       - name: Configure SSH

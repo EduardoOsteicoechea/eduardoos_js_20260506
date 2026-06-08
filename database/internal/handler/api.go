@@ -12,7 +12,7 @@ import (
 )
 
 type API struct {
-	Store *db.Store
+	Store db.DataStore
 }
 
 func (a *API) Catalog(w http.ResponseWriter, _ *http.Request) {

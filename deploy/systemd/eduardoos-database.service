@@ -1,5 +1,5 @@
 [Unit]
-Description=Eduardoos Posts SQLite API
+Description=Eduardoos Posts Database API (DynamoDB)
 After=network.target
 
 [Service]
@@ -9,7 +9,12 @@ WorkingDirectory=/home/ec2-user/database
 EnvironmentFile=-/home/ec2-user/database/.env
 Environment=PORT=8120
 Environment=BIND_HOST=127.0.0.1
-Environment=DB_PATH=/home/ec2-user/database/posts.db
+Environment=DATA_STORE=dynamodb
+Environment=AWS_REGION=us-east-1
+Environment=DYNAMODB_CATALOG_TABLE=eduardoos_catalog
+Environment=DYNAMODB_POSTS_TABLE=eduardoos_posts
+Environment=DYNAMODB_USERS_TABLE=eduardoos_users
+Environment=DYNAMODB_REFRESH_TOKENS_TABLE=eduardoos_refresh_tokens
 ExecStart=/home/ec2-user/database/postsdb
 Restart=always
 RestartSec=3

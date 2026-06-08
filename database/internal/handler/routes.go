@@ -8,7 +8,7 @@ import (
 	"github.com/eduardoos/database/internal/db"
 )
 
-func Register(mux *http.ServeMux, cfg config.Config, store *db.Store) {
+func Register(mux *http.ServeMux, cfg config.Config, store db.DataStore) {
 	api := &API{Store: store}
 
 	mux.HandleFunc("GET /health", Health)

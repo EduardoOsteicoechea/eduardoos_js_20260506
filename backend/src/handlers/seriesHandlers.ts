@@ -45,7 +45,7 @@ export async function getDbSeriesCatalog(_req: Request, res: Response) {
   }
 
   return res.json({
-    source: 'posts-db',
+    source: 'dynamodb',
     ...result.body,
   });
 }

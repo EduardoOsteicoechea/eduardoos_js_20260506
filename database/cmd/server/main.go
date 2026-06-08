@@ -3,9 +3,11 @@ package main
 import (
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/eduardoos/database/internal/config"
 	"github.com/eduardoos/database/internal/db"
+	"github.com/eduardoos/database/internal/dynamo"
 	"github.com/eduardoos/database/internal/handler"
 	"github.com/eduardoos/database/internal/logship"
 )
@@ -13,9 +15,22 @@ import (
 func main() {
 	cfg := config.Load()
 
-	store, err := db.Open(cfg.DBPath)
-	if err != nil {
-		log.Fatalf("open database: %v", err)
+	var store db.DataStore
+	var err error
+	switch strings.ToLower(cfg.DataStore) {
+	case "sqlite":
+		store, err = db.Open(cfg.DBPath)
+		if err != nil {
+			log.Fatalf("open sqlite: %v", err)
+		}
+		log.Printf("posts-db listening on %s (sqlite=%s)", cfg.Addr(), cfg.DBPath)
+	default:
+		store, err = dynamo.Open(cfg)
+		if err != nil {
+			log.Fatalf("open dynamodb: %v", err)
+		}
+		log.Printf("posts-db listening on %s (dynamodb catalog=%s posts=%s region=%s)",
+			cfg.Addr(), cfg.DynamoCatalogTable, cfg.DynamoPostsTable, cfg.AWSRegion)
 	}
 	defer store.Close()
 
@@ -27,9 +42,7 @@ func main() {
 	mux := http.NewServeMux()
 	handler.Register(mux, cfg, store)
 
-	addr := cfg.Addr()
-	log.Printf("posts-db listening on %s (db=%s)", addr, cfg.DBPath)
-	if err := http.ListenAndServe(addr, mux); err != nil {
+	if err := http.ListenAndServe(cfg.Addr(), mux); err != nil {
 		log.Fatal(err)
 	}
 }

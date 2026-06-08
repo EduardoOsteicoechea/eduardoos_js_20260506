@@ -1,0 +1,36 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "EduardoosDynamoDBTables",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+      ],
+      "Resource": [
+        "arn:aws:dynamodb:us-east-1:241533144630:table/eduardoos_catalog",
+        "arn:aws:dynamodb:us-east-1:241533144630:table/eduardoos_posts",
+        "arn:aws:dynamodb:us-east-1:241533144630:table/eduardoos_posts/index/*",
+        "arn:aws:dynamodb:us-east-1:241533144630:table/eduardoos_users",
+        "arn:aws:dynamodb:us-east-1:241533144630:table/eduardoos_users/index/*",
+        "arn:aws:dynamodb:us-east-1:241533144630:table/eduardoos_refresh_tokens",
+        "arn:aws:dynamodb:us-east-1:241533144630:table/eduardoos_refresh_tokens/index/*"
+      ]
+    },
+    {
+      "Sid": "EduardoosDynamoDBListTables",
+      "Effect": "Allow",
+      "Action": ["dynamodb:ListTables"],
+      "Resource": "*"
+    }
+  ]
+}

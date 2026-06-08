@@ -33,8 +33,19 @@ services:
     environment:
       PORT: 8120
       BIND_HOST: 0.0.0.0
-      DB_PATH: /data/posts.db
+      DATA_STORE: ${DATA_STORE:-dynamodb}
       POSTS_DB_INTERNAL_TOKEN: dev-internal-posts-db-token
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      DYNAMODB_CATALOG_TABLE: ${DYNAMODB_CATALOG_TABLE:-eduardoos_catalog}
+      DYNAMODB_POSTS_TABLE: ${DYNAMODB_POSTS_TABLE:-eduardoos_posts}
+      DYNAMODB_USERS_TABLE: ${DYNAMODB_USERS_TABLE:-eduardoos_users}
+      DYNAMODB_REFRESH_TOKENS_TABLE: ${DYNAMODB_REFRESH_TOKENS_TABLE:-eduardoos_refresh_tokens}
+      DYNAMODB_ENDPOINT: ${DYNAMODB_ENDPOINT:-}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN:-}
+      # SQLite fallback: set DATA_STORE=sqlite and mount ./database/data
+      DB_PATH: /data/posts.db
     volumes:
       - ./database/data:/data
     expose:
