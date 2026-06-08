@@ -1,0 +1,30 @@
+.menu_button{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 3px 10px;
+  height: var(--control_min_height);
+  width: var(--control_min_height);
+  background: var(--site-body-fg);
+  cursor: pointer;
+}
+
+.menu_button_bar{
+  background: var(--site-body-bg);
+  height: 2px;
+  width: 100%;
+}
+
+.menu_button_top_bar{
+
+}
+
+.menu_button_bottom_bar{
+
+
+}

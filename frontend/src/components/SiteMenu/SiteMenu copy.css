@@ -1,4 +1,4 @@
-/* ── Site menu drawer ──────────────────────────────────────────── */
+/* ── Site menu drawer ────────────────────────────────────────────
 
 .site-menu-backdrop {
   position: fixed;
@@ -319,4 +319,4 @@ html.dark .site-menu-settings__font-btn--selected {
 .site-menu-toggle {
   position: relative;
   z-index: 230;
-}
+} */
