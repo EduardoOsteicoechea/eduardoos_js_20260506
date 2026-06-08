@@ -8,6 +8,8 @@
   --site-accent: #0011ff; /* Your primary brand color */
   --site-border: #e2e8f0;
 
+  --glassed_background: rgba(255,255,255,.75);
+
   /* This tells the browser to use default light scrollbars and form inputs */
   color-scheme: light; 
 }
@@ -21,6 +23,7 @@
     --site-accent: #4d5cff; /* Slightly brighter accent for dark backgrounds */
     --site-border: #334155;
 
+  --glassed_background: rgba(255,255,255,.1);
     /* This switches default browser UI elements to dark mode */
     color-scheme: dark; 
   }

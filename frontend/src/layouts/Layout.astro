@@ -1,10 +1,7 @@
 ---
 import "../styles/global.css";
-import { SiteChrome } from "../components/SiteChrome";
-import { PageLanguageApplier } from "../components/SiteLanguage";
 import PageBackground from "../components/PageBackground/PageBackground.astro";
 import { isHomePath } from "../config/homeLayout";
-import { getPageBackgroundConfig } from "../config/pageBackgroundRoutes";
 
 const pathname = Astro.url.pathname;
 const pageHome = isHomePath(pathname);
@@ -18,10 +15,6 @@ const {
   title = "Eduardo Osteicoechea",
   activityBarMode = "default",
 } = Astro.props;
-
-const isEditorPage = activityBarMode === "editor";
-
-const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
 ---
 
 <!doctype html>
@@ -71,52 +64,6 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
 
       <meta name="generator" content={Astro.generator} />
       <title>{title}</title>
-      <!-- <script is:inline>
-        try {
-          var storedTheme = localStorage.getItem("eduardoos-theme");
-          var prefersDark =
-            window.matchMedia &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches;
-          var resolvedTheme =
-            storedTheme === "dark" || storedTheme === "light"
-              ? storedTheme
-              : prefersDark
-                ? "dark"
-                : "light";
-          document.documentElement.classList.toggle(
-            "dark",
-            resolvedTheme === "dark",
-          );
-          document.documentElement.dataset.theme = resolvedTheme;
-          document.documentElement.style.colorScheme = resolvedTheme;
-          var trayWidth = localStorage.getItem("eduardoos-chatbot-tray-width");
-          if (trayWidth) {
-            document.documentElement.style.setProperty(
-              "--chatbot-tray-width",
-              trayWidth + "px",
-            );
-          }
-          var fontId = localStorage.getItem("eduardoos-font-family");
-          var fontStacks = {
-            montserrat: '"Montserrat", sans-serif',
-            raleway: '"Raleway", sans-serif',
-            roboto: '"Roboto", sans-serif',
-            system:
-              'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-          };
-          if (fontId && fontStacks[fontId]) {
-            document.documentElement.style.setProperty(
-              "--font-family",
-              fontStacks[fontId],
-            );
-          }
-          var fontSize = localStorage.getItem("eduardoos-article-font-size");
-          if (fontSize) {
-            document.documentElement.style.fontSize = fontSize + "px";
-          }
-          var siteLang = localStorage.getItem("eduardoos-chatbot-language");
-        } catch (_) {}
-      </script> -->
     </head>
     <body
     
