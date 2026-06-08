@@ -1,0 +1,26 @@
+.home_cta_buttons_outer_container{
+    display: flex;
+    gap: 5px;
+}
+
+.action_button{
+    background: #fff;
+    color: #000;
+    height: var(--control_min_height);
+    min-width: var(--control_min_width);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    padding: 2px 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    text-decoration: none;
+    font-weight: 700;
+}
+.level_1_action{
+    
+}
+.level_2_action{
+    
+}

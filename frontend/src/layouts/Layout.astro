@@ -69,6 +69,9 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
         content="RQdklgFawBo75p5tN7wranunENDjUu27gol9MENm-SM"
       />
 
+      <link rel="stylesheet" href="buttons.css">
+      <link rel="stylesheet" href="headings.css">
+
       <meta name="generator" content={Astro.generator} />
       <title>{title}</title>
       <script is:inline>
@@ -155,23 +158,18 @@ const pageBackground = getPageBackgroundConfig(Astro.url.pathname);
       </script>
     </head>
     <body
-      class:list={{
-        "has-page-background": pageBackground.show,
-        "page-editor": isEditorPage,
-      }}
+    
     >
       <PageBackground pathname={pathname} />
 
-      <div class="page-content relative z-[1] min-h-screen">
         <slot />
-      </div>
 
-      <PageLanguageApplier client:load />
-
+      <!-- <PageLanguageApplier client:load /> -->
+<!-- 
       <SiteChrome
         client:load
         pathname={pathname}
         activityBarMode={activityBarMode}
-      />
+      /> -->
     </body>
 </html>

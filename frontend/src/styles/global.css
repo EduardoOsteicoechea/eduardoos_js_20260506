@@ -1,8 +1,9 @@
 :root{
   font-family: Raleway, Montserrat, Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  --min_input_height: 35px;
-  --min_input_width: 35px;
+  --control_min_height: 35px;
+  --control_min_width: 35px;
   --border_radius_001: 4px;
+  --border_001: solid 1px #ccc;
 }
 
 * {
@@ -22,8 +23,9 @@ body {
   margin: auto;
 }
 
-input, button {
-  min-height: var(--min_input_height);
-  min-width: var(--min_input_width);
+input, button, a {
+  min-height: var(--control_min_height);
+  min-width: var(--control_min_width);
   border-radius: var(--border_radius_001);
+  font-family: inherit;
 }

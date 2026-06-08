@@ -7,12 +7,12 @@ export default function HomeCtaButtons() {
   const lang = useSiteLanguage();
 
   return (
-    <div className="home-cta">
+    <div className="home_cta_buttons_outer_container">
       <a
         href={WHATSAPP_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="home-cta__btn home-cta__btn--talk"
+        className="action_button level_1_action"
       >
         {getSiteLabel('letsTalk', lang)}
       </a>
@@ -20,7 +20,7 @@ export default function HomeCtaButtons() {
       <button
         type="button"
         onClick={() => openChatbotWithHomeIntro(lang)}
-        className="home-cta__btn home-cta__btn--ask"
+        className="action_button level_2_action"
       >
         {getSiteLabel('askAnything', lang)}
       </button>
