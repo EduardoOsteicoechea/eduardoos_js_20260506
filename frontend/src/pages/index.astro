@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import HomeCtaButtons from "../components/HomeCta/HomeCtaButtons.jsx";
 import HomeSkillsGrid from "../components/HomeSkills/HomeSkillsGrid.jsx";
-import { WHATSAPP_URL } from '../lib/contactLinks';
+import { WHATSAPP_URL } from "../lib/contactLinks";
 ---
 
 <Layout>
@@ -50,7 +50,7 @@ import { WHATSAPP_URL } from '../lib/contactLinks';
 
   .main_heading {
     font-size: 1.65rem;
-    line-height: 1.6rem;
+    line-height: 1.8rem;
     margin-bottom: 20px;
     color: var(--site-body-fg);
     font-weight: 800;
@@ -78,12 +78,11 @@ import { WHATSAPP_URL } from '../lib/contactLinks';
   .action_buttons_container {
     display: flex;
     gap: 10px;
-    margin-top:5px;
+    margin-top: 5px;
   }
 
   .action_button {
     width: 100%;
-    color: #fff;
     height: var(--control_min_height);
     min-width: var(--control_min_width);
     display: flex;
@@ -96,12 +95,13 @@ import { WHATSAPP_URL } from '../lib/contactLinks';
     text-decoration: none;
     font-weight: 700;
     margin-top: 20px;
-    background: rgb(0, 0, 0);
+    background: var(--site-body-fg);
+    color: var(--site-body-bg);
   }
 
   .action_button_link {
     display: flex;
-    align-items:center;
+    align-items: center;
     text-decoration: none;
     color: inherit;
     font-family: inherit;
