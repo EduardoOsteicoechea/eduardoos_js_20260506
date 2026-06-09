@@ -5,6 +5,12 @@
   margin-right: auto;
   max-width: 56rem;
   padding: 0 1.25rem 2.5rem;
+  padding-bottom: calc(var(--activity-bar-height) + 2.5rem);
+}
+
+body.page-editor .post-editor-page {
+  padding-top: calc(var(--activity-bar-height) + 0.75rem);
+  padding-bottom: 2.5rem;
 }
 
 .post-editor {
@@ -25,15 +31,17 @@ body.page-editor .post-editor {
   display: block;
   margin-bottom: 0.25rem;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
+  color: var(--site-body-fg);
 }
 
 .post-editor__field {
   width: 100%;
   box-sizing: border-box;
-  border-radius: 0.5rem;
-  border: 1px solid rgb(0 0 0 / 0.15);
-  background-color: transparent;
+  border-radius: var(--border_radius_001);
+  border: var(--border_001);
+  background-color: var(--site-body-bg);
+  color: var(--site-body-fg);
   padding-left: 0.75rem;
   padding-right: 0.75rem;
   font-size: 1rem;
@@ -41,19 +49,7 @@ body.page-editor .post-editor {
 }
 
 .post-editor__field:focus {
-  box-shadow: 0 0 0 2px #000000;
-}
-
-html[data-theme='dark'] .post-editor__field,
-html.dark .post-editor__field {
-  border-color: rgb(255 255 255 / 0.15);
-  background-color: var(--site-body-bg);
-  color: var(--site-body-fg);
-}
-
-html[data-theme='dark'] .post-editor__field:focus,
-html.dark .post-editor__field:focus {
-  box-shadow: 0 0 0 2px #ffffff;
+  box-shadow: 0 0 0 2px var(--site-body-fg);
 }
 
 .post-editor__field--select {
@@ -129,23 +125,17 @@ html.dark .post-editor__field:focus {
   width: 100vw;
   max-width: none;
   transform: translateX(-50%);
-  border-top: 1px solid rgb(0 0 0 / 0.1);
-  border-bottom: 1px solid rgb(0 0 0 / 0.1);
-  background-color: rgb(0 0 0 / 0.06);
-}
-
-html[data-theme='dark'] .post-editor-metadata,
-html.dark .post-editor-metadata {
-  border-color: rgb(255 255 255 / 0.1);
-  background-color: rgb(255 255 255 / 0.06);
+  border-top: var(--border_001);
+  border-bottom: var(--border_001);
+  background-color: var(--site-surface-muted);
 }
 
 .post-editor-metadata__field {
   flex: 1 1 10rem;
   min-width: 10rem;
   padding: 0.75rem;
-  border-right: 1px solid rgb(0 0 0 / 0.1);
-  border-bottom: 1px solid rgb(0 0 0 / 0.1);
+  border-right: var(--border_001);
+  border-bottom: var(--border_001);
 }
 
 .post-editor-metadata__field--title {
@@ -156,11 +146,6 @@ html.dark .post-editor-metadata {
   .post-editor-metadata__field {
     padding: 1rem;
   }
-}
-
-html[data-theme='dark'] .post-editor-metadata__field,
-html.dark .post-editor-metadata__field {
-  border-color: rgb(255 255 255 / 0.1);
 }
 
 .post-editor-metadata__status {

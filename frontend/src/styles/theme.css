@@ -4,14 +4,24 @@
 :root {
   --site-body-bg: #ffffff;
   --site-body-fg: #111111;
-  
-  --site-accent: #0011ff; /* Your primary brand color */
+  --site-accent: #0011ff;
   --site-border: #e2e8f0;
-
-  --glassed_background: rgba(255,255,255,.75);
-
-  /* This tells the browser to use default light scrollbars and form inputs */
-  color-scheme: light; 
+  --glassed_background: rgba(255, 255, 255, 0.75);
+  --site-surface-muted: rgba(0, 0, 0, 0.06);
+  --site-muted-fg: rgba(0, 0, 0, 0.6);
+  --site-chrome-bar-bg: var(--site-body-bg);
+  --site-chrome-bar-fg: var(--site-body-fg);
+  --site-chrome-bar-border: var(--site-border);
+  --activity-bar-height: 56px;
+  --ui-control-min-height: var(--control_min_height);
+  --ui-control-size: var(--control_min_height);
+  --chatbot-tray-width: 22rem;
+  --vv-height: 100dvh;
+  --vv-offset-top: 0px;
+  --vv-offset-left: 0px;
+  --vv-width: 100%;
+  --vv-bottom-inset: 0px;
+  color-scheme: light;
 }
 
 /* 2. OS Dark Mode Overrides */
@@ -19,12 +29,40 @@
   :root {
     --site-body-bg: #121212;
     --site-body-fg: #f8fafc;
-    
-    --site-accent: #4d5cff; /* Slightly brighter accent for dark backgrounds */
+    --site-accent: #4d5cff;
     --site-border: #334155;
-
-  --glassed_background: rgba(255,255,255,.1);
-    /* This switches default browser UI elements to dark mode */
-    color-scheme: dark; 
+    --glassed_background: rgba(255, 255, 255, 0.1);
+    --site-surface-muted: rgba(255, 255, 255, 0.06);
+    --site-muted-fg: rgba(255, 255, 255, 0.6);
+    color-scheme: dark;
   }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --activity-bar-height: 45px;
+  }
+}
+
+/* Explicit theme preference (activity bar toggle) */
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --site-body-bg: #121212;
+  --site-body-fg: #f8fafc;
+  --site-accent: #4d5cff;
+  --site-border: #334155;
+  --glassed_background: rgba(255, 255, 255, 0.1);
+  --site-surface-muted: rgba(255, 255, 255, 0.06);
+  --site-muted-fg: rgba(255, 255, 255, 0.6);
+}
+
+html[data-theme='light'] {
+  color-scheme: light;
+  --site-body-bg: #ffffff;
+  --site-body-fg: #111111;
+  --site-accent: #0011ff;
+  --site-border: #e2e8f0;
+  --glassed_background: rgba(255, 255, 255, 0.75);
+  --site-surface-muted: rgba(0, 0, 0, 0.06);
+  --site-muted-fg: rgba(0, 0, 0, 0.6);
 }

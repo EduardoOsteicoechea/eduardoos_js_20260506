@@ -3,10 +3,7 @@ import "../styles/global.css";
 import PageBackground from "../components/PageBackground/PageBackground.astro";
 import { isHomePath } from "../config/homeLayout";
 import { SiteMenu } from "../components/SiteMenu";
-import ChatbotTray from "../components/Chatbot/ChatbotTray";
-
-const pathname = Astro.url.pathname;
-const pageHome = isHomePath(pathname);
+import { SiteChrome } from "../components/SiteChrome";
 
 interface Props {
   title?: string;
@@ -15,6 +12,10 @@ interface Props {
 
 const { title = "Eduardo Osteicoechea", activityBarMode = "default" } =
   Astro.props;
+
+const pathname = Astro.url.pathname;
+const pageHome = isHomePath(pathname);
+const pageEditor = activityBarMode === "editor";
 ---
 
 <!doctype html>
@@ -59,13 +60,37 @@ const { title = "Eduardo Osteicoechea", activityBarMode = "default" } =
 
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem("eduardoos-theme");
+          var dark =
+            stored === "dark" ||
+            (!stored &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          var root = document.documentElement;
+          root.classList.toggle("dark", dark);
+          root.dataset.theme = dark ? "dark" : "light";
+          root.style.colorScheme = dark ? "dark" : "light";
+        } catch (e) {}
+      })();
+    </script>
   </head>
-  <body>
+  <body
+    class:list={{
+      "page-editor": pageEditor,
+      "has-page-background": true,
+    }}
+  >
     <PageBackground />
     <main>
       <slot />
     </main>
-    <SiteMenu client:load/>
-    <ChatbotTray />
+    <SiteChrome
+      client:load
+      pathname={pathname}
+      activityBarMode={activityBarMode}
+    />
+    <SiteMenu client:load />
   </body>
 </html>
