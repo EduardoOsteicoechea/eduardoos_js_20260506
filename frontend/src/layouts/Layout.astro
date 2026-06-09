@@ -3,6 +3,7 @@ import "../styles/global.css";
 import PageBackground from "../components/PageBackground/PageBackground.astro";
 import { isHomePath } from "../config/homeLayout";
 import { SiteMenu } from "../components/SiteMenu";
+import ChatbotTray from "../components/Chatbot/ChatbotTray";
 
 const pathname = Astro.url.pathname;
 const pageHome = isHomePath(pathname);
@@ -61,7 +62,10 @@ const { title = "Eduardo Osteicoechea", activityBarMode = "default" } =
   </head>
   <body>
     <PageBackground />
-    <slot />
-    <SiteMenu />
+    <main>
+      <slot />
+    </main>
+    <SiteMenu client:load/>
+    <ChatbotTray />
   </body>
 </html>

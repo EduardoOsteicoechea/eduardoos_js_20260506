@@ -13,11 +13,21 @@
   background: var(--site-body-fg);
   cursor: pointer;
 }
+.menu_button:hover{
+  transform: scale(1.05);
+}
+
+.menu_button_opened_tray{
+  background: red;
+}
 
 .menu_button_bar{
   background: var(--site-body-bg);
   height: 2px;
   width: 100%;
+  border-radius: 10px;
+  transform: none;
+  transition: all 500ms ease;
 }
 
 .menu_button_top_bar{
@@ -27,4 +37,13 @@
 .menu_button_bottom_bar{
 
 
+}
+
+.menu_button_top_bar_opened{
+  top: 10%;
+  transform: rotate(45deg);
+}
+.menu_button_bottom_bar_opened{
+  bottom: 10%;
+  transform: rotate(135deg);
 }

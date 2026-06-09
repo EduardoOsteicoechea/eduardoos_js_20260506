@@ -1,13 +1,23 @@
-@import './theme.css'; 
-@import './buttons.css'; 
-@import './headings.css'; 
+@import './theme.css';
+@import './buttons.css';
+@import './headings.css';
 
-:root{
+:root {
   font-family: Raleway, Montserrat, Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   --control_min_height: 40px;
   --control_min_width: 40px;
   --border_radius_001: 4px;
   --border_001: solid 1px #ccc;
+}
+
+@media (min-width: 768px) {
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --control_min_height: 35px;
+    --control_min_width: 35px;
+  }
 }
 
 * {
@@ -26,11 +36,13 @@ body {
   width: 100vw;
   overflow: hidden;
   /* border: solid 1px red; */
-  margin: auto; 
+  margin: auto;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-input, button, a {
+input,
+button,
+a {
   min-height: var(--control_min_height);
   min-width: var(--control_min_width);
   font-family: inherit;
