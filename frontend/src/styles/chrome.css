@@ -1,5 +1,11 @@
 /* Site chrome, shared UI controls, and theme helper classes (editor + activity bar). */
 
+html.page-home .site-chrome {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
 .theme-border {
   border-color: var(--site-border);
 }

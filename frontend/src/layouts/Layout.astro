@@ -86,11 +86,15 @@ const pageEditor = activityBarMode === "editor";
     <main>
       <slot />
     </main>
-    <SiteChrome
-      client:load
-      pathname={pathname}
-      activityBarMode={activityBarMode}
-    />
+    {
+      !pageHome && (
+        <SiteChrome
+          client:load
+          pathname={pathname}
+          activityBarMode={activityBarMode}
+        />
+      )
+    }
     <SiteMenu client:load />
   </body>
 </html>
