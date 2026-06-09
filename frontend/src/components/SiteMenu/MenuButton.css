@@ -40,10 +40,12 @@
 }
 
 .menu_button_top_bar_opened{
-  top: 10%;
+  top: 12%;
   transform: rotate(45deg);
+  background: #fff;
 }
 .menu_button_bottom_bar_opened{
-  bottom: 10%;
+  bottom: 13%;
   transform: rotate(135deg);
+  background: #fff;
 }
