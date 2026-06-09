@@ -2,7 +2,6 @@ import { LinkedInIcon, WhatsAppIcon } from '../ActivityBarSocialIcons';
 import ChatbotToggleButton from '../Chatbot/ChatbotToggleButton';
 import { SiteLanguageButton } from '../SiteLanguage';
 import { SiteControlButton } from '../ui';
-import { SiteMenu } from '../SiteMenu';
 import { LINKEDIN_URL, WHATSAPP_URL } from '../../lib/contactLinks';
 import { renderEditorActionIcon } from './ActivityBarEditorIcons';
 
@@ -116,27 +115,6 @@ export default function ActivityBarControl({ controlId, menuPrefs, editorAction 
 
     case 'chatbot':
       return <ChatbotToggleButton />;
-
-    case 'site-menu':
-      if (!menuPrefs?.ready) {
-        return (
-          <span
-            className="ui-control ui-control--bar ui-control--placeholder"
-            aria-hidden="true"
-          />
-        );
-      }
-      return (
-        <SiteMenu
-          theme={menuPrefs.theme}
-          fontFamilyId={menuPrefs.fontFamilyId}
-          baseFontSize={menuPrefs.baseFontSize}
-          onToggleTheme={menuPrefs.onToggleTheme}
-          onIncreaseFont={menuPrefs.onIncreaseFont}
-          onDecreaseFont={menuPrefs.onDecreaseFont}
-          onSelectFont={menuPrefs.onSelectFont}
-        />
-      );
 
     default:
       return null;

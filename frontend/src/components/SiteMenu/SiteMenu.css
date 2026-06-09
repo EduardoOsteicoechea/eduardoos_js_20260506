@@ -1,0 +1,12 @@
+/* Full-viewport layer above site chrome (z-index 200–210). */
+.site_menu {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  pointer-events: none;
+}
+
+.site_menu .menu_button,
+.site_menu .menu_tray {
+  pointer-events: auto;
+}

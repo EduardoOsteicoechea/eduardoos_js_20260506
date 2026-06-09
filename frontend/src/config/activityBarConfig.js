@@ -22,7 +22,6 @@ export const HOME_ACTIVITY_BAR_RIGHT = [
   'whatsapp',
   'linkedin',
   'chatbot',
-  'site-menu',
 ];
 
 /** @type {ActivityBarControlId[]} */
@@ -33,11 +32,10 @@ export const STANDARD_ACTIVITY_BAR_RIGHT = [
   'whatsapp',
   'linkedin',
   'chatbot',
-  'site-menu',
 ];
 
 /** @type {ActivityBarControlId[]} */
-export const EDITOR_ACTIVITY_BAR_RIGHT = ['chatbot', 'site-menu'];
+export const EDITOR_ACTIVITY_BAR_RIGHT = ['chatbot'];
 
 /**
  * @param {string} pathname

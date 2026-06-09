@@ -1,14 +1,17 @@
 .menu_tray {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
+  z-index: 220;
   display: flex;
   height: 100vh;
+  height: 100dvh;
   width: 0;
   background: var(--site-body-bg);
   overflow-x: hidden;
   overflow-y: auto;
-  box-shadow: -5px 0 10px rgba(0,0,0,.15);
+  box-shadow: -5px 0 10px rgba(0, 0, 0, 0.15);
+  transition: width 500ms ease;
 }
 
 .open_menu_tray {

@@ -2,6 +2,7 @@
   position: fixed;
   top: 20px;
   right: 20px;
+  z-index: 221;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,7 +18,11 @@
   transform: scale(1.05);
 }
 
-.menu_button_opened_tray{
+body.page-editor .menu_button {
+  top: calc(var(--activity-bar-height) + 12px);
+}
+
+.menu_button_opened_tray {
   background: red;
 }
 
