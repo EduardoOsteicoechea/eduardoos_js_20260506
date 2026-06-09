@@ -1,0 +1,174 @@
+---
+description: React component structure — SiteMenu pattern when fitting; explain when not
+alwaysApply: false
+globs: frontend/**/*.{jsx,tsx}
+---
+
+# React component code style
+
+**Default:** generate new feature components using the `frontend/src/components/SiteMenu/` pattern when the task fits (see checklist below).
+
+**If it does not fit:** do not force the SiteMenu layout. Before implementing, tell the user **why not** and which alternative pattern to use (listed below). Then match that pattern instead.
+
+---
+
+## When to use the SiteMenu pattern ✅
+
+Use `SiteMenu/` as the template when **all** of these are true:
+
+| Criterion | SiteMenu example |
+|-----------|------------------|
+| Self-contained **site chrome** or **feature UI** (nav, tray, panel, toolbar) | `SiteMenu` |
+| A few related visual parts (typically 2–4), not a large form/editor | `MenuButton` + `MenuTray` |
+| One orchestrator owns UI state (open/closed, active tab) | `isTrayOpen` in `SiteMenu.jsx` |
+| Leaf components are mostly presentational | `MenuTray` maps routes to links |
+| Feature-specific styles with a shared prefix | `menu_tray`, `menu_button` |
+| Optional static config/data separable from React | `routes.js` |
+
+### SiteMenu folder layout (copy this structure)
+
+```
+FeatureName/
+  index.js              # export { default as FeatureName } from './FeatureName';
+  FeatureName.jsx       # orchestrator — state + composition only, NO .css import
+  LeafA.jsx             # one default-export component per file
+  LeafA.css             # sidecar styles, snake_case, feature prefix
+  LeafB.jsx
+  LeafB.css
+  FeatureIcons.jsx      # optional — named exports for SVGs
+  featureData.js        # optional — routes, config, pure logic (not a component)
+```
+
+### SiteMenu orchestrator (`SiteMenu.jsx`)
+
+```jsx
+import { useState } from "react";
+import LeafA from "./LeafA";
+import LeafB from "./LeafB";
+import getFeatureData from "./featureData";
+
+export default function FeatureName() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggle = () => {
+    setIsOpen((prev) => !prev);
+  };
+
+  return (
+    <>
+      <LeafA isOpen={isOpen} getData={getFeatureData} />
+      <LeafB isOpen={isOpen} onToggle={toggle} />
+    </>
+  );
+}
+```
+
+- State and handlers live **only** in the orchestrator.
+- Children receive state + callbacks via props (`isOpen`, `onToggle`).
+- Use a fragment `<>...</>` when composing siblings.
+- No JSDoc required on simple orchestrators (SiteMenu does not use it).
+
+### SiteMenu leaf component (`MenuTray.jsx`, `MenuButton.jsx`)
+
+```jsx
+import "./LeafA.css";
+
+export default function LeafA({ isOpen, getData }) {
+  const items = getData(null);
+
+  return (
+    <div className={`leaf_a ${isOpen ? "open_leaf_a" : ""}`.trim()}>
+      {/* ... */}
+    </div>
+  );
+}
+```
+
+- Import sidecar CSS at the top.
+- **snake_case** classes prefixed with feature name: `menu_tray`, `menu_tray_nav_item`.
+- Open/state modifier classes: `open_menu_tray`, `menu_button_opened_tray`.
+- Conditional classes: template string + `.trim()`.
+- Interactive elements: `aria-expanded`, `aria-label` where `MenuButton` does.
+- External links: `target="_blank"` + `rel="noopener noreferrer"`.
+- Buttons: `type="button"` unless submit.
+
+### SiteMenu icons (`MenuIcons.jsx`)
+
+- Named exports (`export function HomeIcon()`), not default.
+- SVG: `currentColor`, `aria-hidden="true"`, 20×20 (or 18×14).
+- Shared stroke props via a constant (`navIconProps`) when multiple icons match.
+
+### SiteMenu barrel (`index.js`)
+
+```js
+export { default as FeatureName } from './FeatureName';
+```
+
+Consumers import: `import { SiteMenu } from '../components/SiteMenu'`.
+
+### CSS pairing
+
+- One `.css` per leaf component; orchestrator has **no** CSS file.
+- Use tokens from `styles.mdc` (`var(--site-body-bg)`, `--control_min_height`, etc.).
+- Breakpoints: `768px` and `1024px` only.
+
+---
+
+## When NOT to use SiteMenu — use these instead
+
+If any **exclusion** below applies, **stop and explain to the user** which row applies and why, then follow that pattern.
+
+| Situation | Why SiteMenu does not fit | Use instead |
+|-----------|---------------------------|-------------|
+| **Single leaf, no orchestration** | No state to lift; splitting into 3 files adds noise | One file, e.g. `HomeCta/HomeCtaButtons.jsx` — may omit folder orchestrator |
+| **Reusable control used across features** | SiteMenu classes (`menu_*`) are feature-specific | `components/ui/SiteControlButton.jsx` — BEM `ui-control`, `ui-control--primary` |
+| **Large editor / dashboard / wizard** | Too many subviews, modals, and hooks for one orchestrator + 2 leaves | `PostEditor/`, `CatalogEditor/` — subfolder per concern (`sections/`, modals, hooks colocated) |
+| **Global layout shell with portals** | Needs `createPortal`, mount guards, pathname effects | `SiteChrome/SiteChrome.jsx` — effects + portal, not tray/button split |
+| **Custom hook only** | Not a component | `useSomething.jsx` in `hooks/` or next to the one consumer |
+| **Extending an existing folder** | Consistency beats SiteMenu template | Match the existing folder’s files and naming |
+| **Astro-only static markup** | No client state | Prefer `.astro` component; skip React |
+| **Third-party or generated code** | Out of project conventions | Keep as-is; do not refactor to SiteMenu |
+
+### Required deviation message (when not fitting)
+
+When skipping SiteMenu, include a short note like:
+
+> **Pattern:** not using SiteMenu layout because [reason from table]. Using `[Alternative]` from `[path]` instead.
+
+---
+
+## Shared rules (all React components)
+
+- **Default export** for main component: `export default function MenuTray`.
+- **PascalCase** filenames matching the component name.
+- **JSX + JSDoc** for props on non-trivial components (optional on SiteMenu-style leaves).
+- Import order: React → siblings → CSS → hooks → lib.
+- No TypeScript unless the task explicitly requires it.
+- No Tailwind, no anonymous `export default () =>`.
+- No `console.log` left in production code.
+- Avoid camelCase CSS class names in new feature components.
+
+---
+
+## Quick decision flow
+
+```
+New React UI needed?
+  └─ Extending PostEditor / Chatbot / existing folder? → match that folder (say so)
+  └─ Reusable button/control? → ui/SiteControlButton pattern (say so)
+  └─ One-off presentational block? → single .jsx (say so)
+  └─ Chrome / tray / toolbar with 2–4 parts + local open state? → SiteMenu pattern ✅
+  └─ Large multi-step editor? → PostEditor-style subfolders (say so)
+```
+
+---
+
+## Reference
+
+| Pattern | Path |
+|---------|------|
+| **Primary template** | `frontend/src/components/SiteMenu/` |
+| Single-file CTA | `frontend/src/components/HomeCta/HomeCtaButtons.jsx` |
+| UI primitive | `frontend/src/components/ui/SiteControlButton.jsx` |
+| Global chrome | `frontend/src/components/SiteChrome/SiteChrome.jsx` |
+| Large feature | `frontend/src/components/PostEditor/` |

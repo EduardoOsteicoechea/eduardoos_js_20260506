@@ -1,0 +1,98 @@
+---
+description: Frontend styling conventions — theme tokens, layout, and component patterns
+alwaysApply: true
+globs: frontend/**/*.{astro,css,jsx,tsx,js,ts}
+---
+
+# Frontend style guide
+
+Match the patterns in `frontend/src/pages/index.astro`, `frontend/src/styles/theme.css`, `frontend/src/styles/global.css`, and `frontend/src/components/SiteMenu/`.
+
+## Tokens (never hardcode colors)
+
+Use CSS variables from `theme.css` and `global.css`:
+
+- Colors: `--site-body-bg`, `--site-body-fg`, `--site-accent`, `--site-border`, `--glassed_background`
+- Controls: `--control_min_height`, `--control_min_width`
+- Misc: `--border_radius_001`, `--border_001`
+
+Dark/light mode is automatic via `prefers-color-scheme` in `theme.css`. Do not add manual theme toggles unless asked.
+
+## Global baseline
+
+- Import chain: pages/layouts use `global.css` (which imports `theme.css`, `buttons.css`, `headings.css`).
+- Font stack: `Raleway, Montserrat, Roboto, system-ui, …` (set on `:root` in `global.css`).
+- Universal reset: `* { position: relative; margin: 0; padding: 0; box-sizing: border-box; }`.
+- `body`: `background-color: var(--site-body-bg)`, `color: var(--site-body-fg)`, `max-width: 1920px`, `overflow: hidden`, theme transition `0.3s ease`.
+- `input`, `button`, `a`: `min-height/min-width: var(--control_min_*)`, `font-family: inherit`.
+
+## Naming & file organization
+
+- **snake_case** class names: `menu_tray`, `action_button`, `outer_container`.
+- **Astro**: colocated `<style>` block in the page/component file.
+- **React**: dedicated `.css` file imported at top (`import "./MenuTray.css"`); use `className`, not Tailwind or CSS-in-JS.
+- State classes: modifier suffix/prefix pattern — `open_menu_tray`, `menu_button_opened_tray`, `menu_button_top_bar_opened`.
+
+## Layout & responsive
+
+Standard breakpoints (only these unless there is a strong reason):
+
+- `@media (min-width: 768px)`
+- `@media (min-width: 1024px)`
+
+Mobile-first: fixed overlays at bottom/top (`position: fixed`), full-width panels. Desktop (`1024px+`): switch to `position: relative`, constrained widths (e.g. `550px` content column), remove glass background where appropriate.
+
+## Components
+
+### Buttons / CTAs (`index.astro` pattern)
+
+```css
+.action_button {
+  height: var(--control_min_height);
+  min-width: var(--control_min_width);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  font-weight: 700;
+  background: var(--site-body-fg);
+  color: var(--site-body-bg);
+}
+```
+
+Primary links inside buttons: `.action_button_link` with `color: inherit`, no underline.
+
+### Glass panels
+
+```css
+background: var(--glassed_background);
+backdrop-filter: blur(10px);
+```
+
+### Text highlights (`index.astro` spans)
+
+Inline keyword chips: `display: inline-flex`, `background: var(--site-body-bg)`, `color: var(--site-body-fg)`, `box-shadow: 3px 3px 3px rgba(0,0,0,.4)` on mobile; remove shadow on `1024px+`.
+
+### Site menu (`MenuButton`, `MenuTray`)
+
+- Menu button: fixed `top/right: 20px`, square control using `--control_min_height`, `background: var(--site-body-fg)`, bars use `var(--site-body-bg)`.
+- Tray: slides from right (`width: 0` → `50%` open; `25%` at `1024px+`), `background: var(--site-body-bg)`, `box-shadow: -5px 0 10px rgba(0,0,0,.15)`.
+- Nav links: `color: var(--site-body-fg)`, hover via `font-weight: 900` (not background swaps).
+- Hamburger animation: `transition: all 500ms ease`, rotate bars to form X when open.
+
+### Icons (`MenuIcons.jsx`)
+
+- Inline SVG, `20×20` (or `18×14` for hamburger), `stroke="currentColor"` / `fill="currentColor"`, `aria-hidden="true"`.
+- Reuse `navIconProps` pattern for nav icons; inherit color from parent.
+
+## Typography
+
+- Headings: heavy weight (`800`), tight line-height in `rem`, `color: var(--site-body-fg)`.
+- Body: `font-weight: 600`, `line-height: 2rem`, `font-size: 1rem`; scale up at `1024px+`.
+
+## Do not
+
+- Introduce Tailwind, styled-components, or new color hex values when a token exists.
+- Use camelCase CSS class names.
+- Add one-off breakpoints (e.g. `640px`, `1280px`) without matching existing pages.
+- Override `body` overflow or max-width without checking impact on the fixed home layout and menu tray.
