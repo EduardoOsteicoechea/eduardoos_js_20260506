@@ -6,6 +6,35 @@ export const POST_EDITOR_PASSWORD = getEnvOrDefault(
   'POST_EDITOR_PASSWORD',
   'editor-dev',
 );
+
+export const JWT_ACCESS_SECRET = getEnvOrDefault(
+  'JWT_ACCESS_SECRET',
+  'dev-jwt-access-secret-change-me',
+);
+export const JWT_ACCESS_TTL_SECONDS = getEnvNumber('JWT_ACCESS_TTL_SECONDS', 900);
+export const JWT_REFRESH_TTL_MS = getEnvNumber(
+  'JWT_REFRESH_TTL_MS',
+  7 * 24 * 60 * 60 * 1000,
+);
+export const AUTH_COOKIE_NAME = getEnvOrDefault(
+  'AUTH_COOKIE_NAME',
+  'eduardoos_refresh',
+);
+export const AUTH_COOKIE_DOMAIN = getEnvOrDefault('AUTH_COOKIE_DOMAIN', '');
+export const AUTH_COOKIE_SECURE =
+  getEnvOrDefault('AUTH_COOKIE_SECURE', 'false').toLowerCase() === 'true';
+export const APP_PUBLIC_URL = getEnvOrDefault(
+  'APP_PUBLIC_URL',
+  'http://localhost:4321',
+);
+export const GOOGLE_EMAIL_APP_EMAIL = getEnvOrDefault(
+  'GOOGLE_EMAIL_APP_EMAIL',
+  '',
+);
+export const GOOGLE_EMAIL_APP_PASSWORD = getEnvOrDefault(
+  'GOOGLE_EMAIL_APP_PASSWORD',
+  '',
+);
 export const SERIES_DATA_ROOT = getEnvOrDefault(
   'SERIES_DATA_ROOT',
   join(process.cwd(), 'public/data/series'),

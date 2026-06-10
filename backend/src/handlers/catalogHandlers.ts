@@ -1,19 +1,9 @@
 import type { Request, Response } from 'express';
-import { POST_EDITOR_PASSWORD } from '../constants/index.js';
 import { requestFrontendRebuild } from '../deployHook.js';
 import {
   isPostsDbConfigured,
   savePostsDbCatalogEntry,
 } from '../postsDbClient.js';
-
-function readEditorPassword(body: unknown): string {
-  if (!body || typeof body !== 'object') return '';
-  return String((body as { password?: string }).password ?? '').trim();
-}
-
-function isEditorPasswordValid(password: string): boolean {
-  return Boolean(password) && password === POST_EDITOR_PASSWORD;
-}
 
 export async function saveCatalogMetadata(req: Request, res: Response) {
   if (!isPostsDbConfigured()) {
@@ -21,11 +11,6 @@ export async function saveCatalogMetadata(req: Request, res: Response) {
       ok: false,
       error: 'Posts database is not configured',
     });
-  }
-
-  const password = readEditorPassword(req.body);
-  if (!isEditorPasswordValid(password)) {
-    return res.status(401).json({ ok: false, error: 'Contraseña incorrecta' });
   }
 
   const body = req.body && typeof req.body === 'object' ? req.body : {};

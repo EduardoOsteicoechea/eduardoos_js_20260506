@@ -1,14 +1,11 @@
-export async function saveCatalogMetadata(payload, password) {
-  const response = await fetch('/api/catalog/save', {
+import { authorizedFetch } from '../../lib/auth/authStore';
+
+export async function saveCatalogMetadata(payload) {
+  const { response, data } = await authorizedFetch('/api/catalog/save', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      ...payload,
-      password,
-    }),
+    body: JSON.stringify(payload),
   });
 
-  const data = await response.json().catch(() => ({}));
   return { response, data };
 }
 

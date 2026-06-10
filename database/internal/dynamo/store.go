@@ -15,11 +15,16 @@ type Store struct {
 	client       *dynamodb.Client
 	catalogTable string
 	postsTable   string
+	usersTable   string
+	refreshTable string
 }
 
 func Open(cfg config.Config) (*Store, error) {
 	if cfg.DynamoCatalogTable == "" || cfg.DynamoPostsTable == "" {
 		return nil, fmt.Errorf("DYNAMODB_CATALOG_TABLE and DYNAMODB_POSTS_TABLE are required")
+	}
+	if cfg.DynamoUsersTable == "" || cfg.DynamoRefreshTokensTable == "" {
+		return nil, fmt.Errorf("DYNAMODB_USERS_TABLE and DYNAMODB_REFRESH_TOKENS_TABLE are required")
 	}
 
 	loadOpts := []func(*awsconfig.LoadOptions) error{
@@ -48,6 +53,8 @@ func Open(cfg config.Config) (*Store, error) {
 		client:       dynamodb.NewFromConfig(awsCfg, clientOpts...),
 		catalogTable: cfg.DynamoCatalogTable,
 		postsTable:   cfg.DynamoPostsTable,
+		usersTable:   cfg.DynamoUsersTable,
+		refreshTable: cfg.DynamoRefreshTokensTable,
 	}, nil
 }
 

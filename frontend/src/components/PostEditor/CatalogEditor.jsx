@@ -3,7 +3,6 @@ import EditorActionButton from '../EditorActionButton';
 import EditorStatusNotice from '../EditorStatusNotice';
 import { UI_FIELD_CLASS } from '../../lib/uiClasses';
 import CatalogSelect from './CatalogSelect';
-import SavePasswordModal from './SavePasswordModal';
 import {
   canEditChapter,
   getEffectiveChapter,
@@ -11,7 +10,6 @@ import {
   mergeChapterOptions,
   mergeSeriesOptions,
 } from './catalogHelpers';
-import { validateEditorPassword } from './postEditorApi';
 import { fetchSeriesCatalog } from './seriesCatalogApi';
 import { fetchHubMetadata, saveCatalogMetadata } from './catalogEditorApi';
 
@@ -46,8 +44,6 @@ export default function CatalogEditor() {
   const [hubPosts, setHubPosts] = useState([]);
   const [hubLoading, setHubLoading] = useState(false);
   const [notice, setNotice] = useState(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalError, setModalError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const effectiveSerie = useMemo(() => getEffectiveSerie(form), [form]);
@@ -175,27 +171,16 @@ export default function CatalogEditor() {
     }));
   };
 
-  const openSaveModal = () => {
+  const handleSave = async () => {
     clearNotice();
     if (!effectiveSerie) {
       showNotice('warning', 'Selecciona una serie.');
       return;
     }
-    setModalError('');
-    setModalOpen(true);
-  };
 
-  const handleSaveWithPassword = async (password) => {
     setIsSubmitting(true);
-    setModalError('');
 
     try {
-      const auth = await validateEditorPassword(password);
-      if (!auth.response.ok || auth.data?.valid !== true) {
-        setModalError(auth.data?.error ?? 'Contraseña incorrecta.');
-        return;
-      }
-
       const hub =
         effectiveChapter && (hubForm.section || hubForm.description || hubForm.purpose)
           ? {
@@ -216,27 +201,23 @@ export default function CatalogEditor() {
             }
           : undefined;
 
-      const save = await saveCatalogMetadata(
-        {
-          series_slug: effectiveSerie,
-          series_name: form.seriesName.trim() || effectiveSerie,
-          chapter: hub ? effectiveChapter || undefined : undefined,
-          hub,
-        },
-        password,
-      );
+      const save = await saveCatalogMetadata({
+        series_slug: effectiveSerie,
+        series_name: form.seriesName.trim() || effectiveSerie,
+        chapter: hub ? effectiveChapter || undefined : undefined,
+        hub,
+      });
 
       if (!save.response.ok) {
-        setModalError(save.data?.error ?? 'No se pudo guardar el catálogo.');
+        showNotice('warning', save.data?.error ?? 'No se pudo guardar el catálogo.');
         return;
       }
 
-      setModalOpen(false);
       showNotice('success', 'Metadatos del catálogo guardados.');
       const refreshed = await fetchSeriesCatalog();
       setCatalog(refreshed);
-    } catch (error) {
-      setModalError('Error de red al contactar el servidor.');
+    } catch {
+      showNotice('warning', 'Error de red al contactar el servidor.');
     } finally {
       setIsSubmitting(false);
     }
@@ -249,8 +230,8 @@ export default function CatalogEditor() {
         <p className="catalog-editor__intro theme-muted">
           Edita el nombre de las series y los metadatos de cada sección (capítulo).
         </p>
-        <EditorActionButton variant="primary" onClick={openSaveModal}>
-          Guardar catálogo
+        <EditorActionButton variant="primary" onClick={handleSave} disabled={isSubmitting}>
+          {isSubmitting ? 'Guardando…' : 'Guardar catálogo'}
         </EditorActionButton>
       </header>
 
@@ -421,15 +402,6 @@ export default function CatalogEditor() {
         </p>
       )}
 
-      <SavePasswordModal
-        open={modalOpen}
-        isSubmitting={isSubmitting}
-        error={modalError}
-        onClose={() => {
-          if (!isSubmitting) setModalOpen(false);
-        }}
-        onConfirm={handleSaveWithPassword}
-      />
     </div>
   );
 }

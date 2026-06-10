@@ -1,6 +1,5 @@
 import type { Request, Response } from 'express';
 import multer from 'multer';
-import { POST_EDITOR_PASSWORD } from '../constants/index.js';
 import { buildMediaProxyUrl, proxyUrlForS3List } from '../mediaProxy.js';
 import {
   fetchS3List,
@@ -13,15 +12,6 @@ const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 50 * 1024 * 1024 },
 });
-
-function readEditorPassword(body: unknown): string {
-  if (!body || typeof body !== 'object') return '';
-  return String((body as { password?: string }).password ?? '').trim();
-}
-
-function isEditorPasswordValid(password: string): boolean {
-  return Boolean(password) && password === POST_EDITOR_PASSWORD;
-}
 
 function ensureConfigured(res: Response): boolean {
   if (!isS3Configured()) {
@@ -91,11 +81,6 @@ export const uploadMedia = [
   upload.single('file'),
   async (req: Request, res: Response) => {
     if (!ensureConfigured(res)) return;
-
-    const password = readEditorPassword(req.body);
-    if (!isEditorPasswordValid(password)) {
-      return res.status(401).json({ ok: false, error: 'Contraseña incorrecta' });
-    }
 
     if (!req.file) {
       return res.status(400).json({ ok: false, error: 'file es obligatorio' });

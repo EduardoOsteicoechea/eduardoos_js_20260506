@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/eduardoos/database/internal/authdata"
 	"github.com/eduardoos/database/internal/config"
 	"github.com/eduardoos/database/internal/db"
 	"github.com/eduardoos/database/internal/dynamo"
@@ -41,6 +42,9 @@ func main() {
 
 	mux := http.NewServeMux()
 	handler.Register(mux, cfg, store)
+	if authStore, ok := store.(authdata.Store); ok {
+		handler.RegisterAuth(mux, cfg, authStore)
+	}
 
 	if err := http.ListenAndServe(cfg.Addr(), mux); err != nil {
 		log.Fatal(err)

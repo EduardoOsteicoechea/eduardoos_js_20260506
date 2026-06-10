@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { apiRouter } from './router/index.js';
 import { CORS_ORIGINS_SET, PORT } from './constants/index.js';
 import { installLogShip } from './logship.js';
@@ -10,6 +11,7 @@ installLogShip('backend');
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use(
   cors({

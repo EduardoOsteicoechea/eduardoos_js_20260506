@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import EditorActionButton from '../EditorActionButton';
 import { UI_FIELD_CLASS } from '../../lib/uiClasses';
 import EditorStatusNotice from '../EditorStatusNotice';
-import SavePasswordModal from './SavePasswordModal';
 import CatalogSelect from './CatalogSelect';
 import PostEditorPreviewModal from './PostEditorPreviewModal';
 import { PageActionToolbar } from '../PageActionToolbar';
@@ -28,11 +27,7 @@ import { SectionEditModal } from './sections';
 import SectionUnitsPreview from './sections/SectionUnitsPreview';
 import { SectionMoveDownIcon, SectionMoveUpIcon } from './SectionMoveIcons';
 import { downloadArticlePdf } from '../../lib/articlePdfDownload';
-import {
-  readStoredEditorPassword,
-  rememberEditorPassword,
-} from './editorPasswordSession';
-import { savePostPayloadWithAssets, validateEditorPassword } from './postEditorApi';
+import { savePostPayloadWithAssets } from './postEditorApi';
 import {
   fetchNextArticleId,
   fetchSeriesArticle,
@@ -69,10 +64,8 @@ export default function PostEditor() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [catalog, setCatalog] = useState({ series: [], chapters: {} });
   const [catalogLoading, setCatalogLoading] = useState(true);
-  const [modalOpen, setModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
-  const [modalError, setModalError] = useState('');
   const [notice, setNotice] = useState(null);
   const [articleIdLoading, setArticleIdLoading] = useState(false);
   const [existingArticles, setExistingArticles] = useState([]);
@@ -83,17 +76,6 @@ export default function PostEditor() {
   const [previewModalOpen, setPreviewModalOpen] = useState(false);
   const [deleteSectionId, setDeleteSectionId] = useState(null);
   const [deleteSectionInput, setDeleteSectionInput] = useState('');
-  const editorPasswordRef = useRef(readStoredEditorPassword());
-  const [editorPassword, setEditorPassword] = useState(() =>
-    readStoredEditorPassword(),
-  );
-
-  const storeEditorPassword = useCallback((password) => {
-    const clean = rememberEditorPassword(password);
-    editorPasswordRef.current = clean;
-    setEditorPassword(clean);
-  }, []);
-
   const showNotice = useCallback((variant, message) => {
     if (!message?.trim()) {
       setNotice(null);
@@ -534,8 +516,51 @@ export default function PostEditor() {
     showNotice('success', `Título nuevo "${trimmedTitle}" listo para crear artículo.`);
   };
 
+  const handleSave = useCallback(async () => {
+    setIsSubmitting(true);
+
+    const payload = buildPostPayload({
+      ...form,
+      title: effectiveTitle,
+      articleId: effectiveArticleId,
+      folderName: form.folderName || effectiveArticleId,
+    });
+
+    try {
+      const save = await savePostPayloadWithAssets(payload);
+      console.log('Save /api/post/editor/:', save.response.status, save.data);
+
+      if (!save.response.ok) {
+        showNotice('warning', save.data?.error ?? 'No se pudo guardar el artículo.');
+        return;
+      }
+
+      showNotice('success', 'Artículo guardado correctamente.');
+
+      if (!selectedExistingArticle?.articleId && effectiveSerie && effectiveChapter) {
+        const next = await fetchNextArticleId(effectiveSerie, effectiveChapter);
+        setForm((previous) => ({
+          ...previous,
+          articleId: next.articleId,
+        }));
+      }
+    } catch (error) {
+      console.error('PostEditor save failed:', error);
+      showNotice('warning', 'Error de red al contactar el servidor.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [
+    effectiveArticleId,
+    effectiveChapter,
+    effectiveSerie,
+    effectiveTitle,
+    form,
+    selectedExistingArticle?.articleId,
+    showNotice,
+  ]);
+
   const openSaveModal = useCallback(() => {
-    setModalError('');
     clearNotice();
 
     const saveDebug = {
@@ -585,8 +610,8 @@ export default function PostEditor() {
       return;
     }
 
-    console.log('[PostEditor] save validation passed, opening password modal');
-    setModalOpen(true);
+    console.log('[PostEditor] save validation passed');
+    void handleSave();
   }, [
     articleIdLoading,
     effectiveArticleId,
@@ -601,6 +626,7 @@ export default function PostEditor() {
     titleIsCustom,
     clearNotice,
     showNotice,
+    handleSave,
   ]);
 
   const validateEditorForExport = useCallback(() => {
@@ -665,55 +691,6 @@ export default function PostEditor() {
       setIsGeneratingPdf(false);
     }
   }, [clearNotice, showNotice, validateEditorForExport]);
-
-  const handleSaveWithPassword = async (password) => {
-    setIsSubmitting(true);
-    setModalError('');
-
-    const payload = buildPostPayload({
-      ...form,
-      title: effectiveTitle,
-      articleId: effectiveArticleId,
-      folderName: form.folderName || effectiveArticleId,
-    });
-
-    try {
-      const auth = await validateEditorPassword(password);
-      console.log('Auth /api/auth/post/editor/:', auth.response.status, auth.data);
-
-      if (!auth.response.ok || auth.data?.valid !== true) {
-        setModalError(
-          auth.data?.error ?? 'Contraseña incorrecta. No se guardó el artículo.',
-        );
-        return;
-      }
-
-      const save = await savePostPayloadWithAssets(payload, password);
-      console.log('Save /api/post/editor/:', save.response.status, save.data);
-
-      if (!save.response.ok) {
-        setModalError(save.data?.error ?? 'No se pudo guardar el artículo.');
-        return;
-      }
-
-      storeEditorPassword(password);
-      setModalOpen(false);
-      showNotice('success', 'Artículo guardado correctamente.');
-
-      if (!selectedExistingArticle?.articleId && effectiveSerie && effectiveChapter) {
-        const next = await fetchNextArticleId(effectiveSerie, effectiveChapter);
-        setForm((previous) => ({
-          ...previous,
-          articleId: next.articleId,
-        }));
-      }
-    } catch (error) {
-      console.error('PostEditor save failed:', error);
-      setModalError('Error de red al contactar el servidor.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   const chapterFieldEnabled = canEditChapter(form);
   const activityActions = useMemo(
@@ -1045,21 +1022,9 @@ export default function PostEditor() {
         ))}
       </section>
 
-      <SavePasswordModal
-        open={modalOpen}
-        isSubmitting={isSubmitting}
-        error={modalError}
-        onClose={() => {
-          if (!isSubmitting) setModalOpen(false);
-        }}
-        onConfirm={handleSaveWithPassword}
-      />
-
       {editingSection ? (
         <SectionEditModal
           section={editingSection}
-          editorPassword={editorPassword}
-          onRememberPassword={storeEditorPassword}
           onSave={(updatedSection) => {
             updateSection(updatedSection.id, {
               heading: updatedSection.heading,

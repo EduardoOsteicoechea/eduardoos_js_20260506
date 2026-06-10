@@ -114,11 +114,6 @@ export async function savePostEditorArticle(req: Request, res: Response) {
     });
   }
 
-  const password = readEditorPassword(req.body);
-  if (!isEditorPasswordValid(password)) {
-    return res.status(401).json({ ok: false, error: 'Contraseña incorrecta' });
-  }
-
   try {
     const rawPayload = readSavePayload(req.body);
     const payload = normalizeMediaUrls(ensureArticlePayload(rawPayload));

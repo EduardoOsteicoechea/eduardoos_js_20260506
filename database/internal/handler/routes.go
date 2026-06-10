@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/eduardoos/database/internal/auth"
+	"github.com/eduardoos/database/internal/authdata"
 	"github.com/eduardoos/database/internal/config"
 	"github.com/eduardoos/database/internal/db"
 )
@@ -29,4 +30,25 @@ func Register(mux *http.ServeMux, cfg config.Config, store db.DataStore) {
 	registerProtected("POST /catalog/save", api.SaveCatalog)
 	registerProtected("POST /logs", api.AppendLogs)
 	registerProtected("GET /logs", api.QueryLogs)
+}
+
+func RegisterAuth(mux *http.ServeMux, cfg config.Config, store authdata.Store) {
+	authAPI := &AuthAPI{Store: store}
+
+	registerProtected := func(pattern string, handler http.HandlerFunc) {
+		mux.Handle(pattern, auth.Middleware(cfg, handler))
+	}
+
+	registerProtected("POST /auth/register", authAPI.Register)
+	registerProtected("POST /auth/login", authAPI.Login)
+	registerProtected("GET /auth/user", authAPI.GetUser)
+	registerProtected("PATCH /auth/profile", authAPI.UpdateProfile)
+	registerProtected("POST /auth/verify-email", authAPI.VerifyEmail)
+	registerProtected("POST /auth/resend-verification", authAPI.ResendVerification)
+	registerProtected("POST /auth/forgot-password", authAPI.ForgotPassword)
+	registerProtected("POST /auth/reset-password", authAPI.ResetPassword)
+	registerProtected("POST /auth/refresh/issue", authAPI.IssueRefresh)
+	registerProtected("POST /auth/refresh/rotate", authAPI.RotateRefresh)
+	registerProtected("POST /auth/refresh/revoke", authAPI.RevokeRefresh)
+	registerProtected("POST /auth/logout-all", authAPI.LogoutAll)
 }

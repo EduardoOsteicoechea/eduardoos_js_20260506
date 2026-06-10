@@ -7,26 +7,33 @@ class Route {
 }
 
 const privateRoutes = [
-
+    new Route("/post/editor", "Post Editor", "Create and edit articles.")
+    , new Route("/catalog", "Post Catalog Editor", "Manage series catalog metadata.")
+    , new Route("/logs", "Logs", "Service logs (admin).")
+    , new Route("/media", "Media", "Upload and browse media.")
 ];
 
 const publicRoutes = [
     new Route("/", "Home", "Start page and discovery of the site.")
-    , new Route("/series", "Posts Series", "Create and Edit articles.")
-    , new Route("/post/editor", "Post Editor", "Create and Edit articles.")
-    , new Route("/catalog", "Post Catalog Editor", "Create and Edit articles.")
-    , new Route("/logs", "Logs", "Create and Edit articles.")
-    , new Route("/media", "Media", "Create and Edit articles.")
-    , new Route("/server/health", "Server Health", "Create and Edit articles.")
+    , new Route("/series", "Posts Series", "Browse biblical studies.")
+    , new Route("/auth/login", "Login", "Sign in to your account.")
+    , new Route("/auth/register", "Register", "Create a new account.")
+    , new Route("/auth/profile", "Profile", "Your account profile.")
+    , new Route("/server/health", "Server Health", "Service health dashboard.")
 ];
 
 
 const allRoutes = [...privateRoutes, ...publicRoutes];
 
+function canSeePrivateRoutes(session) {
+    if (!session?.isAuthenticated) return false;
+    const roles = session.roles ?? [];
+    return roles.includes('editor') || roles.includes('admin');
+}
+
 export default function getRoutes(session) {
-    if (session && session.isAuthenticated) {
+    if (canSeePrivateRoutes(session)) {
         return allRoutes;
-    } else {
-        return publicRoutes;
     }
+    return publicRoutes;
 }

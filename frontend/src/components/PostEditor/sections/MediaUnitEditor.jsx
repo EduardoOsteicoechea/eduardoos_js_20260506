@@ -1,8 +1,6 @@
 import { useRef, useState } from 'react';
 import { uploadMedia, listMedia } from '../../../lib/mediaApi';
 import { resolveMediaUrl } from '../../../lib/mediaUrl';
-import { validateEditorPassword } from '../postEditorApi';
-import SavePasswordModal from '../SavePasswordModal';
 import { inputClassName } from './editorInputStyles';
 
 const MEDIA_LABEL_BY_TYPE = {
@@ -11,34 +9,24 @@ const MEDIA_LABEL_BY_TYPE = {
   audio: 'Audio',
 };
 
-export default function MediaUnitEditor({
-  type,
-  draft,
-  onChange,
-  editorPassword = '',
-  onRememberPassword,
-}) {
+export default function MediaUnitEditor({ type, draft, onChange }) {
   const fileInputRef = useRef(null);
-  const pendingFileRef = useRef(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
   const [previewError, setPreviewError] = useState(false);
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [libraryLoading, setLibraryLoading] = useState(false);
   const [libraryObjects, setLibraryObjects] = useState([]);
-  const [passwordModalOpen, setPasswordModalOpen] = useState(false);
-  const [passwordModalError, setPasswordModalError] = useState('');
-  const [passwordSubmitting, setPasswordSubmitting] = useState(false);
 
   const previewSrc = resolveMediaUrl(draft.src);
 
-  const uploadFile = async (file, password) => {
+  const uploadFile = async (file) => {
     setUploading(true);
     setUploadError('');
     setPreviewError(false);
 
     try {
-      const result = await uploadMedia(file, { password });
+      const result = await uploadMedia(file);
       const nextUrl = String(result.url ?? result.key ?? '').trim();
       onChange({
         ...draft,
@@ -61,210 +49,125 @@ export default function MediaUnitEditor({
 
   const handleUpload = async (file) => {
     if (!file) return;
-
-    const password = String(editorPassword ?? '').trim();
-    if (!password) {
-      pendingFileRef.current = file;
-      setPasswordModalError('');
-      setPasswordModalOpen(true);
-      return;
-    }
-
-    await uploadFile(file, password);
+    await uploadFile(file);
   };
 
-  const handlePasswordConfirm = async (password) => {
-    setPasswordSubmitting(true);
-    setPasswordModalError('');
-
-    try {
-      const auth = await validateEditorPassword(password);
-      if (!auth.response.ok || auth.data?.valid !== true) {
-        setPasswordModalError(auth.data?.error ?? 'Contraseña incorrecta.');
-        return;
-      }
-
-      onRememberPassword?.(password);
-
-      const pendingFile = pendingFileRef.current;
-      pendingFileRef.current = null;
-      if (pendingFile) {
-        await uploadFile(pendingFile, password);
-      }
-    } catch {
-      setPasswordModalError('Error de red al validar la contraseña.');
-    } finally {
-      setPasswordSubmitting(false);
-    }
-  };
-
-  const loadLibrary = async () => {
+  const openLibrary = async () => {
     setLibraryOpen(true);
     setLibraryLoading(true);
-    setUploadError('');
-
     try {
-      const result = await listMedia();
-      setLibraryObjects(result.objects ?? []);
+      const data = await listMedia();
+      setLibraryObjects(Array.isArray(data.objects) ? data.objects : []);
     } catch (error) {
       setUploadError(
-        error instanceof Error ? error.message : 'No se pudo cargar la biblioteca S3',
+        error instanceof Error ? error.message : 'No se pudo cargar la biblioteca',
       );
-      setLibraryObjects([]);
     } finally {
       setLibraryLoading(false);
     }
   };
 
+  const label = MEDIA_LABEL_BY_TYPE[type] ?? 'Media';
+
   return (
-    <div className="media-unit-editor">
-      <div className="media-unit-editor__toolbar">
+    <div className="post-editor-unit post-editor-unit--media">
+      <label className="post-editor__label">{label}</label>
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept={
+          type === 'image'
+            ? 'image/*'
+            : type === 'video'
+              ? 'video/*'
+              : 'audio/*'
+        }
+        onChange={(event) => handleUpload(event.target.files?.[0])}
+        disabled={uploading}
+      />
+
+      <div className="post-editor-media-actions">
         <button
           type="button"
-          className="theme-toolbar-btn"
+          className="ui-control"
           onClick={() => fileInputRef.current?.click()}
           disabled={uploading}
         >
-          {uploading ? 'Subiendo…' : 'Subir a S3'}
+          {uploading ? 'Subiendo…' : 'Subir archivo'}
         </button>
-        <button
-          type="button"
-          className="theme-toolbar-btn"
-          onClick={loadLibrary}
-          disabled={libraryLoading}
-        >
-          {libraryLoading ? 'Cargando…' : 'Biblioteca S3'}
+        <button type="button" className="ui-control" onClick={openLibrary}>
+          Biblioteca
         </button>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept={
-            type === 'image'
-              ? 'image/*'
-              : type === 'video'
-                ? 'video/*'
-                : 'audio/*'
-          }
-          hidden
-          onChange={(event) => handleUpload(event.target.files?.[0])}
-        />
       </div>
 
-      <p className="media-unit-editor__prefix theme-muted">
-        Los archivos se guardan en el bucket bajo <code>media/</code>. La asociación
-        con cada artículo vive en los datos del post.
-      </p>
+      {uploadError ? <p className="post-editor__error">{uploadError}</p> : null}
 
-      <input
-        id={`${type}-url`}
-        type="text"
-        value={draft.src ?? ''}
-        onChange={(event) => {
-          setPreviewError(false);
-          onChange({ ...draft, src: event.target.value });
-        }}
-        placeholder={`URL o ruta de ${MEDIA_LABEL_BY_TYPE[type].toLowerCase()}`}
-        aria-label={`URL de ${MEDIA_LABEL_BY_TYPE[type]}`}
-        className={inputClassName}
-      />
-
-      <input
-        id={`${type}-name`}
-        type="text"
-        value={draft.name ?? ''}
-        onChange={(event) => onChange({ ...draft, name: event.target.value })}
-        placeholder="Nombre del recurso"
-        aria-label="Nombre del recurso"
-        className={inputClassName}
-      />
-
-      <input
-        id={`${type}-label`}
-        type="text"
-        value={draft.label ?? ''}
-        onChange={(event) => onChange({ ...draft, label: event.target.value })}
-        placeholder="Etiqueta accesible"
-        aria-label="Etiqueta accesible"
-        className={inputClassName}
-      />
-
-      {uploadError ? (
-        <p className="media-unit-editor__error" role="alert">
-          {uploadError}
-        </p>
-      ) : null}
-
-      {libraryOpen ? (
-        <ul className="media-unit-editor__library">
-          {libraryObjects.length === 0 ? (
-            <li className="theme-muted">No hay archivos en media/.</li>
-          ) : (
-            libraryObjects.map((item) => (
-              <li key={item.key}>
-                <button
-                  type="button"
-                  className="media-unit-editor__library-item"
-                  onClick={() => {
-                    setPreviewError(false);
-                    onChange({
-                      ...draft,
-                      src: resolveMediaUrl(item.url ?? item.key),
-                      name: draft.name?.trim() ? draft.name : item.name,
-                    });
-                    setLibraryOpen(false);
-                  }}
-                >
-                  {item.name}
-                </button>
-              </li>
-            ))
-          )}
-        </ul>
-      ) : null}
-
-      {previewSrc && !previewError ? (
-        <div className="media-unit-editor__preview">
+      {previewSrc ? (
+        <div className="post-editor-media-preview">
           {type === 'image' ? (
             <img
               src={previewSrc}
-              alt={draft.label || draft.name || 'Vista previa'}
-              className="media-unit-editor__preview-image"
+              alt={draft.name || label}
               onError={() => setPreviewError(true)}
             />
           ) : type === 'video' ? (
-            <video
-              src={previewSrc}
-              controls
-              className="media-unit-editor__preview-video"
-              onError={() => setPreviewError(true)}
-            />
+            <video src={previewSrc} controls onError={() => setPreviewError(true)} />
           ) : (
-            <audio
-              src={previewSrc}
-              controls
-              className="media-unit-editor__preview-audio"
-              onError={() => setPreviewError(true)}
-            />
+            <audio src={previewSrc} controls onError={() => setPreviewError(true)} />
           )}
+          {previewError ? (
+            <p className="post-editor__error">No se pudo previsualizar el archivo.</p>
+          ) : null}
         </div>
       ) : null}
 
-      {previewError ? (
-        <p className="media-unit-editor__error">No se pudo cargar la vista previa.</p>
-      ) : null}
-
-      <SavePasswordModal
-        open={passwordModalOpen}
-        isSubmitting={passwordSubmitting}
-        error={passwordModalError}
-        onClose={() => {
-          if (!passwordSubmitting) {
-            setPasswordModalOpen(false);
-            pendingFileRef.current = null;
-          }
-        }}
-        onConfirm={handlePasswordConfirm}
+      <label className="post-editor__label">Nombre</label>
+      <input
+        className={inputClassName}
+        type="text"
+        value={draft.name ?? ''}
+        onChange={(event) => onChange({ ...draft, name: event.target.value })}
       />
+
+      {libraryOpen ? (
+        <div className="post-editor-media-library">
+          <div className="post-editor-media-library__header">
+            <strong>Biblioteca</strong>
+            <button
+              type="button"
+              className="ui-control"
+              onClick={() => setLibraryOpen(false)}
+            >
+              Cerrar
+            </button>
+          </div>
+          {libraryLoading ? (
+            <p>Cargando…</p>
+          ) : (
+            <ul>
+              {libraryObjects.map((object) => (
+                <li key={object.key}>
+                  <button
+                    type="button"
+                    className="ui-control"
+                    onClick={() => {
+                      onChange({
+                        ...draft,
+                        src: resolveMediaUrl(object.url ?? object.key),
+                        name: object.name ?? object.key,
+                      });
+                      setLibraryOpen(false);
+                    }}
+                  >
+                    {object.name ?? object.key}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -4,18 +4,20 @@ import {
   proxyChatbot,
 } from '../handlers/chatbotHandlers.js';
 import { downloadArticlePdf } from '../handlers/documentHandlers.js';
-import { saveCatalogMetadata } from '../handlers/catalogHandlers.js';
 import {
-  savePostEditorArticle,
-  validatePostEditorPassword,
-} from '../handlers/postHandlers.js';
+  forgotPassword,
+  loginUser,
+  refreshSession,
+  registerUser,
+  resendVerification,
+  resetPassword,
+  validateEmail,
+} from '../handlers/authHandlers.js';
 import { generatePdf, getPdfCapabilities } from '../handlers/pdfHandlers.js';
 import {
   listMedia,
   serveMediaObject,
-  uploadMedia,
 } from '../handlers/mediaHandlers.js';
-import { getServiceLogs } from '../handlers/logsHandlers.js';
 import {
   getSeriesArticle,
   getSeriesArticles,
@@ -35,13 +37,15 @@ publicRouter.get('/series/hub', getSeriesHub);
 publicRouter.get('/series/next-article-id', getSeriesNextArticleId);
 publicRouter.get('/series/articles', getSeriesArticles);
 publicRouter.get('/series/article', getSeriesArticle);
-publicRouter.post('/auth/post/editor/', validatePostEditorPassword);
-publicRouter.post('/post/editor/', savePostEditorArticle);
-publicRouter.post('/catalog/save', saveCatalogMetadata);
-publicRouter.get('/logs', getServiceLogs);
+publicRouter.post('/auth/register', registerUser);
+publicRouter.post('/auth/login', loginUser);
+publicRouter.post('/auth/refresh', refreshSession);
+publicRouter.post('/auth/validate-email', validateEmail);
+publicRouter.post('/auth/resend-verification', resendVerification);
+publicRouter.post('/auth/forgot-password', forgotPassword);
+publicRouter.post('/auth/reset-password', resetPassword);
 publicRouter.get('/media/list', listMedia);
 publicRouter.get('/media/object', serveMediaObject);
-publicRouter.post('/media/upload', ...uploadMedia);
 publicRouter.post('/documents/article-pdf', downloadArticlePdf);
 publicRouter.post('/chatbot', chatbotPublicAuth, proxyChatbot);
 publicRouter.get('/pdf/capabilities', getPdfCapabilities);
