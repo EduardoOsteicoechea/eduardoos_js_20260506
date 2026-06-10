@@ -4,6 +4,12 @@
   margin-left: auto;
   margin-right: auto;
   padding: 2.5rem 1.25rem;
+  background: var(--site-body-bg);
+  /* border: solid 1px red; */
+  height: 100vh;
+  width: 100vw;
+  max-width: var(--max_desktop_width);
+  overflow-y: auto;
 }
 
 .series-page--article {
