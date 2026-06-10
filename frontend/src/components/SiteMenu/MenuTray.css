@@ -23,7 +23,7 @@
   flex-direction: column;
   gap: 10px;
   /* border: solid 1px red; */
-  width: 100%;
+  width: 50vw;
   height: fit-content;
   margin-top: 80px;
   padding: 0 15px;
@@ -45,12 +45,18 @@
 
 @media (min-width: 768px) {
   .open_menu_tray {
-    width: 50%;
+    width: 25%;
+  }
+  .menu_tray_nav {
+    width: 25vw;
   }
 }
 
 @media (min-width: 1024px) {
   .open_menu_tray {
     width: 25%;
+  }
+  .menu_tray_nav {
+    width: 25vw;
   }
 }
