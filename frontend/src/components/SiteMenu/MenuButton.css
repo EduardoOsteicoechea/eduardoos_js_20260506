@@ -32,7 +32,7 @@ body.page-editor .menu_button {
   width: 100%;
   border-radius: 10px;
   transform: none;
-  transition: all 500ms ease;
+  transition: all 200ms ease;
 }
 
 .menu_button_top_bar{
@@ -45,11 +45,13 @@ body.page-editor .menu_button {
 }
 
 .menu_button_top_bar_opened{
+  width: 60%;
   top: 12%;
   transform: rotate(45deg);
   background: #fff;
 }
 .menu_button_bottom_bar_opened{
+  width: 60%;
   bottom: 13%;
   transform: rotate(135deg);
   background: #fff;

@@ -86,7 +86,7 @@ const pageEditor = activityBarMode === "editor";
     <main>
       <slot />
     </main>
-    {
+    <!-- {
       !pageHome && (
         <SiteChrome
           client:load
@@ -94,7 +94,7 @@ const pageEditor = activityBarMode === "editor";
           activityBarMode={activityBarMode}
         />
       )
-    }
+    } -->
     <SiteMenu client:load />
   </body>
 </html>
