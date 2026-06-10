@@ -1,10 +1,10 @@
-import "./MenuButton.css";
+import "./HeaderMenuButton.css";
 
-export default function MenuButton({ isTrayOpen, onToggle }) {
+export default function HeaderMenuButton({ isTrayOpen, onToggle }) {
   return (
     <button
       type="button"
-      className={`menu_button ${isTrayOpen ? "menu_button_opened_tray" : ""}`.trim()}
+      className={`header_menu_button ${isTrayOpen ? "menu_button_opened_tray" : ""}`.trim()}
       onClick={onToggle}
       aria-expanded={isTrayOpen}
       aria-label="Toggle Menu"

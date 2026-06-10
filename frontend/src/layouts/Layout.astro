@@ -83,6 +83,7 @@ const pageEditor = activityBarMode === "editor";
     }}
   >
     <PageBackground />
+    <Header client:load />
     <main>
       <slot />
     </main>
@@ -95,6 +96,11 @@ const pageEditor = activityBarMode === "editor";
         />
       )
     } -->
-    <Header client:load />
   </body>
 </html>
+
+<style>
+  main{
+    margin-top: var(--header_height) !important;
+  }
+</style>

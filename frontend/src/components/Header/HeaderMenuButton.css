@@ -1,8 +1,4 @@
-.menu_button {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 221;
+.header_menu_button {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,13 +14,12 @@
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   appearance: none;
+  margin-left: auto;
+  margin-right: 20px;
+  z-index: 221;
 }
-.menu_button:hover{
+.header_menu_button:hover{
   transform: scale(1.05);
-}
-
-body.page-editor .menu_button {
-  top: calc(var(--activity-bar-height) + 12px);
 }
 
 .menu_button_opened_tray {

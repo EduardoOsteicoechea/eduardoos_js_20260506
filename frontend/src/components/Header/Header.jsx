@@ -1,5 +1,5 @@
 import { useState } from "react";
-import MenuButton from "./MenuButton";
+import HeaderMenuButton from "./HeaderMenuButton";
 import MenuTray from "./MenuTray";
 import getRoutes from "./routes";
 import "./Header.css";
@@ -14,7 +14,7 @@ export default function Header() {
   return (
     <div className="header">
       <MenuTray isTrayOpen={isTrayOpen} getRoutes={getRoutes} />
-      <MenuButton isTrayOpen={isTrayOpen} onToggle={toggleTray} />
+      <HeaderMenuButton isTrayOpen={isTrayOpen} onToggle={toggleTray} />
     </div>
   );
 }
