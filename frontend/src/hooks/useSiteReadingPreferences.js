@@ -2,7 +2,7 @@ import { useCallback, useEffect, useSyncExternalStore } from 'react';
 import {
   ensureReadingPreferencesHydrated,
   decreaseReadingFontSize,
-  getReadingPreferencesRevision,
+  getReadingPreferencesServerSnapshot,
   getReadingPreferencesSnapshot,
   increaseReadingFontSize,
   setReadingFontFamily,
@@ -18,13 +18,11 @@ export function useSiteReadingPreferences() {
     ensureReadingPreferencesHydrated();
   }, []);
 
-  useSyncExternalStore(
+  const snapshot = useSyncExternalStore(
     subscribeReadingPreferences,
-    getReadingPreferencesRevision,
-    () => 0,
+    getReadingPreferencesSnapshot,
+    getReadingPreferencesServerSnapshot,
   );
-
-  const snapshot = getReadingPreferencesSnapshot();
 
   const onToggleTheme = useCallback(() => {
     toggleReadingTheme();

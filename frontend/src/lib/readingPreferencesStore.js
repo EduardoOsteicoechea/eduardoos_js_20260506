@@ -41,6 +41,16 @@ export function getReadingPreferencesSnapshot() {
   return { theme, fontFamilyId, baseFontSize, ready: hydrated };
 }
 
+/** SSR / first client paint — must match before localStorage hydration. */
+export function getReadingPreferencesServerSnapshot() {
+  return {
+    theme: THEMES.light,
+    fontFamilyId: 'montserrat',
+    baseFontSize: 18,
+    ready: false,
+  };
+}
+
 function hydrateFromStorage() {
   theme = getStoredTheme();
   fontFamilyId = getStoredFontFamily();
@@ -52,8 +62,6 @@ function hydrateFromStorage() {
 }
 
 if (typeof window !== 'undefined') {
-  hydrateFromStorage();
-
   const media = window.matchMedia('(prefers-color-scheme: dark)');
   media.addEventListener('change', () => {
     const stored = localStorage.getItem(STORAGE_KEYS.theme);
