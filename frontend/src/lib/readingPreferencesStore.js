@@ -37,18 +37,38 @@ export function subscribeReadingPreferences(listener) {
   return () => listeners.delete(listener);
 }
 
+/** Cached for useSyncExternalStore — must be a stable reference. */
+const READING_PREFERENCES_SERVER_SNAPSHOT = Object.freeze({
+  theme: THEMES.light,
+  fontFamilyId: 'montserrat',
+  baseFontSize: 18,
+  ready: false,
+});
+
+let cachedClientSnapshot = READING_PREFERENCES_SERVER_SNAPSHOT;
+
 export function getReadingPreferencesSnapshot() {
-  return { theme, fontFamilyId, baseFontSize, ready: hydrated };
+  if (
+    cachedClientSnapshot.theme === theme &&
+    cachedClientSnapshot.fontFamilyId === fontFamilyId &&
+    cachedClientSnapshot.baseFontSize === baseFontSize &&
+    cachedClientSnapshot.ready === hydrated
+  ) {
+    return cachedClientSnapshot;
+  }
+
+  cachedClientSnapshot = {
+    theme,
+    fontFamilyId,
+    baseFontSize,
+    ready: hydrated,
+  };
+  return cachedClientSnapshot;
 }
 
 /** SSR / first client paint — must match before localStorage hydration. */
 export function getReadingPreferencesServerSnapshot() {
-  return {
-    theme: THEMES.light,
-    fontFamilyId: 'montserrat',
-    baseFontSize: 18,
-    ready: false,
-  };
+  return READING_PREFERENCES_SERVER_SNAPSHOT;
 }
 
 function hydrateFromStorage() {
