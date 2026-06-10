@@ -2,7 +2,7 @@
 import "../styles/global.css";
 import PageBackground from "../components/PageBackground/PageBackground.astro";
 import { isHomePath } from "../config/homeLayout";
-import { SiteMenu } from "../components/SiteMenu";
+import { Header } from "../components/Header";
 import { SiteChrome } from "../components/SiteChrome";
 
 interface Props {
@@ -95,6 +95,6 @@ const pageEditor = activityBarMode === "editor";
         />
       )
     } -->
-    <SiteMenu client:load />
+    <Header client:load />
   </body>
 </html>

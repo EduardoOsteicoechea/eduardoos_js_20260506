@@ -452,6 +452,12 @@ html.dark .quiz-question__feedback {
 
 /* ── Article viewer ────────────────────────────────────────────── */
 
+.article-viewer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 .article-viewer__notice {
   margin-bottom: 1rem;
   border-radius: 0.5rem;

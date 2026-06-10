@@ -5,10 +5,7 @@ import EditorStatusNotice from '../EditorStatusNotice';
 import SavePasswordModal from './SavePasswordModal';
 import CatalogSelect from './CatalogSelect';
 import PostEditorPreviewModal from './PostEditorPreviewModal';
-import {
-  clearActivityBarLeftActions,
-  setActivityBarLeftActions,
-} from '../../lib/activityBarActionsStore';
+import { PageActionToolbar } from '../PageActionToolbar';
 import {
   canEditChapter,
   getEffectiveChapter,
@@ -761,13 +758,12 @@ export default function PostEditor() {
     [handleDownloadPdf, isGeneratingPdf, isSubmitting, openSaveModal],
   );
 
-  useEffect(() => {
-    setActivityBarLeftActions(activityActions);
-    return () => clearActivityBarLeftActions();
-  }, [activityActions]);
-
   return (
     <div className="post-editor">
+      <PageActionToolbar
+        actions={activityActions}
+        ariaLabel="Acciones del editor de artículos"
+      />
 
       <section className="post-editor-metadata" aria-label="Metadatos del artículo">
         <div className="post-editor-metadata__field">

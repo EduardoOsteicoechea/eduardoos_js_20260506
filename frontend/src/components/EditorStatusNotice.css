@@ -1,7 +1,3 @@
-body.page-editor .editor-status-notice {
-  top: calc(var(--activity-bar-height) + 0.75rem);
-}
-
 .editor-status-notice {
   pointer-events: auto;
   position: fixed;

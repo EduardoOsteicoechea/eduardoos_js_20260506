@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import ArticleGenerator from './ArticleGenerator';
+import { PageActionToolbar } from '../PageActionToolbar';
 import { useArticleActivityBarActions } from './useArticleActivityBarActions';
 import {
   getStoredViewMode,
@@ -160,7 +161,7 @@ export default function ArticleViewer({
     }
   }, [article, slug]);
 
-  const { viewModePanel } = useArticleActivityBarActions({
+  const { actions, viewModePanel } = useArticleActivityBarActions({
     viewMode,
     onSelectViewMode: setViewMode,
     onScrollToTop: scrollToTop,
@@ -176,7 +177,12 @@ export default function ArticleViewer({
   });
 
   return (
-    <>
+    <div className="article-viewer">
+      <PageActionToolbar
+        actions={actions}
+        ariaLabel="Acciones del visor de artículos"
+      />
+
       {reloadError ? (
         <p className="article-viewer__notice theme-border">
           Error al recargar: {reloadError}
@@ -201,6 +207,6 @@ export default function ArticleViewer({
       />
 
       {prefs.ready ? viewModePanel : null}
-    </>
+    </div>
   );
 }

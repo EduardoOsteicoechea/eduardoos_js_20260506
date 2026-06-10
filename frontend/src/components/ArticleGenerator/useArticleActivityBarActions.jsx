@@ -1,13 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
-import {
-  clearActivityBarLeftActions,
-  setActivityBarLeftActions,
-} from '../../lib/activityBarActionsStore';
+import { useMemo, useState } from 'react';
 
 import VisualizationModePanel from './VisualizationModePanel';
 
 /**
- * Registers article-specific activity bar actions in the global store and renders the view-mode panel.
+ * Builds article viewer toolbar actions and the view-mode picker panel.
  */
 export function useArticleActivityBarActions({
   viewMode,
@@ -35,7 +31,7 @@ export function useArticleActivityBarActions({
       const items = [
         {
           id: 'view-mode',
-          label: 'M',
+          label: 'Modo',
           title: 'Modo de visualización',
           active: viewModePickerOpen,
           onClick: () => setViewModePickerOpen((open) => !open),
@@ -45,7 +41,7 @@ export function useArticleActivityBarActions({
       if (hasSermon) {
         items.push({
           id: 'sermon',
-          label: isSermonLoading && !isSermonPlaying ? '…' : isSermonPlaying ? '❚❚' : '▶',
+          label: isSermonLoading && !isSermonPlaying ? '…' : isSermonPlaying ? 'Pausar' : 'Sermón',
           title: isSermonPlaying ? 'Pausar sermón' : 'Reproducir sermón',
           active: isSermonPlaying,
           disabled: isSermonLoading && !isSermonPlaying,
@@ -68,7 +64,7 @@ export function useArticleActivityBarActions({
         },
         {
           id: 'reload',
-          label: isReloading ? '…' : '↻',
+          label: isReloading ? '…' : 'Recargar',
           title: 'Recargar JSON',
           disabled: isReloading,
           onClick: onReload,
@@ -99,11 +95,6 @@ export function useArticleActivityBarActions({
     ],
   );
 
-  useEffect(() => {
-    setActivityBarLeftActions(actions);
-    return () => clearActivityBarLeftActions();
-  }, [actions]);
-
   const viewModePanel = (
     <VisualizationModePanel
       open={viewModePickerOpen}
@@ -113,5 +104,5 @@ export function useArticleActivityBarActions({
     />
   );
 
-  return { viewModePanel };
+  return { actions, viewModePanel };
 }

@@ -1,0 +1,36 @@
+.page_action_toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 0 1rem;
+  padding: 10px 0;
+  padding-right: calc(var(--control_min_height) + 24px);
+  background: var(--glassed_background);
+  backdrop-filter: blur(10px);
+  border-bottom: var(--border_001);
+}
+
+.page_action_toolbar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.page_action_toolbar__extra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (min-width: 1024px) {
+  .page_action_toolbar {
+    padding-right: calc(var(--control_min_height) + 32px);
+  }
+}
